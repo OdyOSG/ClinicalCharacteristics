@@ -21,7 +21,7 @@ library(ClinicalCharacteristics)
 # Introduction
 
 
-We introduce a new R package called ClinicalCharacteristics which is a table-shell approach to characterization in real-world data mapped to the OMOP CDM. The purpose of introducing this package was to deal with table-shells in studies. Often we encounter situations were our study counter-parts wish to characterize an indication based on a series of specific comorbidities identified using a set of codes. Using base OHDSI tools this request is becomes non-trivial, involving lots of data-wrangling. Our goal was to build a tool that could characterize specific comorbidities of interest and only pull results of interest omitting superflous output. 
+We introduce a new R package called ClinicalCharacteristics which is a table-shell approach to characterization in real-world data mapped to the OMOP CDM. The purpose of introducing this package was to deal with table-shells in studies. Often we encounter situations where our study counter-parts wish to characterize an indication based on a series of specific comorbidities identified using a set of codes. Using base OHDSI tools this request is becomes non-trivial, involving lots of data-wrangling. Our goal was to build a tool that could characterize specific comorbidities of interest and only pull results of interest omitting superflous output. 
 
 ## Good ole' `FeatureExtraction`
 
@@ -116,7 +116,7 @@ tableShell <- createTableShell(
     createCohortInfo(id = 1, name = "T2D")
   ),
   lineItems = lineItems(
-    createAgeLineItem()), # age as
+    createAgeLineItem()),
     createGenderLineItem(),
     createConceptSetLineItemBatch(
       name = "Baseline Conditions",
