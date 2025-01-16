@@ -83,7 +83,11 @@ defaultTableShellBuildOptions <- function(keepResultsTable = FALSE,
                                           timeWindowTempTable = "#time_windows",
                                           targetCohortTempTable = "#target_cohorts",
                                           tsMetaTempTable = "#ts_meta",
-                                          conceptSetOccurrenceTempTable = "#concept_set_occ") {
+                                          conceptSetOccurrenceTempTable = "#concept_set_occ",
+                                          patientLevelDataTempTable = "#patient_data",
+                                          categoricalSummaryTempTable = "#categorical_table",
+                                          continuousSummaryTempTable = "#continuous_table"
+                                          ) {
 
   buildOpts <- BuildOptions$new(
     keepResultsTable = keepResultsTable,
@@ -92,7 +96,10 @@ defaultTableShellBuildOptions <- function(keepResultsTable = FALSE,
     timeWindowTempTable = timeWindowTempTable,
     tsMetaTempTable = tsMetaTempTable,
     targetCohortTempTable = targetCohortTempTable,
-    conceptSetOccurrenceTempTable = conceptSetOccurrenceTempTable
+    conceptSetOccurrenceTempTable = conceptSetOccurrenceTempTable,
+    patientLevelDataTempTable = patientLevelDataTempTable,
+    categoricalSummaryTempTable = categoricalSummaryTempTable,
+    continuousSummaryTempTable = continuousSummaryTempTable
   )
   return(buildOpts)
 
@@ -118,15 +125,71 @@ timeInterval <- function(lb, rb) {
 #   return(pres)
 # }
 
-createPresence <- function(operator = "at_least", occurrences = 1) {
-  pres <- CategoricalPresence$new(operator = operator, occurrences = occurrences)
+anyPresenceStat <- function() {
+  pres <- Presence$new(personLine = "anyCount")
   return(pres)
 }
 
-createCount <- function(breaks = NULL) {
-  occurrenceCount <- Count$new(breaks = breaks)
-  return(occurrenceCount)
+observedPresenceStat <- function() {
+  pres <- Presence$new(personLine = "observedCount")
+  return(pres)
 }
+
+anyCountStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
+  options <- match.arg(options)
+  if (options == "breaks") {
+    if (is.null(options)) {
+      stop("Breaks option requires a BreaksStrategy")
+    }
+    stat <- Breaks$new(personLine = "anyCount", breaks = breaks)
+  } else {
+    stat <- ContinuousDistribution$new(personLine = "anyCount")
+  }
+  return(stat)
+}
+
+
+observedCountStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
+  options <- match.arg(options)
+  if (options == "breaks") {
+    if (is.null(options)) {
+      stop("Breaks option requires a BreaksStrategy")
+    }
+    stat <- Breaks$new(personLine = "observedCount", breaks = breaks)
+  } else {
+    stat <- ContinuousDistribution$new(personLine = "observedCount")
+  }
+  return(stat)
+}
+
+timeToFirstStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
+  options <- match.arg(options)
+  if (options == "breaks") {
+    if (is.null(options)) {
+      stop("Breaks option requires a BreaksStrategy")
+    }
+    stat <- Breaks$new(personLine = "timeToFirst", breaks = breaks)
+  } else {
+    stat <- ContinuousDistribution$new(personLine = "timeToFirst")
+  }
+  return(stat)
+}
+
+
+timeToLastStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
+  options <- match.arg(options)
+  if (options == "breaks") {
+    if (is.null(options)) {
+      stop("Breaks option requires a BreaksStrategy")
+    }
+    stat <- Breaks$new(personLine = "timeToLast", breaks = breaks)
+  } else {
+    stat <- ContinuousDistribution$new(personLine = "timeToLast")
+  }
+  return(stat)
+}
+
+
 
 #' @title
 #' Create a concept set line item and set its attributes
@@ -300,12 +363,12 @@ createDemographicLineItem <- function(statistic) {
   )
   statLabel <- class(statistic)[[1]]
 
-  if (statLabel %in% c("CategoricalAge", "ContinuousAge")) {
+  if (statLabel == "DemographicAge") {
     dcli$valueId <- -999
     dcli$valueDescription <- "year_of_birth"
   }
 
-  if (statLabel == "CategoricalDemographic") {
+  if (statLabel == "DemographicConcept") {
     dcli$valueId <- statistic$getConceptId()
     dcli$valueDescription <- statistic$getConceptColumn()
   }
@@ -315,8 +378,9 @@ createDemographicLineItem <- function(statistic) {
 
 
 maleGender <- function() {
-  maleConcept <- CategoricalDemographic$new(
-    label = "Gender: Male",
+  maleConcept <- DemographicConcept$new(
+    demoCategory = "Gender",
+    demoLine = "Male",
     conceptColumn = "gender_concept_id",
     conceptId = 8507L
   )
@@ -324,8 +388,9 @@ maleGender <- function() {
 }
 
 femaleGender <- function() {
-  femaleConcept <- CategoricalDemographic$new(
-    label = "Gender: Female",
+  femaleConcept <- DemographicConcept$new(
+    demoCategory = "Gender",
+    demoLine = "Female",
     conceptColumn = "gender_concept_id",
     conceptId = 8532L
   )

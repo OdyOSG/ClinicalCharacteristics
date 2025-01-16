@@ -78,16 +78,38 @@ TableShell <- R6::R6Class("TableShell",
 
     },
 
+    # function to instantiate tables for queries
+    instantiateTables = function(executionSettings, buildOptions) {
+
+      # ensure R6 object used
+      checkmate::assert_class(executionSettings, classes = "ExecutionSettings", null.ok = FALSE)
+      checkmate::assert_class(buildOptions, classes = "BuildOptions", null.ok = FALSE)
+
+      # insert Ts Meta
+      private$.insertTsMeta(
+        executionSettings = executionSettings,
+        buildOptions = buildOptions
+      )
+
+      # insert time windows
+      private$.insertTimeWindows(
+        executionSettings = executionSettings,
+        buildOptions = buildOptions
+      )
+
+      invisible(executionSettings)
+
+    },
 
     #key function to generate the table shell
     buildTableShellSql = function(executionSettings, buildOptions) {
 
-      # ensure that executionSettings R6 object used
+      # ensure R6 object used
       checkmate::assert_class(executionSettings, classes = "ExecutionSettings", null.ok = FALSE)
-
+      checkmate::assert_class(buildOptions, classes = "BuildOptions", null.ok = FALSE)
 
       cli::cat_bullet(
-        glue::glue_col("{yellow Preparing table shell sql}"),
+        glue::glue_col("{yellow Preparing Table Shell Sql}"),
         bullet = "pointer",
         bullet_col = "yellow"
       )
@@ -95,127 +117,126 @@ TableShell <- R6::R6Class("TableShell",
       # collect all the sql
       fullSql <- c(
 
-        # step 1: dat table ddl
-        private$.makeDatTable(),
+        # step 1: Make target Cohort table
+        private$.makeTargetCohortTable(
+          executionSettings = executionSettings,
+          buildOptions = buildOptions
+        ),
 
         # step 2: create targe cohort table
-        private$.getTargetCohortSql(),
+        private$.buildCodesetQueries(
+          executionSettings = executionSettings,
+          buildOptions = buildOptions
+        ),
 
-        # Step 3: Create line items
+        # Step 3: create concept set query
+        private$.buildConceptSetOccurrenceQuery(
+          executionSettings = executionSettings,
+          buildOptions = buildOptions
+        ),
 
-          # A) Demographics
-        private$.buildDemographicsQuery(),
+        # Step 4: transform to patient line data
+        private$.transformToPatientLineData(
+          executionSettings = executionSettings,
+          buildOptions = buildOptions
+        ),
 
-          # B) Concept Set
-        # create codeset query
-        private$.buildCodesetQueries(buildOptions),
-        # create concept set query
-        private$.buildConceptLineItemQuery(),
-
-          # C) Multi-domain groups
-        # grp_Sql <- private$.buildGroupLineItemQuery()
-
-          # D) Cohorts
-        #cd_sql <- private$.buildCohortLineItemQuery()
-
-        # Step 4: Make table drop sql
-        private$.dropCsTempTables()
+        # Step 5: Aggregate results
+        private$.aggregateResults(
+          executionSettings = executionSettings,
+          buildOptions = buildOptions
+        )
       ) |>
         glue::glue_collapse(sep = "\n")
 
-      # render it with schema info
-      renderedSql <- SqlRender::render(
-        sql = fullSql,
-        cdmDatabaseSchema = executionSettings$cdmDatabaseSchema,
-        vocabularyDatabaseSchema = executionSettings$cdmDatabaseSchema,
-        workDatabaseSchema = executionSettings$workDatabaseSchema,
-        cohortTable = executionSettings$targetCohortTable,
-        dataTable = buildOptions$resultsTempTable,
-        codesetTable = buildOptions$codesetTempTable,
-        targetTable = buildOptions$targetCohortTempTable,
-        timeWindowTable = buildOptions$timeWindowTempTable
-      )
 
-      # translate and prep for execution
-      finalSql <- SqlRender::translate(
-        sql = renderedSql,
-        targetDialect = executionSettings$getDbms(),
-        tempEmulationSchema = executionSettings$tempEmulationSchema
-      )
-
-      return(finalSql)
+      return(fullSql)
 
     },
 
-    # function to aggregate categorical vars into table
-    aggregateTableShell = function(executionSettings, type, buildOptions) {
+    outputResults = function(executionSettings, buildOptions) {
 
-      #identify which lineItems are continuous or categorical
-      idList <- private$.identifyCategoryIds()
+      tsm <- self$getTableShellMeta()
 
-      # get sql for categorical
-      if (type == "categorical") {
+      tc <- self$getTargetCohorts() |>
+        .targetCohortLabels()
 
-        categoricalIds <- idList |>
-          dplyr::filter(distributionType == "categorical") |>
-          dplyr::pull(categoryId) |>
-          paste(collapse = ", ")
+      # categorical results
+      cat_res <- .getCategoricalResults(tsm, tc, executionSettings, buildOptions) |>
+        tibble::as_tibble()
 
-
-        sqlFile <- "aggregateCategorical.sql"
-        # get sql from package
-        sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-          readr::read_file() |>
-          glue::glue() |>
-          SqlRender::render(
-            workDatabaseSchema = executionSettings$workDatabaseSchema,
-            cohortTable = executionSettings$targetCohortTable,
-            dataTable = buildOptions$resultsTempTable
-          )
-      }
-
-      # get sql for continuous
-      if (type == "continuous") {
-
-        continuousIds <- idList |>
-          dplyr::filter(distributionType == "continuous") |>
-          dplyr::pull(categoryId) |>
-          paste(collapse = ", ")
-
-        sqlFile <- "aggregateContinuous.sql"
-        # get sql from package
-        sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-          readr::read_file() |>
-          glue::glue() |>
-          SqlRender::render(
-            dataTable = buildOptions$resultsTempTable
-          )
-      }
-
-      finalSql <- sql |>
-        SqlRender::translate(
-          targetDialect = executionSettings$getDbms(),
-          tempEmulationSchema = executionSettings$tempEmulationSchema
-        )
-
-      # get aggregateTable
-      aggregateTable <- DatabaseConnector::querySql(
-        connection = executionSettings$getConnection(),
-        sql = finalSql
-      ) |>
-        tibble::as_tibble() |>
-        dplyr::rename_with(tolower) |>
-        dplyr::arrange(cohort_id, category_id, time_id, value_id)
-
-      # format results
-      formattedTable <- private$.labelResults(
-        results = aggregateTable,
-        type = type
-      )
-
-      return(formattedTable)
-
+      return(cat_res)
     }
+
+    # function to aggregate categorical vars into table
+    # aggregateTableShell = function(executionSettings, type, buildOptions) {
+    #
+    #   #identify which lineItems are continuous or categorical
+    #   idList <- private$.identifyCategoryIds()
+    #
+    #   # get sql for categorical
+    #   if (type == "categorical") {
+    #
+    #     categoricalIds <- idList |>
+    #       dplyr::filter(distributionType == "categorical") |>
+    #       dplyr::pull(categoryId) |>
+    #       paste(collapse = ", ")
+    #
+    #
+    #     sqlFile <- "aggregateCategorical.sql"
+    #     # get sql from package
+    #     sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
+    #       readr::read_file() |>
+    #       glue::glue() |>
+    #       SqlRender::render(
+    #         workDatabaseSchema = executionSettings$workDatabaseSchema,
+    #         cohortTable = executionSettings$targetCohortTable,
+    #         dataTable = buildOptions$resultsTempTable
+    #       )
+    #   }
+    #
+    #   # get sql for continuous
+    #   if (type == "continuous") {
+    #
+    #     continuousIds <- idList |>
+    #       dplyr::filter(distributionType == "continuous") |>
+    #       dplyr::pull(categoryId) |>
+    #       paste(collapse = ", ")
+    #
+    #     sqlFile <- "aggregateContinuous.sql"
+    #     # get sql from package
+    #     sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
+    #       readr::read_file() |>
+    #       glue::glue() |>
+    #       SqlRender::render(
+    #         dataTable = buildOptions$resultsTempTable
+    #       )
+    #   }
+    #
+    #   finalSql <- sql |>
+    #     SqlRender::translate(
+    #       targetDialect = executionSettings$getDbms(),
+    #       tempEmulationSchema = executionSettings$tempEmulationSchema
+    #     )
+    #
+    #   # get aggregateTable
+    #   aggregateTable <- DatabaseConnector::querySql(
+    #     connection = executionSettings$getConnection(),
+    #     sql = finalSql
+    #   ) |>
+    #     tibble::as_tibble() |>
+    #     dplyr::rename_with(tolower) |>
+    #     dplyr::arrange(cohort_id, category_id, time_id, value_id)
+    #
+    #   # format results
+    #   formattedTable <- private$.labelResults(
+    #     results = aggregateTable,
+    #     type = type
+    #   )
+    #
+    #   return(formattedTable)
+    #
+    # }
 
 
   ),
@@ -236,9 +257,9 @@ TableShell <- R6::R6Class("TableShell",
         dplyr::rename_with(snakecase::to_snake_case)
 
       cli::cat_bullet(
-        glue::glue("Insert #ts_meta table to route characterization"),
-        bullet = "pointer",
-        bullet_col = "yellow"
+        glue::glue_col("Insert tsMeta table ---> {cyan {buildOptions$tsMetaTempTable}}"),
+        bullet = "info",
+        bullet_col = "blue"
       )
 
       # establish connection to database
@@ -288,9 +309,9 @@ TableShell <- R6::R6Class("TableShell",
         )
 
       cli::cat_bullet(
-        glue::glue("Insert time window tables for characterization"),
-        bullet = "pointer",
-        bullet_col = "yellow"
+        glue::glue_col("Insert timeWindows table ---> {cyan {buildOptions$timeWindowTempTable}}"),
+        bullet = "info",
+        bullet_col = "blue"
       )
 
       # establish connection to database
@@ -310,15 +331,6 @@ TableShell <- R6::R6Class("TableShell",
       )
 
       invisible(time_tbl)
-    },
-
-    #function to create dat table
-    .makeDatTable = function(){
-      sqlFile <- "datTable.sql"
-      # get sql from package
-      sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-        readr::read_file()
-      return(sql)
     },
 
     # function to get target cohort sql
@@ -349,67 +361,6 @@ TableShell <- R6::R6Class("TableShell",
       return(renderedSql)
     },
 
-    # pluck Concept Set Line Items
-    # .pluckLineItems = function(classType) {
-    #   lineItems <- self$getLineItems()
-    #   idsToPluck <- .findLineItemId(lineItems = lineItems, classType = classType)
-    #
-    #   filteredLineItems <- lineItems[idsToPluck]
-    #   return(filteredLineItems)
-    # },
-
-    .identifyCategoryIds = function() {
-      # get line items
-      li <- self$getLineItems()
-
-      #figure if base stat is continuous or categorical
-      categoryIdTbl <- dplyr::bind_rows(
-        .findDemographicCategoryIds(li),
-        .findConceptSetCategoryIds(li)
-      )
-
-      return(categoryIdTbl)
-
-    },
-
-    .grabDemographicsMetaTable = function() {
-      demoLineItems <- private$.pluckLineItems(classType = "DemographicLineItem")
-
-      demoMetaTable <- tibble::tibble(
-        'categoryId' = purrr::map_int(demoLineItems, ~.x$ordinal),
-        'catName' = purrr::map_chr(demoLineItems, ~.x$getName()),
-        'timeId' = -999,
-        'twLabel' = "Static at Index"
-      ) |>
-        dplyr::mutate(
-          categoryLabel = glue::glue("Demographics: {catName}")
-        ) |>
-        dplyr::select(
-          -c(catName)
-        )
-
-      return(demoMetaTable)
-
-    },
-
-    # function to prep demographics sql
-    .buildDemographicsQuery = function() {
-
-      # get concept set line items
-      demoLineItems <- private$.pluckLineItems(classType = "DemographicLineItem")
-      if (length(demoLineItems) >= 1) {
-        demoSql <- purrr::map(
-          demoLineItems,
-          ~.x$getSql()
-        )|>
-          glue::glue_collapse(sep = "\n\n")
-      } else {
-        demoSql <- ""
-      }
-
-      return(demoSql)
-
-    },
 
 
     # function to create sql for codset query
@@ -442,19 +393,6 @@ TableShell <- R6::R6Class("TableShell",
       return(cs_query)
 
     },
-
-    # .grabConceptSetMetaTable = function() {
-    #   csLineItems <- private$.pluckLineItems(classType = "ConceptSetLineItem")
-    #   # only run if CSD in ts
-    #   if (length(csLineItems) >= 1) {
-    #
-    #     # Step 1: Get the concept set meta
-    #     csMeta <- .conceptSetMeta(csLineItems)
-    #   } else {
-    #     csMeta <- NULL
-    #   }
-    #   return(csMeta)
-    # },
 
     # function to extract concept level information
     .buildConceptSetOccurrenceQuery = function(executionSettings, buildOptions) {
@@ -508,67 +446,110 @@ TableShell <- R6::R6Class("TableShell",
 
     },
 
-    # function to drop all cs Tables
-    .dropCsTempTables = function() {
+    .transformToPatientLineData = function(executionSettings, buildOptions) {
 
-      csMeta <- private$.grabConceptSetMetaTable()
+      # Step 1: make patient level data table
+      ptDatTbSql <- fs::path_package(
+        "ClinicalCharacteristics",
+        fs::path("sql", "patientLevelData.sql")
+      ) |>
+        readr::read_file()
 
-      # only run if CSD in ts
-      if (!is.null(csMeta)) {
+      # Step 2: run patient level queries
+      tsm <- self$getTableShellMeta()
+      # step 2a demographics
 
-      tempTables <- csMeta  |>
-        dplyr::select(tempTableName) |>
-        dplyr::distinct()
+      demoPatientLevelSql <- .buildDemoPatientLevelSql(tsm)
 
-      dropTmpTb0 <- purrr::pmap(tempTables, ~.truncDropTempTables(tempTableName = ..1)) |>
-        glue::glue_collapse(sep = "\n\n")
+      # step 2b concept set pat level
+      csPatientLevelSql <- .buildOccurrencePatientLevelSql(tsm)
 
-      dropTmpTb <- c(
-        "\n-- Drop CS Temp Tables",
-        .truncDropTempTables(tempTableName = "#Codeset"),
-        dropTmpTb0
-      )|>
-        glue::glue_collapse(sep = "\n\n")
-      } else {
-        dropTmpTb <- ""
-      }
+      # step 2c cohort pat level
+      chPatientLevelSql <- .buildCohortPatientLevelSql(tsm)
 
-      return(dropTmpTb)
+      # full sql for sql
+      ptFullSql <- c(ptDatTbSql, demoPatientLevelSql, csPatientLevelSql, chPatientLevelSql) |>
+        glue::glue_collapse(sep = "\n\n") |>
+        SqlRender::render(
+          patient_level_data = buildOptions$patientLevelDataTempTable,
+          concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable,
+          target_table = buildOptions$targetCohortTempTable,
+          cdm_database_schema = executionSettings$cdmDatabaseSchema
+        ) |>
+        SqlRender::translate(
+          targetDialect = executionSettings$getDbms(),
+          tempEmulationSchema = executionSettings$tempEmulationSchema
+        )
+
+      return(ptFullSql)
     },
 
-    .labelResults = function(results, type) {
+    .aggregateResults = function(executionSettings, buildOptions) {
 
-      #get target Cohort labels
-      targetCohortKey <- .makeTargetCohortLabels(private$targetCohorts)
+      tsm <- self$getTableShellMeta()
+
+      # Create temp table joining patient date with ts meta
+      patTsSql <- .tempPsDatTable(executionSettings, buildOptions)
+
+      # make temp continuous + categorical table
+      initSummaryTableSql <- .initAggregationTables(executionSettings, buildOptions)
+
+      # get denominator
+      denomSql <- .getDenominator(executionSettings, buildOptions)
+
+      # make all the aggregate sql queries
+      aggregateSqlQuery <- .aggregateSql(tsm, executionSettings, buildOptions)
+
+      allSql <- c(patTsSql, initSummaryTableSql, denomSql, aggregateSqlQuery) |>
+        glue::glue_collapse(sep = "\n\n")
+
+      return(allSql)
 
 
-      # label the demographic results
-      resultsDemoLabelled <- .formatDemographics(
-        results = results,
-        type = type,
-        targetCohortKey = targetCohortKey,
-        demoMeta = private$.grabDemographicsMetaTable())
+    },
 
-      # get Concept Set Labels
-      resultsCsLabelled <- .formatConceptSets(
-        results = results,
-        type = type,
-        targetCohortKey = targetCohortKey,
-        categoryKey = private$.identifyCategoryIds(),
-        conceptSetMeta = private$.grabConceptSetMetaTable()
+
+
+    # function to drop all cs Tables
+    .dropTempTables = function(executionSettings, buildOptions) {
+
+      # get temp table slot names
+      tempTableSlots <- names(buildOptions)[grepl("TempTable",names(buildOptions))]
+
+      # get table names
+      tempTableNames <- purrr::map_chr(
+        tempTableSlots,
+        ~buildOptions[[.x]]
       )
 
-      # Bind for output
-      labelledResults <- dplyr::bind_rows(
-        resultsDemoLabelled,
-        resultsCsLabelled
-        #add others
-      )
+      tempTables <- tibble::tibble(
+        tempTableSlots = tempTableSlots,
+        tempTableNames = tempTableNames
+      ) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(
+          drop = grepl("\\#", tempTableNames) # check if temp
+        )
 
-      return(labelledResults)
+      dropTempTableSql <- vector('list', length = nrow(tempTables))
+      for (i in 1:nrow(tempTables)) {
+        if (tempTables$drop[i]) {
+          dropTempTableSql[[i]] <- .truncDropTempTables(
+            tempTableName = tempTables$tempTableNames[i]
+          )
+        } else {
+          dropTempTableSql[[i]] <- ""
+        }
+      }
+      dropTempTableSql <- do.call("c", dropTempTableSql) |>
+        glue::glue_collapse("\n") |>
+        SqlRender::translate(
+          targetDialect = executionSettings$getDbms(),
+          tempEmulationSchema = executionSettings$tempEmulationSchema
+        )
 
+      return(dropTempTableSql)
     }
-
   )
 )
 
@@ -588,7 +569,11 @@ BuildOptions <- R6::R6Class(
                           timeWindowTempTable = NULL,
                           targetCohortTempTable = NULL,
                           tsMetaTempTable = NULL,
-                          conceptSetOccurrenceTempTable = NULL) {
+                          conceptSetOccurrenceTempTable = NULL,
+                          patientLevelDataTempTable = NULL,
+                          categoricalSummaryTempTable = NULL,
+                          continuousSummaryTempTable = NULL
+                          ) {
       .setLogical(private = private, key = ".keepResultsTable", value = keepResultsTable)
       .setString(private = private, key = ".resultsTempTable", value = resultsTempTable)
       .setString(private = private, key = ".codesetTempTable", value = codesetTempTable)
@@ -596,6 +581,9 @@ BuildOptions <- R6::R6Class(
       .setString(private = private, key = ".tsMetaTempTable", value = tsMetaTempTable)
       .setString(private = private, key = ".targetCohortTempTable", value = targetCohortTempTable)
       .setString(private = private, key = ".conceptSetOccurrenceTempTable", value = conceptSetOccurrenceTempTable)
+      .setString(private = private, key = ".patientLevelDataTempTable", value = patientLevelDataTempTable)
+      .setString(private = private, key = ".categoricalSummaryTempTable", value = categoricalSummaryTempTable)
+      .setString(private = private, key = ".continuousSummaryTempTable", value = continuousSummaryTempTable)
     }
   ),
   private = list(
@@ -605,7 +593,10 @@ BuildOptions <- R6::R6Class(
     .timeWindowTempTable = NULL,
     .targetCohortTempTable = NULL,
     .tsMetaTempTable = NULL,
-    .conceptSetOccurrenceTempTable = NULL
+    .conceptSetOccurrenceTempTable = NULL,
+    .patientLevelDataTempTable = NULL,
+    .categoricalSummaryTempTable = NULL,
+    .continuousSummaryTempTable = NULL
   ),
 
   active = list(
@@ -639,6 +630,18 @@ BuildOptions <- R6::R6Class(
 
     conceptSetOccurrenceTempTable = function(value) {
       .setActiveString(private = private, key = ".conceptSetOccurrenceTempTable", value = value)
+    },
+
+    patientLevelDataTempTable = function(value) {
+      .setActiveString(private = private, key = ".patientLevelDataTempTable", value = value)
+    },
+
+    categoricalSummaryTempTable = function(value) {
+      .setActiveString(private = private, key = ".categoricalSummaryTempTable", value = value)
+    },
+
+    continuousSummaryTempTable = function(value) {
+      .setActiveString(private = private, key = ".continuousSummaryTempTable", value = value)
     }
 
 
@@ -877,83 +880,56 @@ CohortInfo <- R6::R6Class("CohortInfo",
 Statistic <- R6::R6Class(
   classname = "Statistic",
   public = list(
-    initialize = function(label, type) {
-      .setString(private = private , key = "label", value = label)
-      .setString(private = private , key = "type", value = type)
+    initialize = function(statType, personLine, aggType) {
+      .setString(private = private , key = "statisticType", value = statType)
+      .setString(private = private , key = "personLineTransformation", value = personLine)
+      .setString(private = private , key = "aggregationType", value = aggType)
+
     },
-    getStatType = function() {
-      statType <- private$type
+    getStatisticType = function() {
+      statType <- private$statisticType
       return(statType)
     },
-    getStatLabel = function() {
-      statLabel <- private$label
-      return(statLabel)
+    getAggregationType = function() {
+      aggType <- private$aggregationType
+      return(aggType)
+    },
+    getPersonLineTransformation = function() {
+      plt <- private$personLineTransformation
+      return(plt)
     }
   ),
   private = list(
-    label = NA_character_,
-    type = NA_character_
+    statisticType = NA_character_,
+    personLineTransformation = NA_character_,
+    aggregationType = NA_character_
   )
 )
-# Statistic_old <- R6::R6Class("Statistic",
-#                          public = list(
-#                            initialize = function(type) {
-#                              .setString(private = private , key = "type", value = type)
-#                            },
-#
-#                            # helper to get state type from class
-#                            getStatType = function() {
-#                              statType <- private$type
-#                              return(statType)
-#                            }
-#                          ),
-#                          private = list(
-#                            type = NULL
-#                          )
-# )
 
 ## Demographic Stats----------------------
 
 
-### Continuous Age ---------------------
-ContinuousAge <- R6::R6Class(
-  classname = "ContinuousAge",
-  inherit = Statistic,
-  public = list(
-    initialize = function() {
-      super$initialize(label = "Age", type = "Continuous")
-    }
-  )
-)
-
-### Categorical Age ---------------------
-CategoricalAge <- R6::R6Class(
-  classname = "CategoricalAge",
-  inherit = Statistic,
-  public = list(
-    initialize = function(breaks) {
-      super$initialize(label = "Age", type = "Categorical")
-      .setClass(private = private, key = "breaks", value = breaks, class = "Breaks")
-    }
-  ),
-  private = list(
-    breaks = NULL
-  )
-)
-
-
 ### Demographic Concept -----------------
-CategoricalDemographic <- R6::R6Class(
-  classname = "CategoricalDemographic",
+DemographicConcept <- R6::R6Class(
+  classname = "DemographicConcept",
   inherit = Statistic,
   public = list(
-    initialize = function(label, conceptColumn, conceptId) {
-      super$initialize(label, type = "Categorical")
+    initialize = function(demoCategory, demoLine, conceptColumn, conceptId) {
+      super$initialize(
+        personLine = "binary",
+        statType = "presence",
+        aggType = "categorical")
+      .setString(private = private, key = "demoCategory", value = demoCategory)
+      .setString(private = private, key = "demoLine", value = demoLine)
       .setString(private = private, key = "conceptColumn", value = conceptColumn)
       .setNumber(private = private, key = "conceptId", value = conceptId)
     },
     getConceptColumn = function() {
       rr <- private$conceptColumn
+      return(rr)
+    },
+    getDemoLabel = function() {
+      rr <- glue::glue("{private$demoCategory}: {private$demoLine}")
       return(rr)
     },
     getConceptId = function() {
@@ -962,141 +938,163 @@ CategoricalDemographic <- R6::R6Class(
     }
   ),
   private = list(
+    demoCategory = NA_character_,
+    demoLine = NA_character_,
     conceptColumn = NA_character_,
     conceptId = NA_integer_
   )
 )
-#
-# DemographicConcept <- R6::R6Class("DemographicConcept",
-#                            inherit = Statistic,
-#                            public = list(
-#                              initialize = function(conceptColumn) {
-#                                super$initialize(type = "Concept")
-#                                #TODO make this a setChoics of Concept, Age, Year
-#                                .setString(private = private, key = 'conceptColumn', value = conceptColumn)
-#                                invisible(private)
-#                              },
-#                              getDemoColumn = function() {
-#                                col <- private$conceptColumn
-#                                return(col)
-#                              }
-#                            ),
-#                            private = list(
-#                              conceptColumn = NULL
-#                            )
-# )
 
-
-### Demographic Year -----------------
-DemographicYear <- R6::R6Class("DemographicYear",
-                           inherit = Statistic,
-                           public = list(
-                             initialize = function(breaks = NULL) {
-                               super$initialize(type = "Year")
-                               if (!is.null(breaks)) {
-                                 .setClass(private = private,
-                                           key = "breaks",
-                                           value = breaks,
-                                           class = "Breaks")
-                               }
-                               invisible(private)
-                             }
-                           ),
-                           private = list(
-                             breaks = NULL
-                           )
-)
-
-
-## Presence -----------------------
-
-#' @title
-#' An R6 class to define a Presence object
-#'
-#' @description
-#' Child of Statistic. The Presence statistic is a binary metric the indicates the presence of a variable
-#'
-#' @export
-CategoricalPresence <- R6::R6Class(
-  classname = "CategoricalPresence",
+### Demographic Age ---------------------
+DemographicAge <- R6::R6Class(
+  classname = "DemographicAge",
   inherit = Statistic,
   public = list(
-    initialize = function(operator, occurrences) {
-      super$initialize(label = "Presence", type = "Categorical")
-      .setString(private = private, key = "operator", value = operator)
-      .setNumber(private = private, key = "occurrences", value = occurrences)
+    initialize = function(statType, aggType, demoCategory, breaks = NULL) {
+      super$initialize(
+        personLine = "age",
+        statType = statType,
+        aggType = aggType)
+      .setString(private = private, key = "demoCategory", value = "Age")
+      .setClass(private = private, key = "breaks", value = breaks, class = "BreaksStrategy")
+    },
+
+    getDemoLabel = function() {
+      rr <- glue::glue("{private$demoCategory}")
+      return(rr)
     }
   ),
   private = list(
-    operator = NA_character_,
-    occurrences = NA
+    demoCategory = NA_character_,
+    breaks = NULL
   )
 )
 
 
-# Presence <- R6::R6Class("Presence",
-#                         inherit = Statistic,
-#                         public = list(
-#                           initialize = function(operator,
-#                                                 occurrences) {
-#                             super$initialize(type = "Presence")
-#                             # TODO change this to enforce operator from choice list
-#                             .setString(private = private, key = "operator", value = operator)
-#                             .setNumber(private = private, key = "occurrences", value = occurrences)
-#                             invisible(private)
-#                           },
-#                           getSql = function() {
-#
-#                             sqlFile <- "presenceStat.sql"
-#                             op <- .opConverter(private$operator)
-#                             occurrences <- private$occurrences
-#                             # get sql from package
-#                             sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-#                               readr::read_file() |>
-#                               glue::glue()
-#                             return(sql)
-#                           }
-#                         ),
-#                         private = list(
-#                           operator = NULL,
-#                           occurrences = NA
-#                         )
+
+
+
+### Demographic Year -----------------
+# DemographicYear <- R6::R6Class("DemographicYear",
+#                            inherit = Statistic,
+#                            public = list(
+#                              initialize = function(breaks = NULL) {
+#                                super$initialize(type = "Year")
+#                                if (!is.null(breaks)) {
+#                                  .setClass(private = private,
+#                                            key = "breaks",
+#                                            value = breaks,
+#                                            class = "Breaks")
+#                                }
+#                                invisible(private)
+#                              }
+#                            ),
+#                            private = list(
+#                              breaks = NULL
+#                            )
 # )
+
+## CS, CSG, Cohort Stats -----------------------------
+
+### Presence -----------------------
+
+Presence <- R6::R6Class(
+  classname = "Presence",
+  inherit = Statistic,
+  public = list(
+    initialize = function(personLine) {
+      super$initialize(
+        personLine = personLine,
+        statType = "presence",
+        aggType = "categorical"
+      )
+    }
+  ),
+  private = list()
+)
+
+### Breaks ------------------------
+Breaks <- R6::R6Class(
+  classname = "Breaks",
+  inherit = Statistic,
+  public = list(
+    initialize = function(personLine, breaks) {
+      super$initialize(
+        personLine = personLine,
+        statType = "breaks",
+        aggType = "categorical"
+      )
+      .setClass(private = private, key = "breaks", value = breaks, class = "BreaksStrategy")
+    }
+  ),
+  private = list(
+    breaks = NULL
+  )
+)
+
+### Distribution ------------------------
+ContinuousDistribution <- R6::R6Class(
+  classname = "ContinuousDistribution",
+  inherit = Statistic,
+  public = list(
+    initialize = function(personLine) {
+      super$initialize(
+        personLine = personLine,
+        statType = "continuousDistribution",
+        aggType = "continuous"
+      )
+    }
+  ),
+  private = list(
+  )
+)
+
+### Score ------------------------
+Score <- R6::R6Class(
+  classname = "Score",
+  inherit = Statistic,
+  public = list(
+    initialize = function(personLine, score) {
+      super$initialize(
+        personLine = personLine,
+        statType = "scoreTransformation",
+        aggType = "continuous"
+      )
+      .setClass(private = private, key = "score", value = score, class = "ScoreWeight")
+    }
+  ),
+  private = list(
+    score = NULL
+  )
+)
 
 
 ## Count -----------------------
 
-#' @title
-#' An R6 class to define a Count object
-#'
-#' @description
-#' Child of Statistic. The Count statistic is a poisson metric the indicates the number of occurrences of a variable
-#'
-#' @export
-Count <- R6::R6Class("Count",
-                     inherit = Statistic,
-                     public = list(
-                       initialize = function(breaks = NULL) {
-                         super$initialize(type = "Count")
-                         if (!is.null(breaks)) {
-                           .setClass(private = private, key = "breaks", value = breaks, class = "Breaks")
-                         }
-                         invisible(private)
-                       },
-                       getSql = function() {
-
-                         sqlFile <- "countStat.sql"
-                          # get sql from package
-                         sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-                           readr::read_file() |>
-                           glue::glue()
-                         return(sql)
-                       }
-                     ),
-                     private = list(
-                       breaks = NULL
-                     )
-)
+# Count <- R6::R6Class("Count",
+#                      inherit = Statistic,
+#                      public = list(
+#                        initialize = function(breaks = NULL) {
+#                          super$initialize(type = "Count")
+#                          if (!is.null(breaks)) {
+#                            .setClass(private = private, key = "breaks", value = breaks, class = "Breaks")
+#                          }
+#                          invisible(private)
+#                        },
+#                        getSql = function() {
+#
+#                          sqlFile <- "countStat.sql"
+#                           # get sql from package
+#                          sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
+#                            readr::read_file() |>
+#                            glue::glue()
+#                          return(sql)
+#                        }
+#                      ),
+#                      private = list(
+#                        breaks = NULL
+#                      )
+# )
 
 
 # LineItem Classes -----
@@ -1148,7 +1146,9 @@ public = list(
       valueId = private$.valueId,
       valueDescription = private$.valueDescription,
       timeLabel = timeLabel,
-      statisticType = class(private$statistic)[[1]],
+      personLineTransformation = private$statistic$getPersonLineTransformation(),
+      statisticType = private$statistic$getStatisticType(),
+      aggregationType = private$statistic$getAggregationType(),
       domainTable = private$.domainTable,
       lineItemClass = private$.lineItemClass
     )
@@ -1412,7 +1412,7 @@ DemographicLineItem <- R6::R6Class(
       super$initialize(
         sectionLabel = "Demographics",
         domainTable = "person",
-        lineItemLabel = statistic$getStatLabel(),
+        lineItemLabel = statistic$getDemoLabel(),
         lineItemClass = "Demographic",
         statistic = statistic,
         timeInterval = NULL

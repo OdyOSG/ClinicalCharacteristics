@@ -11,8 +11,9 @@ Specific types of statistics are defined in derived classes
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Statistic-new}{\code{Statistic$new()}}
-\item \href{#method-Statistic-getStatType}{\code{Statistic$getStatType()}}
-\item \href{#method-Statistic-getStatLabel}{\code{Statistic$getStatLabel()}}
+\item \href{#method-Statistic-getStatisticType}{\code{Statistic$getStatisticType()}}
+\item \href{#method-Statistic-getAggregationType}{\code{Statistic$getAggregationType()}}
+\item \href{#method-Statistic-getPersonLineTransformation}{\code{Statistic$getPersonLineTransformation()}}
 \item \href{#method-Statistic-clone}{\code{Statistic$clone()}}
 }
 }
@@ -21,25 +22,34 @@ Specific types of statistics are defined in derived classes
 \if{latex}{\out{\hypertarget{method-Statistic-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Statistic$new(label, type)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$new(statType, personLine, aggType)}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Statistic-getStatType"></a>}}
-\if{latex}{\out{\hypertarget{method-Statistic-getStatType}{}}}
-\subsection{Method \code{getStatType()}}{
+\if{html}{\out{<a id="method-Statistic-getStatisticType"></a>}}
+\if{latex}{\out{\hypertarget{method-Statistic-getStatisticType}{}}}
+\subsection{Method \code{getStatisticType()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Statistic$getStatType()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$getStatisticType()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Statistic-getStatLabel"></a>}}
-\if{latex}{\out{\hypertarget{method-Statistic-getStatLabel}{}}}
-\subsection{Method \code{getStatLabel()}}{
+\if{html}{\out{<a id="method-Statistic-getAggregationType"></a>}}
+\if{latex}{\out{\hypertarget{method-Statistic-getAggregationType}{}}}
+\subsection{Method \code{getAggregationType()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Statistic$getStatLabel()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$getAggregationType()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Statistic-getPersonLineTransformation"></a>}}
+\if{latex}{\out{\hypertarget{method-Statistic-getPersonLineTransformation}{}}}
+\subsection{Method \code{getPersonLineTransformation()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$getPersonLineTransformation()}\if{html}{\out{</div>}}
 }
 
 }

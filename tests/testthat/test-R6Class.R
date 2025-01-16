@@ -3,7 +3,7 @@ testthat::local_edition(3)
 
 test_that("TableShell object is initialized correctly", {
   targetCohort <- CohortInfo$new(id = 1, name = "Cohort 1")
-  stat <- Statistic$new(label = "test", type = "test")
+  stat <- Statistic$new(statType = "test", personLine = "test", aggType = "test")
   lineItem <- LineItem$new(
     sectionLabel = "sectionLabel",
     lineItemClass = "lineItemClass",
@@ -44,7 +44,7 @@ test_that("LineItem class initializes correctly", {
   lineItemClass <- "Class A"
   valueId <- 1
   valueDescription <- "Description 1"
-  statistic <- Statistic$new(label = "test", type = "test")
+  statistic <- Statistic$new(statType = "test", personLine = "test", aggType = "test")
   timeInterval <- TimeInterval$new(0,365)
 
   lineItem <- LineItem$new(
@@ -62,12 +62,12 @@ test_that("LineItem class initializes correctly", {
 
   expect_true(inherits(lineItem, "LineItem"))
   expect_true(inherits(liMeta, "tbl_df"))
-  expect_equal(ncol(liMeta), 9)
+  expect_equal(ncol(liMeta), 11)
 })
 
 test_that("ConceptSetLineItem object initializes correctly", {
   conceptSet <- ConceptSetLineItem$new(sectionLabel = "CS",
-                                       statistic = Statistic$new(label = "test", type = "test"),
+                                       statistic = Statistic$new(statType = "test", personLine = "test", aggType = "test"),
                                        domainTable = "domain",
                                        conceptSet = Capr::cs(1335471, name = "test"),
                                        timeInterval = TimeInterval$new(0,365),
@@ -81,7 +81,7 @@ test_that("ConceptSetLineItem object initializes correctly", {
 test_that("CohortLineItem initializes correctly", {
   cohortInfo <- CohortInfo$new(id = 1, name = "Test Cohort")
   timeInterval <- TimeInterval$new(0, 365)
-  statistic <- Statistic$new(label = "test", type = "test")
+  statistic <- Statistic$new(statType = "test", personLine = "test", aggType = "test")
   cohortLi <- CohortLineItem$new(sectionLabel = "C",
                                  statistic = statistic,
                                  covariateCohort = cohortInfo,
@@ -92,8 +92,27 @@ test_that("CohortLineItem initializes correctly", {
   expect_true(inherits(cohortLi, "LineItem"))
 })
 
-test_that("CategoricalPresence object initializes correctly", {
-  presence <- CategoricalPresence$new("operator", 2)
-  expect_true(inherits(presence, "CategoricalPresence"))
+test_that("Presence object initializes correctly", {
+  presence <- Presence$new(personLine = "anyCount")
+  expect_true(inherits(presence, "Presence"))
   expect_true(inherits(presence, "Statistic"))
+})
+
+test_that("DemographicConcept object initializes correctly", {
+  maleConcept <- DemographicConcept$new(
+    demoCategory = "Gender",
+    demoLine = "Male",
+    conceptColumn = "gender_concept_id",
+    conceptId = 8507L
+  )
+  expect_true(inherits(maleConcept, "DemographicConcept"))
+  expect_true(inherits(maleConcept, "Statistic"))
+  expect_equal(maleConcept$getConceptId(), 8507L)
+})
+
+test_that("ContinuousDistribution object initializes correctly", {
+  cd <- ContinuousDistribution$new(personLine = "anyCount")
+  expect_true(inherits(cd, "ContinuousDistribution"))
+  expect_true(inherits(cd, "Statistic"))
+  expect_equal(cd$getPersonLineTransformation(), "anyCount")
 })

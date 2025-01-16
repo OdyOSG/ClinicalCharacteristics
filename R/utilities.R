@@ -1,3 +1,11 @@
+.targetCohortLabels <- function(tcList) {
+  tcl <- tibble::tibble(
+    targetCohortId = purrr::map_dbl(tcList, ~.x$getId()),
+    targetCohortName = purrr::map_chr(tcList, ~.x$getName())
+  )
+  return(tcl)
+}
+
 .opConverter <- function(op) {
   op <- switch(op,
                'at_least' = '>=',
@@ -188,6 +196,337 @@
   return(sql)
 
 }
+
+.truncDropTempTables <- function(tempTableName) {
+  sql <- glue::glue("TRUNCATE TABLE {tempTableName}; DROP TABLE {tempTableName};")
+  return(sql)
+}
+
+## Patient level Sql ---------------------
+
+.buildDemoPatientLevelSql <- function(tsm){
+
+  demoLines <- tsm |>
+    dplyr::filter(
+      grepl("Demographic", lineItemClass)
+    )
+
+
+  statType <- demoLines |>
+    dplyr::pull(personLineTransformation) |>
+    unique()
+
+  sqlDemographicsPath <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql", "demographics")
+  )
+
+  # concept demographic
+  if (any(statType == "binary")) { # this label will change
+    valueId <- demoLines$valueId
+    valueDescription <- demoLines$valueDescription
+    demoConceptSql <- readr::read_file(file = fs::path(sqlDemographicsPath, "demoConcept.sql")) |>
+      glue::glue() |>
+      glue::glue_collapse("\n\n")
+  } else{
+    demoConceptSql <- ""
+  }
+
+  # concept age
+  if (any(statType == "AgeDemographic")) { # this label will change
+    demoAgeSql <- readr::read_file(file = fs::path(sqlDemographicsPath, "demoAge.sql")) |>
+      glue::glue() |>
+      glue::glue_collapse("\n\n")
+  } else{
+    demoAgeSql <- ""
+  }
+
+  sql <- c(demoConceptSql, demoAgeSql) |>
+    glue::glue_collapse(sep = "\n\n")
+
+}
+
+
+.buildOccurrencePatientLevelSql <- function(tsm) {
+
+  statTypes <- tsm |>
+    dplyr::select(personLineTransformation, lineItemClass) |>
+    dplyr::distinct()
+
+  # limit statTYpes to only concept set
+  statType <- statTypes |>
+    dplyr::filter(
+      grepl("ConceptSet", lineItemClass)
+    ) |>
+    dplyr::pull(personLineTransformation) |>
+    unique()
+
+  sqlConceptSetPath <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql", "conceptSet")
+  )
+
+  # concept set anyCount
+  if (any(statType == "anyCount")) { # this label will change
+    anyCountSql <- fs::path(sqlConceptSetPath, "anyCount.sql") |>
+      readr::read_file()
+  } else{
+    anyCountSql <- ""
+  }
+
+  # concept set observedCount
+  if (any(statType == "observedCount")) { # this label will change
+    observedCountSql <- fs::path(sqlConceptSetPath, "observedCount.sql") |>
+      readr::read_file()
+  } else{
+    observedCountSql <- ""
+  }
+
+  # concept set timeTo
+  if (any(statType == "timeToFirst")) {
+    timeToFirstSql <- fs::path(sqlConceptSetPath, "timeToFirst.sql") |>
+      readr::read_file()
+  } else{
+    timeToFirstSql <- ""
+  }
+
+  sql <- c(anyCountSql, observedCountSql, timeToFirstSql) |>
+    glue::glue_collapse(sep = "\n\n")
+
+  return(sql)
+
+
+}
+
+
+
+.buildCohortPatientLevelSql <- function(tsm) {
+
+  statTypes <- tsm |>
+    dplyr::select(personLineTransformation, lineItemClass) |>
+    dplyr::distinct()
+
+  # limit statTYpes to only concept set
+  statType <- statTypes |>
+    dplyr::filter(
+      grepl("Cohort", lineItemClass)
+    ) |>
+    dplyr::pull(personLineTransformation) |>
+    unique()
+
+  sqlConceptSetPath <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql", "cohort")
+  )
+
+  # concept set anyCount
+  if (any(statType == "anyCount")) { # this label will change
+    anyCountSql <- fs::path(sqlConceptSetPath, "anyCount.sql") |>
+      readr::read_file()
+  } else{
+    anyCountSql <- ""
+  }
+
+  # concept set observedCount
+  if (any(statType == "observedCount")) { # this label will change
+    observedCountSql <- fs::path(sqlConceptSetPath, "observedCount.sql") |>
+      readr::read_file()
+  } else{
+    observedCountSql <- ""
+  }
+
+  # concept set timeTo
+  if (any(statType == "timeToFirst")) {
+    timeToFirstSql <- fs::path(sqlConceptSetPath, "timeToFirst.sql") |>
+      readr::read_file()
+  } else{
+    timeToFirstSql <- ""
+  }
+
+  sql <- c(anyCountSql, observedCountSql, timeToFirstSql) |>
+    glue::glue_collapse(sep = "\n\n")
+
+  return(sql)
+
+}
+
+
+## aggregation sql ------------------
+
+.tempPsDatTable <- function(executionSettings, buildOptions) {
+
+   # Create temp table joining patient date with ts meta
+  patTsSql <- "
+        CREATE TABLE #pat_ts_tab AS
+        SELECT
+          a.*, b.ordinal_id, b.section_label, b.line_item_label,
+          b.value_description, b.statistic_type,
+          b.aggregation_type, b.line_item_class
+        FROM @patient_data a
+        JOIN @ts_meta b
+        ON a.value_id = b.value_id AND a.time_label = b.time_label;" |>
+    SqlRender::render(
+      patient_data = buildOptions$patientLevelDataTempTable,
+      ts_meta = buildOptions$tsMetaTempTable
+    ) |>
+    SqlRender::translate(
+      targetDialect = executionSettings$getDbms(),
+      tempEmulationSchema = executionSettings$tempEmulationSchema
+    )
+  return(patTsSql)
+}
+
+.initAggregationTables <- function(executionSettings, buildOptions) {
+
+  initSummaryTableSql <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql/aggregate", "initSummaryTables.sql")
+  ) |>
+    readr::read_file() |>
+    SqlRender::render(
+      categorical_table = buildOptions$categoricalSummaryTempTable,
+      continuous_table = buildOptions$continuousSummaryTempTable
+    ) |>
+    SqlRender::translate(
+      targetDialect = executionSettings$getDbms(),
+      tempEmulationSchema = executionSettings$tempEmulationSchema
+    )
+
+  return(initSummaryTableSql)
+
+}
+
+.getDenominator <- function(executionSettings, buildOptions) {
+
+  denomSql <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql/aggregate/denom_any.sql")
+  ) |>
+    readr::read_file() |>
+    SqlRender::render(
+      target_cohort_table = buildOptions$targetCohortTempTable
+    ) |>
+    SqlRender::translate(
+      targetDialect = executionSettings$getDbms(),
+      tempEmulationSchema = executionSettings$tempEmulationSchema
+    )
+
+  return(denomSql)
+
+}
+
+.aggregateSql <- function(tsm, executionSettings, buildOptions) {
+
+  aggregateSqlPaths <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql/aggregate")
+  )
+
+  # Step 1: Make a table with all the aggregation types
+  aggSqlTb <- tibble::tibble(
+    aggName = c("presence", "continuousDistribution", "breaks", "score"),
+    aggType = c("categorical", "continuous", "categorical", "continuous"),
+    aggSqlPath = fs::path(aggregateSqlPaths, aggName, ext = "sql")
+  ) |>
+    dplyr::rowwise() |>
+    dplyr::mutate(
+      aggSql = readr::read_file(aggSqlPath) # read in file
+    )
+  # Step 2: identify the correct temp tables
+  aggSqlTb <- aggSqlTb |>
+    dplyr::left_join(
+      tibble::tibble(
+        aggType = c("categorical", "continuous"),
+        aggTable = c(buildOptions$categoricalSummaryTempTable, buildOptions$continuousSummaryTempTable)
+      ),
+      by = c("aggType")
+    )
+
+  # Step 3: Find the distinct stat types from the table shell
+  statTypes <- tsm |>
+    dplyr::select(statisticType) |>
+    dplyr::distinct()
+
+  # Step 4: Reduce the agg Sql to only the stat types
+
+  aggSqlTb2 <- aggSqlTb |>
+    dplyr::inner_join(statTypes, by = c("aggName" = "statisticType"))
+
+  # Step 5:
+  aggSqlBind <- vector('list', length = nrow(aggSqlTb2))
+  for (i in 1:nrow(aggSqlTb2)) {
+
+  # if categorical render with table
+    if (aggSqlTb2$aggType[i] == "categorical") {
+      aggSqlBind[[i]] <- SqlRender::render(
+        sql = aggSqlTb2$aggSql[i],
+        categorical_table = aggSqlTb2$aggTable[i]
+      ) |>
+        SqlRender::translate(
+          targetDialect = executionSettings$getDbms(),
+          tempEmulationSchema = executionSettings$tempEmulationSchema
+        )
+    }
+    # if continuous render with table
+    if (aggSqlTb2$aggType[i] == "continuous") {
+      aggSqlBind[[i]] <- SqlRender::render(
+        sql = aggSqlTb2$aggSql[i],
+        continuous_table = aggSqlTb2$aggTable[i]
+      ) |>
+        SqlRender::translate(
+          targetDialect = executionSettings$getDbms(),
+          tempEmulationSchema = executionSettings$tempEmulationSchema
+        )
+    }
+
+  }
+  aggSqlBind <- do.call('c', aggSqlBind) |>
+    glue::glue_collapse("\n\n")
+
+  return(aggSqlBind)
+}
+
+
+# Get Results ------------------
+
+.getCategoricalResults <- function(tsm, tc, executionSettings, buildOptions) {
+
+  sql <- "SELECT * FROM @categorical_table;" |>
+    SqlRender::render(
+      categorical_table = buildOptions$categoricalSummaryTempTable
+    ) |>
+    SqlRender::translate(
+      targetDialect = executionSettings$getDbms(),
+      tempEmulationSchema = executionSettings$tempEmulationSchema
+    )
+
+  jj <- DatabaseConnector::querySql(
+    connection = executionSettings$getConnection(),
+    sql = sql,
+    snakeCaseToCamelCase = TRUE
+  )
+
+  categoricalResults <- jj |>
+    dplyr::inner_join(
+      tsm |> dplyr::select(ordinalId, sectionLabel),
+      by = c("ordinalId")
+    ) |>
+    dplyr::left_join(
+      tc,
+      by = c("targetCohortId")
+    ) |>
+    dplyr::select(
+      targetCohortId, targetCohortName, ordinalId, sectionLabel, lineItemLabel, timeLabel, subjectCount, pct
+    ) |>
+    dplyr::arrange(
+      targetCohortId, ordinalId
+    ) |>
+    dplyr::distinct()
+
+  return(categoricalResults)
+
+}
+
 
 
 # Archive ------------------------
@@ -426,10 +765,6 @@
 # }
 #
 #
-# .truncDropTempTables <- function(tempTableName) {
-#   sql <- glue::glue("TRUNCATE TABLE {tempTableName}; DROP TABLE {tempTableName};")
-#   return(sql)
-# }
 #
 # .prepCsTransform <- function(categoryId, tempTableName, sql) {
 #
