@@ -86,22 +86,12 @@ TableShell <- R6::R6Class("TableShell",
       checkmate::assert_class(buildOptions, classes = "BuildOptions", null.ok = FALSE)
 
       # insert Ts Meta
-      cli::cat_bullet(
-        glue::glue_col("Insert tsMeta table ---> {cyan {buildOptions$tsMetaTempTable}}"),
-        bullet = "info",
-        bullet_col = "blue"
-      )
       private$.insertTsMeta(
         executionSettings = executionSettings,
         buildOptions = buildOptions
       )
 
       # insert time windows
-      cli::cat_bullet(
-        glue::glue("Insert timeWindows table ---> {cyan {buildOptions$timeWindowTempTable}}"),
-        bullet = "info",
-        bullet_col = "blue"
-      )
       private$.insertTimeWindows(
         executionSettings = executionSettings,
         buildOptions = buildOptions
@@ -119,7 +109,7 @@ TableShell <- R6::R6Class("TableShell",
       checkmate::assert_class(buildOptions, classes = "BuildOptions", null.ok = FALSE)
 
       cli::cat_bullet(
-        glue::glue_col("{yellow Preparing table shell sql}"),
+        glue::glue_col("{yellow Preparing Table Shell Sql}"),
         bullet = "pointer",
         bullet_col = "yellow"
       )
@@ -162,7 +152,21 @@ TableShell <- R6::R6Class("TableShell",
 
       return(fullSql)
 
-    }#,
+    },
+
+    outputResults = function(executionSettings, buildOptions) {
+
+      tsm <- self$getTableShellMeta()
+
+      tc <- self$getTargetCohorts() |>
+        .targetCohortLabels()
+
+      # categorical results
+      cat_res <- .getCategoricalResults(tsm, tc, executionSettings, buildOptions) |>
+        tibble::as_tibble()
+
+      return(cat_res)
+    }
 
     # function to aggregate categorical vars into table
     # aggregateTableShell = function(executionSettings, type, buildOptions) {
@@ -253,9 +257,9 @@ TableShell <- R6::R6Class("TableShell",
         dplyr::rename_with(snakecase::to_snake_case)
 
       cli::cat_bullet(
-        glue::glue("Insert #ts_meta table to route characterization"),
-        bullet = "pointer",
-        bullet_col = "yellow"
+        glue::glue_col("Insert tsMeta table ---> {cyan {buildOptions$tsMetaTempTable}}"),
+        bullet = "info",
+        bullet_col = "blue"
       )
 
       # establish connection to database
@@ -305,9 +309,9 @@ TableShell <- R6::R6Class("TableShell",
         )
 
       cli::cat_bullet(
-        glue::glue("Insert time window tables for characterization"),
-        bullet = "pointer",
-        bullet_col = "yellow"
+        glue::glue_col("Insert timeWindows table ---> {cyan {buildOptions$timeWindowTempTable}}"),
+        bullet = "info",
+        bullet_col = "blue"
       )
 
       # establish connection to database
@@ -490,16 +494,21 @@ TableShell <- R6::R6Class("TableShell",
       # make temp continuous + categorical table
       initSummaryTableSql <- .initAggregationTables(executionSettings, buildOptions)
 
+      # get denominator
+      denomSql <- .getDenominator(executionSettings, buildOptions)
+
       # make all the aggregate sql queries
       aggregateSqlQuery <- .aggregateSql(tsm, executionSettings, buildOptions)
 
-      allSql <- c(patTsSql, initSummaryTableSql, aggregateSqlQuery) |>
+      allSql <- c(patTsSql, initSummaryTableSql, denomSql, aggregateSqlQuery) |>
         glue::glue_collapse(sep = "\n\n")
 
       return(allSql)
 
 
     },
+
+
 
     # function to drop all cs Tables
     .dropTempTables = function(executionSettings, buildOptions) {

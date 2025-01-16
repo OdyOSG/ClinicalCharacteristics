@@ -6,7 +6,7 @@ CREATE TABLE @continuous_table (
 	line_item_label VARCHAR(200) NOT NULL,
 	patient_line VARCHAR(50) NOT NULL,
 	subject_count BIGINT NOT NULL,
-	occurrence_count BIGINT NOT NULL,
+	mean FLOAT NOT NULL,
 	standard_deviation FLOAT NOT NULL,
 	minimum_value FLOAT NOT NULL,
 	p10_value FLOAT NOT NULL,
@@ -25,5 +25,6 @@ CREATE TABLE @categorical_table (
 	time_label VARCHAR(50) NOT NULL,
 	line_item_label VARCHAR(200) NOT NULL,
 	patient_line VARCHAR(50) NOT NULL,
-	subject_count BIGINT NOT NULL
+	subject_count BIGINT NOT NULL,
+	pct FLOAT NOT NULL
 );

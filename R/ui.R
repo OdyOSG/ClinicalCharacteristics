@@ -21,16 +21,24 @@ generateTableShell <- function(tableShell, executionSettings, buildOptions = NUL
 
   # Step 3: Execute them on dbms
   cli::cat_bullet(
-    glue::glue_col("{yellow Executing shell sql}"),
+    glue::glue_col("{yellow Executing Table Shell Sql}"),
     bullet = "pointer",
     bullet_col = "yellow"
   )
-
+  ## Execute on db
   DatabaseConnector::executeSql(
     connection = executionSettings$getConnection(),
     sql = tsSql
   )
 
+  # Step 4: Extract Summaries
+  cli::cat_bullet(
+    glue::glue_col("{yellow Summarizing Table Shell}"),
+    bullet = "pointer",
+    bullet_col = "yellow"
+  )
+  res <- tableShell$outputResults(executionSettings, buildOptions)
+  return(res)
 }
 
 

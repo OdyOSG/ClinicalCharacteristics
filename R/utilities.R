@@ -1,3 +1,11 @@
+.targetCohortLabels <- function(tcList) {
+  tcl <- tibble::tibble(
+    targetCohortId = purrr::map_dbl(tcList, ~.x$getId()),
+    targetCohortName = purrr::map_chr(tcList, ~.x$getName())
+  )
+  return(tcl)
+}
+
 .opConverter <- function(op) {
   op <- switch(op,
                'at_least' = '>=',
@@ -388,17 +396,31 @@
 
 }
 
+.getDenominator <- function(executionSettings, buildOptions) {
+
+  denomSql <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql/aggregate/denom_any.sql")
+  ) |>
+    readr::read_file() |>
+    SqlRender::render(
+      target_cohort_table = buildOptions$targetCohortTempTable
+    ) |>
+    SqlRender::translate(
+      targetDialect = executionSettings$getDbms(),
+      tempEmulationSchema = executionSettings$tempEmulationSchema
+    )
+
+  return(denomSql)
+
+}
+
 .aggregateSql <- function(tsm, executionSettings, buildOptions) {
 
-  # aggregateSqlPaths <- fs::path_package(
-  #   package = "ClinicalCharacteristics",
-  #   fs::path("sql/aggregate")
-  # )|>
-  #   fs::dir_ls()
-
-  # test
-  aggregateSqlPaths <- here::here("inst") |>
+  aggregateSqlPaths <- fs::path_package(
+    package = "ClinicalCharacteristics",
     fs::path("sql/aggregate")
+  )
 
   # Step 1: Make a table with all the aggregation types
   aggSqlTb <- tibble::tibble(
@@ -463,6 +485,48 @@
 
   return(aggSqlBind)
 }
+
+
+# Get Results ------------------
+
+.getCategoricalResults <- function(tsm, tc, executionSettings, buildOptions) {
+
+  sql <- "SELECT * FROM @categorical_table;" |>
+    SqlRender::render(
+      categorical_table = buildOptions$categoricalSummaryTempTable
+    ) |>
+    SqlRender::translate(
+      targetDialect = executionSettings$getDbms(),
+      tempEmulationSchema = executionSettings$tempEmulationSchema
+    )
+
+  jj <- DatabaseConnector::querySql(
+    connection = executionSettings$getConnection(),
+    sql = sql,
+    snakeCaseToCamelCase = TRUE
+  )
+
+  categoricalResults <- jj |>
+    dplyr::inner_join(
+      tsm |> dplyr::select(ordinalId, sectionLabel),
+      by = c("ordinalId")
+    ) |>
+    dplyr::left_join(
+      tc,
+      by = c("targetCohortId")
+    ) |>
+    dplyr::select(
+      targetCohortId, targetCohortName, ordinalId, sectionLabel, lineItemLabel, timeLabel, subjectCount, pct
+    ) |>
+    dplyr::arrange(
+      targetCohortId, ordinalId
+    ) |>
+    dplyr::distinct()
+
+  return(categoricalResults)
+
+}
+
 
 
 # Archive ------------------------
