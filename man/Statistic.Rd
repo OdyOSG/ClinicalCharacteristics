@@ -14,6 +14,7 @@ Specific types of statistics are defined in derived classes
 \item \href{#method-Statistic-getStatisticType}{\code{Statistic$getStatisticType()}}
 \item \href{#method-Statistic-getAggregationType}{\code{Statistic$getAggregationType()}}
 \item \href{#method-Statistic-getPersonLineTransformation}{\code{Statistic$getPersonLineTransformation()}}
+\item \href{#method-Statistic-getBreaksIfAny}{\code{Statistic$getBreaksIfAny()}}
 \item \href{#method-Statistic-clone}{\code{Statistic$clone()}}
 }
 }
@@ -50,6 +51,15 @@ Specific types of statistics are defined in derived classes
 \subsection{Method \code{getPersonLineTransformation()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$getPersonLineTransformation()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Statistic-getBreaksIfAny"></a>}}
+\if{latex}{\out{\hypertarget{method-Statistic-getBreaksIfAny}{}}}
+\subsection{Method \code{getBreaksIfAny()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$getBreaksIfAny()}\if{html}{\out{</div>}}
 }
 
 }

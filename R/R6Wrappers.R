@@ -85,6 +85,7 @@ defaultTableShellBuildOptions <- function(keepResultsTable = FALSE,
                                           tsMetaTempTable = "#ts_meta",
                                           conceptSetOccurrenceTempTable = "#concept_set_occ",
                                           patientLevelDataTempTable = "#patient_data",
+                                          patientLevelTableShellTempTable = "#pat_ts_tab",
                                           categoricalSummaryTempTable = "#categorical_table",
                                           continuousSummaryTempTable = "#continuous_table"
                                           ) {
@@ -98,6 +99,7 @@ defaultTableShellBuildOptions <- function(keepResultsTable = FALSE,
     targetCohortTempTable = targetCohortTempTable,
     conceptSetOccurrenceTempTable = conceptSetOccurrenceTempTable,
     patientLevelDataTempTable = patientLevelDataTempTable,
+    patientLevelTableShellTempTable = patientLevelTableShellTempTable,
     categoricalSummaryTempTable = categoricalSummaryTempTable,
     continuousSummaryTempTable = continuousSummaryTempTable
   )
@@ -340,21 +342,6 @@ createConceptSetLineItemBatch <- function(
 #   return(csLiBatch)
 # }
 
-#' @title
-#' Create gender demographic line item
-#'
-#' @return A Demographic line item type class object
-#' @export
-createGenderLineItem <- function() {
-
-  gender <- DemographicLineItem$new(
-    name = "Gender",
-    statistic = DemographicConcept$new(conceptColumn = "gender_concept_id")
-  )
-
-  return(gender)
-
-}
 
 
 createDemographicLineItem <- function(statistic) {
@@ -374,6 +361,25 @@ createDemographicLineItem <- function(statistic) {
   }
 
   return(dcli)
+}
+
+ageChar <- function(breaks = NULL) {
+
+  if(is.null(breaks)) {
+    ageChar <- DemographicAge$new(
+      statType = "continuousDistribution",
+      aggType = "continuous",
+      breaks = NULL
+    )
+  } else {
+    ageChar <- DemographicAge$new(
+      statType = "breaks",
+      aggType = "categorical",
+      breaks = breaks
+    )
+  }
+  return(ageChar)
+
 }
 
 
@@ -397,53 +403,21 @@ femaleGender <- function() {
   return(femaleConcept)
 }
 
-#' @title
-#' Create race demographic line item
-#'
-#' @return A Demographic line item type class object
-#' @export
-createRaceLineItem <- function() {
 
-  gender <- DemographicLineItem$new(
-    name = "Race",
-    statistic = DemographicConcept$new(conceptColumn = "race_concept_id")
+newBreaks <- function(name, breaks, labels = NULL) {
+  if (is.null(labels)) {
+    a <- dplyr::lead(breaks)
+    lab <- glue::glue("[{breaks}-{a})")[-length(breaks)]
+    labels <- c(lab, paste0(dplyr::last(breaks), "+"))
+  }
+
+  br <- BreaksStrategy$new(
+    name = name,
+    breaks = breaks,
+    labels = labels
   )
 
-  return(gender)
-
-}
-
-#' @title
-#' Create ethnicity demographic line item
-#'
-#' @return A Demographic line item type class object
-#' @export
-createEthnicityLineItem <- function() {
-
-  gender <- DemographicLineItem$new(
-    name = "Ethnicity",
-    statistic = DemographicConcept$new(conceptColumn = "ethnicity_concept_id")
-  )
-
-  return(gender)
-
-}
-
-#' @title
-#' Create age demographic line item
-#'
-#' @param breaks A breaks object describing how to categorize the continuous value
-#' @return A Demographic line item type class object
-#' @export
-createAgeLineItem <- function(breaks = NULL) {
-
-  age <- DemographicLineItem$new(
-    name = "Age",
-    statistic = DemographicAge$new(breaks = breaks)
-  )
-
-  return(age)
-
+  return(br)
 }
 
 #' @title

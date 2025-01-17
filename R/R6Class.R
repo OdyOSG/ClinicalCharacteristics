@@ -36,47 +36,47 @@ TableShell <- R6::R6Class("TableShell",
       return(tsLineItems)
     },
 
-    printJobDetails = function() {
-
-      titleNm <- self$getName()
-
-      tcs <- self$getTargetCohorts()
-      cohortPrintInfo <- purrr::map_chr(tcs, ~.x$targetCohortDetails())
-
-      # get line item info
-      lineItems <- self$getLineItems()
-      liPrintInfo <- purrr::map_chr(lineItems, ~.x$lineItemDetails())
-
-      cli::cat_bullet(
-        glue::glue_col("{yellow Job Details for Table Shell: {titleNm}}"),
-        bullet = "pointer",
-        bullet_col = "yellow"
-      )
-
-      cli::cat_bullet(
-        glue::glue("Target Cohort Details:"),
-        bullet = "pointer",
-        bullet_col = "yellow"
-      )
-
-      cli::cat_line(
-        glue::glue("\t{cohortPrintInfo}")
-      )
-
-
-      cli::cat_bullet(
-        glue::glue("Line Item tasks:"),
-        bullet = "pointer",
-        bullet_col = "yellow"
-      )
-
-      cli::cat_line(
-        glue::glue("\t{liPrintInfo}")
-      )
-
-      invisible(liPrintInfo)
-
-    },
+    # printJobDetails = function() {
+    #
+    #   titleNm <- self$getName()
+    #
+    #   tcs <- self$getTargetCohorts()
+    #   cohortPrintInfo <- purrr::map_chr(tcs, ~.x$targetCohortDetails())
+    #
+    #   # get line item info
+    #   lineItems <- self$getLineItems()
+    #   liPrintInfo <- purrr::map_chr(lineItems, ~.x$lineItemDetails())
+    #
+    #   cli::cat_bullet(
+    #     glue::glue_col("{yellow Job Details for Table Shell: {titleNm}}"),
+    #     bullet = "pointer",
+    #     bullet_col = "yellow"
+    #   )
+    #
+    #   cli::cat_bullet(
+    #     glue::glue("Target Cohort Details:"),
+    #     bullet = "pointer",
+    #     bullet_col = "yellow"
+    #   )
+    #
+    #   cli::cat_line(
+    #     glue::glue("\t{cohortPrintInfo}")
+    #   )
+    #
+    #
+    #   cli::cat_bullet(
+    #     glue::glue("Line Item tasks:"),
+    #     bullet = "pointer",
+    #     bullet_col = "yellow"
+    #   )
+    #
+    #   cli::cat_line(
+    #     glue::glue("\t{liPrintInfo}")
+    #   )
+    #
+    #   invisible(liPrintInfo)
+    #
+    # },
 
     # function to instantiate tables for queries
     instantiateTables = function(executionSettings, buildOptions) {
@@ -165,7 +165,17 @@ TableShell <- R6::R6Class("TableShell",
       cat_res <- .getCategoricalResults(tsm, tc, executionSettings, buildOptions) |>
         tibble::as_tibble()
 
-      return(cat_res)
+      # categorical results
+      cts_res <- .getContinuousResults(tsm, tc, executionSettings, buildOptions) |>
+        tibble::as_tibble()
+
+
+      res <- list(
+        'categorical' = cat_res,
+        'continuous' = cts_res
+      )
+
+      return(res)
     }
 
     # function to aggregate categorical vars into table
@@ -340,7 +350,8 @@ TableShell <- R6::R6Class("TableShell",
       cohortIds <- purrr::map_int(
         private$targetCohorts,
         ~.x$getId()
-      )
+      ) |>
+        glue::glue_collapse(", ")
 
       # get sql from package
       sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
@@ -549,6 +560,10 @@ TableShell <- R6::R6Class("TableShell",
         )
 
       return(dropTempTableSql)
+    },
+
+    .getLineItemsWithBreaks = function() {
+      tsm <- self$tabl
     }
   )
 )
@@ -571,6 +586,7 @@ BuildOptions <- R6::R6Class(
                           tsMetaTempTable = NULL,
                           conceptSetOccurrenceTempTable = NULL,
                           patientLevelDataTempTable = NULL,
+                          patientLevelTableShellTempTable = NULL,
                           categoricalSummaryTempTable = NULL,
                           continuousSummaryTempTable = NULL
                           ) {
@@ -582,6 +598,7 @@ BuildOptions <- R6::R6Class(
       .setString(private = private, key = ".targetCohortTempTable", value = targetCohortTempTable)
       .setString(private = private, key = ".conceptSetOccurrenceTempTable", value = conceptSetOccurrenceTempTable)
       .setString(private = private, key = ".patientLevelDataTempTable", value = patientLevelDataTempTable)
+      .setString(private = private, key = ".patientLevelTableShellTempTable", value = patientLevelTableShellTempTable)
       .setString(private = private, key = ".categoricalSummaryTempTable", value = categoricalSummaryTempTable)
       .setString(private = private, key = ".continuousSummaryTempTable", value = continuousSummaryTempTable)
     }
@@ -595,6 +612,7 @@ BuildOptions <- R6::R6Class(
     .tsMetaTempTable = NULL,
     .conceptSetOccurrenceTempTable = NULL,
     .patientLevelDataTempTable = NULL,
+    .patientLevelTableShellTempTable = NULL,
     .categoricalSummaryTempTable = NULL,
     .continuousSummaryTempTable = NULL
   ),
@@ -634,6 +652,10 @@ BuildOptions <- R6::R6Class(
 
     patientLevelDataTempTable = function(value) {
       .setActiveString(private = private, key = ".patientLevelDataTempTable", value = value)
+    },
+
+    patientLevelTableShellTempTable = function(value) {
+      .setActiveString(private = private, key = ".patientLevelTableShellTempTable", value = value)
     },
 
     categoricalSummaryTempTable = function(value) {
@@ -897,6 +919,14 @@ Statistic <- R6::R6Class(
     getPersonLineTransformation = function() {
       plt <- private$personLineTransformation
       return(plt)
+    },
+    getBreaksIfAny = function() {
+      if (self$getStatisticType() == "breaks") {
+        br <- private$breaks
+      } else {
+        br <- NULL
+      }
+      return(br)
     }
   ),
   private = list(
@@ -956,13 +986,21 @@ DemographicAge <- R6::R6Class(
         statType = statType,
         aggType = aggType)
       .setString(private = private, key = "demoCategory", value = "Age")
-      .setClass(private = private, key = "breaks", value = breaks, class = "BreaksStrategy")
+      .setClass(private = private, key = "breaks", value = breaks,
+                class = "BreaksStrategy", nullable = TRUE)
     },
 
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
+    },
+
+
+    modifyBreaksLabels = function(newLabels) {
+      br <- private$breaks
+      br$labels <- newLabels
     }
+
   ),
   private = list(
     demoCategory = NA_character_,
@@ -1154,6 +1192,11 @@ public = list(
     )
 
     return(tb)
+  },
+
+  getStatistic = function() {
+    st <- private$statistic
+    return(st)
   }
 
 ),
@@ -1682,284 +1725,65 @@ TimeInterval <- R6::R6Class(
     'rb' = NA_integer_
   )
 )
-#
-# TimeInterval_old <- R6::R6Class(
-#   "TimeInterval",
-#   public = list(
-#     initialize = function(lb, rb) {
-#       .setNumber(private = private, key = "lb", value = lb)
-#       .setNumber(private = private, key = "rb", value = rb)
-#       invisible(self)
-#     },
-#     getLb = function() {
-#       lb <- private$lb
-#       return(lb)
-#     },
-#     getRb = function() {
-#       rb <- private$rb
-#       return(rb)
-#     },
-#     getTimeInterval = function() {
-#       tb <- tibble::tibble(
-#         lb = private$lb,
-#         rb = private$rb
-#       )
-#       return(tb)
-#     }
-#   ),
-#   private = list(
-#     'lb' = NA_integer_,
-#     'rb' = NA_integer_
-#   )
-# )
 
+## Breaks Strategy -----------------
+BreaksStrategy <- R6::R6Class(
+  classname = "BreaksStrategy",
+  public = list(
 
-# Legacy -------------
+    initialize = function(name, labels, breaks) {
+      .setString(private = private, key = ".name", value = name)
+      .setCharacter(private = private, key = ".labels", value = labels)
+      .setNumber(private = private, key = ".breaks", value = breaks)
+    },
 
+    makeCaseWhenSql = function(ordinalId) {
+      sql_when <- tibble::tibble(
+        lhs = self$breaks,
+        rhs = dplyr::lead(self$breaks) - 0.01,
+        label = self$labels
+      ) |>
+        dplyr::mutate(
+          #ord = dplyr::row_number(),
+          expr_left = glue::glue("{lhs} <= a.value"),
+          expr_right = dplyr::if_else(!is.na(rhs), glue::glue("a.value <= {rhs}"), ""),
+          expr_both = glue::glue("WHEN ({expr_left} AND {expr_right}) THEN '{label}'"),
+          expr_both = dplyr::if_else(is.na(rhs), gsub(" AND ", "", expr_both), expr_both)
+        ) |>
+        dplyr::pull(expr_both) |>
+        glue::glue_collapse(sep = "\n")
 
-## Section ------
+      case_when_sql <- c(
+        "SELECT *,",
+        "\nCASE ",
+        glue::glue_collapse(sql_when, sep = "\n\t"),
+        "\nELSE 'Other' END AS break_id",
+        "\nFROM @pat_ts_tab a",
+        "\nWHERE ordinal_id = {ordinalId}"
+      ) |>
+        glue::glue_collapse() |>
+        glue::glue()
 
-## @description
-###' An R6 class to define a Section object
-## A Section object is a logical encapsulation of LineItems
-## Sections have names and ordinals for the final output
-##
-## @export
-## Section <- R6::R6Class("Section",
-#   public = list(
-#     initialize = function(name,
-#                           ordinal,
-#                           lineItems) {
-#       .setString(private = private, key = "name", value = name)
-#       .setNumber(private = private, key = "ordinal", value = ordinal)
-#       .setListofClasses(private = private, key = "lineItems", value = lineItems, classes = c("LineItem"))
-#     },
-#     getName = function() {
-#       name <- private$name
-#       return(name)
-#     },
-#     getOrdinal = function() {
-#       sectionOrdinal <- private$ordinal
-#       return(sectionOrdinal)
-#     },
-#     getLineItems = function() {
-#       sectionLineItems <- private$lineItems
-#       return(sectionLineItems)
-#     }
-#   ),
-#   private = list(
-#     name = NULL,
-#     ordinal = NA,
-#     lineItems = NULL
-#   )
-# )
+      return(case_when_sql)
+    }
 
+  ),
+  private = list(
+    .name = NA_character_,
+    .labels = NA_character_,
+    .breaks = NA_real_
+  ),
 
+  active = list(
+    name = function(name) {
+      .setActiveString(private = private, key = ".name", value = name)
+    },
+    labels = function(labels) {
+      .setActiveCharacter(private = private, key = ".labels", value = labels)
+    },
+    breaks = function(breaks) {
+      .setActiveNumber(private = private, key = ".breaks", value = breaks)
+    }
+  )
+)
 
-## TimeWindow ------
-#
-# TimeWindow <- R6::R6Class(
-#   "TimeWindow",
-#   public = list(
-#     initialize = function(windows) {
-#       .setListofClasses(
-#         private = private,
-#         key = "windows",
-#         value = windows,
-#         classes = c("TimeInterval")
-#       )
-#       invisible(self)
-#     },
-#     length = function() {
-#       ll <- length(private$windows)
-#       return(ll)
-#     },
-#     getTimeIntervals = function() {
-#
-#       tis <- purrr::map_dfr(
-#         private$windows,
-#         ~tibble::tibble(
-#           'lb' = .x$getLeftBound(),
-#           'rb' = .x$getRightBound()
-#         )
-#       )
-#       return(tis)
-#     }
-#   ),
-#   private = list(
-#     windows = NULL
-#   )
-# )
-
-# # GenderDefinition -----
-#
-# #' @description
-# #' An R6 class to define a GenderDefinition object.
-# #'
-# #' @export
-# GenderDefinition <- R6::R6Class("GenderDefinition",
-#  inherit = LineItem,
-#  public = list(
-#    initialize = function(name,
-#                          genderConceptIds) {
-#      super$setDomainIds(domainIds = "Gender")
-#      super$setName(name = name)
-#      super$setConceptIds(conceptIds = genderConceptIds)
-#
-#      templateSql <- "select something;" ## TODO as SqlRender::loadRenderTranslateSql()
-#      super$setTemplateSql(templateSql = templateSql)
-#    }
-#  )
-# )
-
-
-
-
-# # IndexYearDefinition -----
-
-# #' @description
-# #' An R6 class to define a IndexYearDefinition object.
-# #'
-# #' @export
-# IndexYearDefinition <- R6::R6Class("IndexYearDefinition",
-#  inherit = LineItem,
-#  public = list(
-#    initialize = function(name = indexYear,
-#                          indexYear) {
-#      super$setName(name = name)
-#      super$setDomainIds(domainIds = "IndexYear")
-#      super$setMinThreshold(minThreshold = indexYear)
-#      super$setMaxThreshold(maxThreshold = indexYear) # is it fine to just stuff this in min and max thresholds?
-#
-#      templateSql <- "select something;" ## TODO as SqlRender::loadRenderTranslateSql()
-#      super$setTemplateSql(templateSql = templateSql)
-#    }
-
-# # ConceptSetGroupDefinition ----
-
-# #' @description
-# #' An R6 class to define a ConceptSetGroupDefinition
-# #' A line item that uses a Concept Set Group
-# #'
-# #' @export
-# ConceptSetGroupDefinition <- R6::R6Class("ConceptSetGroupDefinition",
-#  inherit = LineItem,
-#  public = list(
-#    initialize = function(ConceptSetLineItems) {
-#      .setListofClasses(private = private, key = "ConceptSetLineItems",
-#                        value = ConceptSetLineItems,
-#                        classes = c("ConceptSetLineItem"))
-#    },
-#    getConceptSetLineItems = function() {
-#      ConceptSetLineItems <- private$ConceptSetLineItems
-#      return(ConceptSetLineItems)
-#     }
-#   ),
-#   private = list(
-#     ConceptSetLineItems = c()
-#   )
-# ))
-
-
-
-
-# # CohortDefinition ----
-
-# #' @description
-# #' An R6 class to define a CohortDefinition
-# #'
-# #' @export
-# CohortDefinition <- R6::R6Class("CohortDefinition",
-#   inherit = LineItem,
-#   public = list(
-#     initialize = function(name,
-#                           cohortDefinitionId, cohortDatabaseSchema, cohortTable) {
-#       super$setName(name = name)
-#       super$setDomainIds(domainIds = "Cohort")
-#       super$setAssetId(assetId = cohortDefinitionId)
-#
-#      # Could simply use an execution settings object, but the scope here is much less, as we
-#      # need the same connection and database
-#      .setString(private = private, key = "cohortDatabaseSchema", value = cohortDatabaseSchema)
-#      .setString(private = private, key = "cohortTable", value = cohortTable)
-#
-#       templateSql <- "select something;" ## TODO as SqlRender::loadRenderTranslateSql()
-#       super$setTemplateSql(templateSql = templateSql)
-#     }
-#   ),
-#     private = list(
-#     cohortDatabaseSchema = NULL,
-#     cohortTable = NULL)
-# )
-
-# # RaceDefinition ------
-
-# #' @description
-# #' An R6 class to define a RaceDefinition object.
-# #'
-# #' @export
-# RaceDefinition <- R6::R6Class("RaceDefinition", list(
-#   inherit = LineItem,
-#   public = list(
-#     initialize = function(name,
-#                           raceConceptIds) {
-#       super$setDomainIds(domainIds = "Race")
-#       super$setName(name = name)
-#       super$setConceptIds(conceptIds = raceConceptIds)
-
-#       templateSql <- "select something;" ## TODO as SqlRender::loadRenderTranslateSql()
-#       super$setTemplateSql(templateSql = templateSql)
-#     },
-#     getRaceConceptIds = function() {
-#      raceConceptIds <- private$raceConceptIds
-#      return(raceConceptIds)
-#     }
-#   )
-# ))
-
-# ######## MORE TO-DO #####
-
-
-# # ValueDefinition ----
-
-# #' @description
-# #' An R6 class to handle the ...
-# #'
-# #' @export
-# ValueDefinition <- R6::R6Class("ValueDefinition", list(
-#   inherit = LineItem,
-
-#   domainIds = c(),
-#   thresholdMin = NA,
-#   thresholdMax = NA,
-#   unitConceptIds = c(),
-#   unitConversions = c()
-# ))
-
-# # UnitConversion ----
-
-# #' @description
-# #' An R6 class to handle the ...
-# #'
-# #' @export
-# UnitConversion <- R6::R6Class("UnitConversion", list(
-#   originalUnitConceptId = NA,
-#   targetUnitConceptId = NA,
-#   multiplierToOriginal = NA
-# ))
-
-# # BreaksStrategy ----
-
-# #' @description
-# #' An R6 class to handle the ...
-# #'
-# #' @export
-# BreaksStrategy <- R6::R6Class("BreaksStrategy", list(
-#   name = NULL,
-#   breaks = NULL,
-#   initialize = function(name,
-#                         breaks) {
-#     self$name <- name
-#     self$breaks <- breaks
-#   }
-# ))
