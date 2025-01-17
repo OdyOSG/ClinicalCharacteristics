@@ -67,7 +67,6 @@
     vv <- private[[key]]
     return(vv)
   }
-  # replace the codesetTempTable
   .setLogical(private = private, key = key, value = value)
 }
 
@@ -77,10 +76,17 @@
     vv <- private[[key]]
     return(vv)
   }
-  # replace the codesetTempTable
   .setString(private = private, key = key, value = value)
 }
 
+.setActiveCharacter <- function(private, key, value) {
+  # return the value if nothing added
+  if(missing(value)) {
+    vv <- private[[key]]
+    return(vv)
+  }
+  .setCharacter(private = private, key = key, value = value)
+}
 
 .setActiveNumber <- function(private, key, value) {
   # return the value if nothing added

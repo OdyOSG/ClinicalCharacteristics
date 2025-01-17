@@ -115,6 +115,17 @@ test_that("createCohorttLineItemBatch creates a list of CohortLineItem objects",
 })
 
 
+test_that("newBreaks makes a BreaksStrategy Object",{
+  newBreaksStrategy <- newBreaks(name = "test", breaks = c(0,2,4))
+  expect_equal(newBreaksStrategy$name, "test")
+  expect_equal(class(newBreaksStrategy)[[1]], "BreaksStrategy")
+  expect_equal(newBreaksStrategy$labels[1], "[0-2)")
+
+  newBreaksStrategy$labels <- c("0-1", "2-3", "4+")
+  expect_equal(newBreaksStrategy$labels[1], "0-1")
+
+})
+
 test_that("create a set of lineItems", {
 
   cs1 <- list(

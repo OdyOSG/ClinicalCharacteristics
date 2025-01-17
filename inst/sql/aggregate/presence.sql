@@ -18,7 +18,7 @@ FROM (
     COUNT(DISTINCT SUBJECT_ID) AS subject_count
   FROM (
       SELECT p.*, d.tot_subjects
-      FROM #pat_ts_tab p
+      FROM @pat_ts_tab p
       JOIN #cohort_denom d ON p.target_cohort_id = d.target_cohort_id
       WHERE p.statistic_type = 'presence'
   ) t1

@@ -1,4 +1,5 @@
 /* Initialize Continuous Table*/
+DROP TABLE IF EXISTS @continuous_table;
 CREATE TABLE @continuous_table (
 	target_cohort_id BIGINT NOT NULL,
 	ordinal_id INT NOT NULL,
@@ -17,7 +18,7 @@ CREATE TABLE @continuous_table (
 	maximum_value FLOAT NOT NULL
 );
 
-
+DROP TABLE IF EXISTS @categorical_table_table;
 /* Initialize Categorical Table*/
 CREATE TABLE @categorical_table (
 	target_cohort_id BIGINT NOT NULL,

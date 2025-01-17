@@ -17,7 +17,7 @@ SELECT
   max(m.value) AS max
 FROM (
     SELECT d.*
-    FROM #pat_ts_tab d
+    FROM @pat_ts_tab d
     WHERE d.statistic_type = 'continuousDistribution'
 ) m
 GROUP BY target_cohort_id, ordinal_id, time_label, line_item_label, patient_line
