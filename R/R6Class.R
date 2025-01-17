@@ -453,7 +453,51 @@ TableShell <- R6::R6Class("TableShell",
       } else {
         conceptSetOccurrenceSql <- ""
       }
+
       return(conceptSetOccurrenceSql)
+
+    },
+
+    .buildCohortOccurrenceQuery = function(executionSettings, buildOptions) {
+      # Step 1: Get the cohort meta
+      chMeta <- self$getTableShellMeta() |>
+        dplyr::filter(grepl("Cohort", lineItemClass))
+
+      # only run if Cohorts are in ts
+      if (!is.null(chMeta)) {
+
+        # Step 2: Prep the cohort extraction
+        cohort_ids <- chMeta$valueId |> unique() |> glue::glue_collapse(", ")
+        time_labels <- chMeta$timeLabel |> unique() |> glue::glue_collapse("', '")
+        domain <- chMeta$domainTable |> unique()
+
+        # Step 3: make the cohort occurrence sql
+
+        cohortOccurrenceSql <- fs::path_package(
+          package = "ClinicalCharacteristics",
+          fs::path("sql/cohortOccurrenceQuery.sql")
+        ) |>
+          readr::read_file() |>
+          glue::glue()
+
+        # render sql
+        cohortOccurrenceSql <- cohortOccurrenceSql |>
+          SqlRender::render(
+            target_cohort_table = buildOptions$targetCohortTempTable,
+            cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable,
+            time_window_table = buildOptions$timeWindowTempTable,
+            work_database_schema = executionSettings$workDatabaseSchema
+          ) |>
+          SqlRender::translate(
+            targetDialect = executionSettings$getDbms(),
+            tempEmulationSchema = executionSettings$tempEmulationSchema
+          )
+
+      } else {
+        cohortOccurrenceSql <- ""
+      }
+
+      return(cohortOccurrenceSql)
 
     },
 
@@ -578,25 +622,23 @@ TableShell <- R6::R6Class("TableShell",
 BuildOptions <- R6::R6Class(
   classname = "BuildOptions",
   public = list(
-    initialize = function(keepResultsTable = NULL,
-                          resultsTempTable = NULL,
-                          codesetTempTable = NULL,
+    initialize = function(codesetTempTable = NULL,
                           timeWindowTempTable = NULL,
                           targetCohortTempTable = NULL,
                           tsMetaTempTable = NULL,
                           conceptSetOccurrenceTempTable = NULL,
+                          cohortOccurrenceTempTable = NULL,
                           patientLevelDataTempTable = NULL,
                           patientLevelTableShellTempTable = NULL,
                           categoricalSummaryTempTable = NULL,
                           continuousSummaryTempTable = NULL
                           ) {
-      .setLogical(private = private, key = ".keepResultsTable", value = keepResultsTable)
-      .setString(private = private, key = ".resultsTempTable", value = resultsTempTable)
       .setString(private = private, key = ".codesetTempTable", value = codesetTempTable)
       .setString(private = private, key = ".timeWindowTempTable", value = timeWindowTempTable)
       .setString(private = private, key = ".tsMetaTempTable", value = tsMetaTempTable)
       .setString(private = private, key = ".targetCohortTempTable", value = targetCohortTempTable)
       .setString(private = private, key = ".conceptSetOccurrenceTempTable", value = conceptSetOccurrenceTempTable)
+      .setString(private = private, key = ".cohortOccurrenceTempTable", value = cohortOccurrenceTempTable)
       .setString(private = private, key = ".patientLevelDataTempTable", value = patientLevelDataTempTable)
       .setString(private = private, key = ".patientLevelTableShellTempTable", value = patientLevelTableShellTempTable)
       .setString(private = private, key = ".categoricalSummaryTempTable", value = categoricalSummaryTempTable)
@@ -611,6 +653,7 @@ BuildOptions <- R6::R6Class(
     .targetCohortTempTable = NULL,
     .tsMetaTempTable = NULL,
     .conceptSetOccurrenceTempTable = NULL,
+    .cohortOccurrenceTempTable = NULL,
     .patientLevelDataTempTable = NULL,
     .patientLevelTableShellTempTable = NULL,
     .categoricalSummaryTempTable = NULL,
@@ -648,6 +691,10 @@ BuildOptions <- R6::R6Class(
 
     conceptSetOccurrenceTempTable = function(value) {
       .setActiveString(private = private, key = ".conceptSetOccurrenceTempTable", value = value)
+    },
+
+    cohortOccurrenceTempTable = function(value) {
+      .setActiveString(private = private, key = ".cohortOccurrenceTempTable", value = value)
     },
 
     patientLevelDataTempTable = function(value) {
@@ -1146,9 +1193,9 @@ Score <- R6::R6Class(
 #'
 #' @export
 LineItem <- R6::R6Class(
-classname = "LineItem",
-public = list(
-  initialize = function(
+  classname = "LineItem",
+  public = list(
+    initialize = function(
     sectionLabel,
     lineItemLabel = NA_character_,
     domainTable,
@@ -1157,140 +1204,85 @@ public = list(
     valueDescription  = NA_integer_,
     statistic,
     timeInterval = NULL
-  ) {
-    .setString(private = private, key = ".sectionLabel", value = sectionLabel)
-    .setString(private = private, key = ".lineItemLabel", value = lineItemLabel, naOk = TRUE)
-    .setCharacter(private = private, key = ".domainTable", value = domainTable)
-    .setString(private = private, key = ".lineItemClass", value = lineItemClass)
-    .setNumber(private = private, key = ".valueId", value = valueId)
-    .setString(private = private, key = ".valueDescription", value = valueDescription, naOk = TRUE)
-    .setClass(private = private, key = "statistic", value = statistic, class = "Statistic")
-    .setClass(private = private, key = "timeInterval", value = timeInterval, class = "TimeInterval", nullable = TRUE)
-  },
+    ) {
+      .setString(private = private, key = ".sectionLabel", value = sectionLabel)
+      .setString(private = private, key = ".lineItemLabel", value = lineItemLabel, naOk = TRUE)
+      .setCharacter(private = private, key = ".domainTable", value = domainTable)
+      .setString(private = private, key = ".lineItemClass", value = lineItemClass)
+      .setNumber(private = private, key = ".valueId", value = valueId)
+      .setString(private = private, key = ".valueDescription", value = valueDescription, naOk = TRUE)
+      .setClass(private = private, key = "statistic", value = statistic, class = "Statistic")
+      .setClass(private = private, key = "timeInterval", value = timeInterval, class = "TimeInterval", nullable = TRUE)
+    },
 
-  getLineItemMeta = function() {
+    getLineItemMeta = function() {
 
-    tw <- private$timeInterval
-    if (is.null(tw)) {
-      timeLabel <- "Static at Index"
-    } else {
-      timeLabel <- tw$getTimeLabel()
+      tw <- private$timeInterval
+      if (is.null(tw)) {
+        timeLabel <- "Static at Index"
+      } else {
+        timeLabel <- tw$getTimeLabel()
+      }
+
+      tb <- tibble::tibble(
+        ordinalId = private$.ordinalId,
+        sectionLabel = private$.sectionLabel,
+        lineItemClass = private$.lineItemClass,
+        lineItemLabel = private$.lineItemLabel,
+        valueId = private$.valueId,
+        valueDescription = private$.valueDescription,
+        timeLabel = timeLabel,
+        personLineTransformation = private$statistic$getPersonLineTransformation(),
+        statisticType = private$statistic$getStatisticType(),
+        aggregationType = private$statistic$getAggregationType(),
+        domainTable = private$.domainTable
+      )
+
+      return(tb)
+    },
+
+    getStatistic = function() {
+      st <- private$statistic
+      return(st)
     }
 
-    tb <- tibble::tibble(
-      ordinalId = private$.ordinalId,
-      sectionLabel = private$.sectionLabel,
-      lineItemLabel = private$.lineItemLabel,
-      valueId = private$.valueId,
-      valueDescription = private$.valueDescription,
-      timeLabel = timeLabel,
-      personLineTransformation = private$statistic$getPersonLineTransformation(),
-      statisticType = private$statistic$getStatisticType(),
-      aggregationType = private$statistic$getAggregationType(),
-      domainTable = private$.domainTable,
-      lineItemClass = private$.lineItemClass
-    )
-
-    return(tb)
-  },
-
-  getStatistic = function() {
-    st <- private$statistic
-    return(st)
-  }
-
-),
-private = list(
-  .ordinalId = NA_integer_,
-  .sectionLabel = NA_character_,
-  .lineItemLabel = NA_character_,
-  .valueId = NA_integer_,
-  .valueDescription = NA_character_,
-  timeInterval = NULL,
-  statistic = NULL,
-  .domainTable = NA_character_,
-  .lineItemClass = NA_character_
-),
-active = list(
-  ordinalId = function(ordinalId) {
-    .setActiveNumber(private = private, key = ".ordinalId", value = ordinalId)
-  },
-  sectionLabel = function(sectionLabel) {
-    .setActiveString(private = private, key = ".sectionLabel", value = sectionLabel)
-  },
-  lineItemLabel = function(lineItemLabel) {
-    .setActiveString(private = private, key = ".lineItemLabel", value = lineItemLabel)
-  },
-  valueId = function(valueId) {
-    .setActiveNumber(private = private, key = ".valueId", value = valueId)
-  },
-  valueDescription = function(valueDescription) {
-    .setActiveString(private = private, key = ".valueDescription", value = valueDescription)
-  },
-  domainTable = function(domainTable) {
-    .setActiveString(private = private, key = ".domainTable", value = domainTable)
-  },
-  lineItemClass = function(lineItemClass) {
-    .setActiveString(private = private, key = ".lineItemClass", value = lineItemClass)
-  }
+  ),
+  private = list(
+    .ordinalId = NA_integer_,
+    .sectionLabel = NA_character_,
+    .lineItemLabel = NA_character_,
+    .valueId = NA_integer_,
+    .valueDescription = NA_character_,
+    timeInterval = NULL,
+    statistic = NULL,
+    .domainTable = NA_character_,
+    .lineItemClass = NA_character_
+  ),
+  active = list(
+    ordinalId = function(ordinalId) {
+      .setActiveNumber(private = private, key = ".ordinalId", value = ordinalId)
+    },
+    sectionLabel = function(sectionLabel) {
+      .setActiveString(private = private, key = ".sectionLabel", value = sectionLabel)
+    },
+    lineItemLabel = function(lineItemLabel) {
+      .setActiveString(private = private, key = ".lineItemLabel", value = lineItemLabel)
+    },
+    valueId = function(valueId) {
+      .setActiveNumber(private = private, key = ".valueId", value = valueId)
+    },
+    valueDescription = function(valueDescription) {
+      .setActiveString(private = private, key = ".valueDescription", value = valueDescription)
+    },
+    domainTable = function(domainTable) {
+      .setActiveString(private = private, key = ".domainTable", value = domainTable)
+    },
+    lineItemClass = function(lineItemClass) {
+      .setActiveString(private = private, key = ".lineItemClass", value = lineItemClass)
+    }
+  )
 )
-)
-#
-# LineItem_old <- R6::R6Class("LineItem",
-#   public = list(
-#     initialize = function(name,
-#                           #ordinal,
-#                           definitionType,
-#                           statistic) {
-#       .setString(private = private, key = "name", value = name)
-#       #.setNumber(private = private, key = "ordinal", value = ordinal)
-#       # TODO change this to enforce definitionType from choice list
-#       .setString(private = private, key = "definitionType", value = definitionType)
-#       .setClass(private = private, key = "statistic", value = statistic, class = "Statistic")
-#
-#       invisible(self)
-#     },
-#     getName = function() {
-#       name <- private$name
-#       return(name)
-#     },
-#     getDefinitionType = function() {
-#       liDefinitionType <- private$definitionType
-#       return(liDefinitionType)
-#     },
-#     identifyStatType = function() {
-#       statType <- private$statistic$getStatType() |>
-#         .isLineItemContinuous()
-#       if (statType) {
-#         statType <- "continuous"
-#       } else {
-#         statType <- "categorical"
-#       }
-#       return(statType)
-#     }
-#
-#   ),
-#
-#   private = list(
-#     name = NULL,
-#     .ordinal = NA_integer_,
-#     definitionType = NULL,
-#     statistic = NULL
-#   ),
-#
-#   active = list(
-#     ordinal = function(value) {
-#       # return the value if nothing added
-#       if(missing(value)) {
-#         ord <- private$.ordinal
-#         return(ord)
-#       }
-#       private$.ordinal <- as.integer(value)
-#       invisible(private)
-#     }
-#   )
-#
-# )
+
 
 ## ConceptSetLineItem ----
 
@@ -1298,7 +1290,6 @@ active = list(
 #' An R6 class to define a ConceptSetLineItem
 #'
 #' @export
-
 ConceptSetLineItem <- R6::R6Class(
   classname = "ConceptSetLineItem",
   inherit = LineItem,
@@ -1346,98 +1337,6 @@ ConceptSetLineItem <- R6::R6Class(
   ),
   active = list()
 )
-# ConceptSetLineItem_old <- R6::R6Class("ConceptSetLineItem",
-#   inherit = LineItem,
-#   public = list(
-#
-#     # initialize the class
-#     initialize = function(name,
-#                           #ordinal,
-#                           statistic,
-#                           domain,
-#                           conceptSet,
-#                           timeInterval,
-#                           sourceConceptSet = NULL,
-#                           typeConceptIds = c(),
-#                           visitOccurrenceConceptIds = c()) {
-#       super$initialize(name = name, definitionType = "ConceptSet",
-#                        statistic = statistic)
-#       .setString(private = private, key = "domain", value = domain)
-#       .setClass(private = private, key = "conceptSet", value = conceptSet, class = "ConceptSet")
-#       .setClass(private = private, key = "timeInterval", value = timeInterval, class = "TimeInterval")
-#       # TODO change this to enforce domain from choice list
-#       .setClass(private = private, key = "sourceConceptSet", value = sourceConceptSet, class = "ConceptSet", nullable = TRUE)
-#       .setNumber(private = private, key = "typeConceptIds", value = typeConceptIds, nullable = TRUE)
-#       .setNumber(private = private, key = "visitOccurrenceConceptIds", value = visitOccurrenceConceptIds, nullable = TRUE)
-#     },
-#
-#     # gather information for print
-#     lineItemDetails = function() {
-#
-#       ord <- self$ordinal |>
-#         tibble::as_tibble() |>
-#         dplyr::rename(
-#           ordinal = value
-#           )
-#
-#       info <- self$getConceptSetRef() |>
-#         dplyr::select(
-#           -c(hash)
-#         ) |>
-#         dplyr::bind_cols(
-#           ord
-#         ) |>
-#         glue::glue_data_col(
-#           "{ordinal}) \\
-#           ConceptSetName: {green {name}}; \\
-#           ConceptSetDomain: {green {domain}}; \\
-#           TimeWindow: {magenta {lb}d} to {magenta {rb}d}"
-#         )
-#
-#       return(info)
-#     },
-#
-
-#
-#     # helper to retrieve the time windows in the clas
-#     getTimeInterval = function() {
-#       tw <- private$timeInterval$getTimeInterval()
-#       return(tw)
-#     },
-#
-#
-#     # helper to get reference table of the concept sets in the class
-#     getConceptSetRef = function() {
-#
-#       # # make key for cs use
-#       csTbl <- tibble::tibble(
-#         'name' = private$name,
-#         'hash' = private$conceptSet@id,
-#         'domain' = private$domain,
-#         'lb' = private$timeInterval$getLb(),
-#         'rb' = private$timeInterval$getRb()
-#       )
-#       return(csTbl)
-#     },
-#
-#     getStatisticInfo = function() {
-#       tb <- tibble::tibble(
-#         'ord' = self$ordinal,
-#         'statType' = private$statistic$getStatType(),
-#         'sql' = private$statistic$getSql()
-#       )
-#       return(tb)
-#     }
-#   ),
-#   private = list(
-#     domain = NULL,
-#     conceptSet = NULL,
-#     timeInterval = NULL,
-#     sourceConceptSet = NULL,
-#     typeConceptIds = c(),
-#     visitOccurrenceConceptIds = c()
-#   )
-# )
 
 # DemographicLineItem -----
 
@@ -1445,8 +1344,6 @@ ConceptSetLineItem <- R6::R6Class(
 #' An R6 class to handle the ...
 #'
 #' @export
-
-
 DemographicLineItem <- R6::R6Class(
   classname = "DemographicLineItem",
   inherit = LineItem,
@@ -1463,76 +1360,6 @@ DemographicLineItem <- R6::R6Class(
     }),
   private = list()
 )
-
-# DemographicLineItem <- R6::R6Class("DemographicLineItem",
-#   inherit = LineItem,
-#   public = list(
-#     initialize = function(name,
-#                           #ordinal,
-#                           statistic) {
-#       super$initialize(name = name,
-#                        #ordinal = ordinal,
-#                        definitionType = "Demographic",
-#                        statistic = statistic)
-#     },
-#
-#     # gather information for print
-#     lineItemDetails = function() {
-#
-#       ord <- self$ordinal
-#
-#       nm <- self$getName()
-#
-#       info <- glue::glue_col(
-#           "{ord}) \\
-#           DemographicName: {green {nm}}"
-#       )
-#
-#       return(info)
-#     },
-#
-#
-#     # function to get sql
-#     getSql = function() {
-#
-#       # get stat type
-#       statType <- private$statistic$getStatType()
-#
-#       # prep sql if Age demographic
-#       if (statType == "Age") {
-#         sqlFile <- "demoAgeChar.sql"
-#         ordinal <- self$ordinal
-#         # get sql from package
-#         sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-#           readr::read_file() |>
-#           glue::glue()
-#       }
-#
-#       # prep sql if Concept demographic
-#       if (statType == "Concept") {
-#         sqlFile <- "demoConceptChar.sql"
-#         ordinal <- self$ordinal
-#         conceptColumn <- private$statistic$getDemoColumn()
-#         # get sql from package
-#         sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-#           readr::read_file() |>
-#           glue::glue()
-#       }
-#
-#       # prep sql if Concept demographic
-#       if (statType == "Year") {
-#         sqlFile <- "demoYearChar.sql"
-#         ordinal <- self$ordinal
-#         # get sql from package
-#         sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-#           readr::read_file() |>
-#           glue::glue()
-#       }
-#
-#       return(sql)
-#     }
-#   )
-# )
 
 ## CohortLineItem ----
 
@@ -1570,98 +1397,19 @@ CohortLineItem <- R6::R6Class(
   ),
   active = list()
 )
-# CohortLineItem <- R6::R6Class("CohortLineItem",
-#   inherit = LineItem,
-#   public = list(
-#
-#     # initialize the class
-#     initialize = function(name,
-#                           #ordinal,
-#                           statistic,
-#                           cohort,
-#                           timeInterval) {
-#       super$initialize(name = name,
-#                        definitionType = "Cohort",
-#                        statistic = statistic)
-#       .setClass(private = private, key = "cohort", value = cohort, class = "CohortInfo")
-#       .setClass(private = private, key = "timeInterval", value = timeInterval, class = "TimeInterval")
-#     },
-#
-#     # gather information for print
-#     lineItemDetails = function() {
-#
-#       ord <- self$ordinal |>
-#         tibble::as_tibble() |>
-#         dplyr::rename(
-#           ordinal = value
-#           )
-#
-#       info <- self$getCohortRef() |>
-#         dplyr::select(
-#           -c(hash)
-#         ) |>
-#         dplyr::bind_cols(
-#           ord
-#         ) |>
-#         glue::glue_data_col(
-#           "{ordinal}) \\
-#           CohortName: {green {name}}; \\
-#           TimeWindow: {magenta {lb}d} to {magenta {rb}d}"
-#         )
-#
-#       return(info)
-#     },
-#
-#     # helper to pull cohort items
-#     grabCohort = function() {
-#       c <- private$cohort
-#       return(c)
-#     },
-#
-#     # helper to retrieve the time windows in the class
-#     getTimeInterval = function() {
-#       tw <- private$timeInterval$getTimeInterval()
-#       return(tw)
-#     },
-#
-#     # helper to get reference table of the cohorts in the class
-#     getCohortRef = function() {
-#       cTbl <- tibble::tibble(
-#         'name' = private$name,
-#         'lb' = private$timeInterval$getLb(),
-#         'rb' = private$timeInterval$getRb()
-#       )
-#       return(cTbl)
-#     },
-#
-#     getStatisticInfo = function() {
-#       tb <- tibble::tibble(
-#         'ord' = self$ordinal,
-#         'statType' = private$statistic$getStatType(),
-#         'sql' = private$statistic$getSql()
-#       )
-#       return(tb)
-#     }
-#   ),
-#   private = list(
-#     cohort = NULL,
-#     timeInterval = NULL
-#   )
-# )
 
-
-
+## Concept Set Group -----------------
 ConceptSetGroupLineItem <- R6::R6Class(
   classname = "ConceptSetGroupLineItem",
   inherit = LineItem,
   public = list(
     initialize = function(
-    sectionLabel,
-    groupLabel,
-    conceptSets,
-    domainTables,
-    timeInterval,
-    statistic
+      sectionLabel,
+      groupLabel,
+      conceptSets,
+      domainTables,
+      timeInterval,
+      statistic
     ) {
       super$initialize(
         sectionLabel = sectionLabel,
