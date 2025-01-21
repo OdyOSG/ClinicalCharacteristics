@@ -25,81 +25,92 @@ To run this example you need to install `Capr`
 library(ClinicalCharacteristics)
 library(Capr)
 
-# make connection details
-connectionDetails <- DatabaseConnector::createConnectionDetails(
-  dbms = '<dbms>',
-  user = "<user>",
-  password = "<password>",
-  connectionString = "<jdbcString>"
+# add execution settings CHANGE ME
+executionSettings <- createExecutionSettings(
+  connectionDetails = connectionDetails,
+  cdmDatabaseSchema = "cdm_schema",
+  workDatabaseSchema = "work_schema",
+  tempEmulationSchema = "scratch_schema",
+  targetCohortTable = "cohort",
+  cdmSourceName = "my_cdm"
 )
 
-executionSettings <- list(
-  databaseName = "my_omop_data",
-  cdmDatabaseSchema = "cdm",
-  workDatabaseSchema = "scratch",
-  cohortTable = "cohorts"
+
+# add concept sets
+
+cs1 <- list(
+  't2d' = cs(descendants(201826), name = "t2d"),
+  'ckd' = cs(descendants(46271022), name = "ckd")
 )
 
-outputFolder <- here::here("my_output")
+cs2 <- list(
+  'sglt2' = cs(descendants(1123627), name = "sglt2"),
+  'glp1' = cs(descendants(1123618), name = "glp1")
+)
 
-connection <- DatabaseConnector::connect(connectionDetails)
+# add cohorts
 
-clinChar <- makeClinChar(
-  targetCohortIds = 1,
-  targetCohortNames = "Target",
-  dbms = connection@dbms,
-  database = executionSettings$databaseName,
-  cdmDatabaseSchema = executionSettings$cdmDatabaseSchema,
-  workDatabaseSchema = executionSettings$workDatabaseSchema,
-  cohortTable = executionSettings$cohortTable
-) |>
-  addAgeChar(categorize = age10yrGrp()) |>
-  addGenderChar() |>
-  addRaceChar() |>
-  addYearChar(categorize = year5yrGrp()) |>
-  addConditionPresence(
-    conceptSets = charlsonConcepts(),
-    timeWindows = makeTimeTable(time_a = -365, time_b = -1),
-    limit = "first",
-    score = charlsonIndexScore(ageId = 1)
-  ) |>
-  addDrugPresence(
-    conceptSets = atcConcepts(),
-    timeWindows = makeTimeTable(
-      time_a = c(-365, 0, 0, 0),
-      time_b = c(-1, 183, 365, 730)
-      ),
-    limit = "first"
-  ) |>
-  addDrugCount(
-    timeWindows = makeTimeTable(
-      time_a = c(-365, 0, 0, 0),
-      time_b = c(-1, 183, 365, 730)
-    )
-  ) |>
-  addVisitCount(
-    conceptSets = standardVisitConcepts(),
-    timeWindows = makeTimeTable(
-      time_a = c(-365, 0, 0, 0),
-      time_b = c(-1, 183, 365, 730)
+ch <- list(
+  createCohortInfo(id = 3, name = "Procedure Cohort 1"),
+  createCohortInfo(id = 4, name = "Procedure Cohort 2")
+)
+
+
+# time windows
+tw1 <- list(
+  timeInterval(lb = -365, rb = -1)
+)
+tw2 <- list(
+  timeInterval(lb = 0, rb = 90),
+  timeInterval(lb = 0, rb = 365)
+)
+
+
+tw3 <- list(
+  timeInterval(lb = -365, rb = -1),
+  timeInterval(lb = 0, rb = 90),
+  timeInterval(lb = 0, rb = 365)
+)
+
+
+# make table shell
+
+tableShell <- createTableShell(
+  title = "Test",
+  targetCohorts = list(
+    createCohortInfo(id = 1, name = "Target Cohort 1"),
+    createCohortInfo(id = 2, name = "Target Cohort 2")
+  ),
+  lineItems = lineItems(
+    createDemographicLineItem(maleGender()),
+    createDemographicLineItem(ageChar(breaks = age5yrGrp())),
+    createDemographicLineItem(ageChar()),
+    createConceptSetLineItemBatch(
+      sectionLabel = "Baseline Conditions",
+      domain = "condition_occurrence",
+      statistic = anyPresenceStat(),
+      conceptSets = cs1,
+      timeIntervals = tw1
+    ),
+    createConceptSetLineItemBatch(
+      sectionLabel = "Post-Index Drugs",
+      domain = "drug_exposure",
+      statistic = anyPresenceStat(),
+      conceptSets = cs2,
+      timeIntervals = tw2
+    ),
+    createCohortLineItemBatch(
+      sectionLabel = "Post-Index Procedures",
+      covariateCohorts = ch,
+      cohortTable = "cohort",
+      timeIntervals = tw3,
+      statistic = anyPresenceStat()
     )
   )
+)
 
-
-# run the clinical characteristics
-dt <- runClinicalCharacteristics(connection = connection,
-                                      clinChar = clinChar,
-                                      saveName = "internals_test",
-                                      savePath = outputFolder,
-                                      dropDat = FALSE)
-
-# preview the categorical results
-previewClincalCharacteristics(dt, type = "categorical")
-# preview the continuous results
-previewClincalCharacteristics(dt, type = "continuous")
-#build a report
-createReport(clinChar, outputFolder = outputFolder)
-
+# run
+res <- generateTableShell(tableShell, executionSettings)
 
 ```
 
