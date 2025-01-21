@@ -1,3 +1,9 @@
+#' @title
+#' Create a breaks Strategy object for age into 5 year groups
+#'
+#' @return A BreaksStreategy object with defaults assumptions for 5 year age groups
+#'
+#' @export
 age5yrGrp <- function() {
 
   x <- seq(0,130, by = 5)

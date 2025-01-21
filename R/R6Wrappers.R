@@ -17,20 +17,6 @@ createTableShell <- function(title,
     return(tableShell)
 }
 
-#' @title
-#' Parse cohort info from a data frame
-#'
-#' @param df The data frame containing the information for the cohorts (id and name)
-#'
-#' @return A list of CohortInfo objects
-#'
-#' @export
-parseCohortInfoFromDf <- function(df) {
-    cohortInfo <- purrr::pmap(df, function(id, name) {
-        createCohortInfo(id, name)
-    })
-    return(cohortInfo)
-}
 
 #' @title
 #' Create a CohortInfo object for a cohort and set its attributes
@@ -76,7 +62,23 @@ createExecutionSettings <- function(connectionDetails,
   return(executionSettings)
 }
 
-
+#' @title
+#' Default build options to generate table shell
+#'
+#' @param connectionDetails A DatabaseConnector connectionDetails object (optional if connection is specified)
+#' @param codesetTempTable the name of the codeset table used in execution. Defaults as a temp table #codeset
+#' @param timeWindowTempTable the name of the time Window table used in execution. Defaults as a temp table #time_windows
+#' @param targetCohortTempTable the name of the target cohort table used in execution. Defaults as a temp table #target_cohorts
+#' @param tsMetaTempTable the name of the table shell meta table used in execution. Defaults as a temp table #ts_meta
+#' @param conceptSetOccurrenceTempTable the name of the concept set occurrence table used in execution. Defaults as a temp table #concept_set_occ
+#' @param cohortOccurrenceTempTable the name of the cohort occurrence  table used in execution. Defaults as a temp table #cohort_occ
+#' @param patientLevelDataTempTable the name of the patient level data table used in execution. Note this does not contain info of the table shell. Defaults as a temp table #patient_data
+#' @param patientLevelTableShellTempTable the name of the patient level data table with additional meta info used in execution. Defaults as a temp table #pat_ts_tab
+#' @param categoricalSummaryTempTable the name of the categorical summary table used in execution. Defaults as a temp table #categorical_table
+#' @param continuousSummaryTempTable the name of the continuous summary table used in execution. Defaults as a temp table #continuous_table
+#'
+#' @return A BuildOptions object
+#' @export
 defaultTableShellBuildOptions <- function(codesetTempTable = "#codeset",
                                           timeWindowTempTable = "#time_windows",
                                           targetCohortTempTable = "#target_cohorts",
@@ -125,16 +127,40 @@ timeInterval <- function(lb, rb) {
 #   return(pres)
 # }
 
+#' @title
+#' Create a presence stat where any occurrence is valid
+#'
+#' @return A presence stat object
+#'
+#' @export
 anyPresenceStat <- function() {
   pres <- Presence$new(personLine = "anyCount")
   return(pres)
 }
 
+#' @title
+#' Create a presence stat where only occurrence during the observation period are valid
+#'
+#' @return A presence stat object
+#'
+#' @export
 observedPresenceStat <- function() {
   pres <- Presence$new(personLine = "observedCount")
   return(pres)
 }
 
+
+
+#' @title
+#' Create a count stat where any occurrence is valid.
+#'
+#' @param options set whether to summarize as continuousDistribution or breaks.
+#' A breaks option summarizes as categorial and requires a breaksStrategy
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories
+#'
+#' @return A stat object either continuousDistribution or breaks based on the options input
+#'
+#' @export
 anyCountStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
   options <- match.arg(options)
   if (options == "breaks") {
@@ -148,7 +174,16 @@ anyCountStat <- function(options = c("continuousDistribution", "breaks"), breaks
   return(stat)
 }
 
-
+#' @title
+#' Create a count stat where only occurrence during the observation period are valid
+#'
+#' @param options set whether to summarize as continuousDistribution or breaks.
+#' A breaks option summarizes as categorial and requires a breaksStrategy
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories
+#'
+#' @return A stat object either continuousDistribution or breaks based on the options input
+#'
+#' @export
 observedCountStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
   options <- match.arg(options)
   if (options == "breaks") {
@@ -162,6 +197,16 @@ observedCountStat <- function(options = c("continuousDistribution", "breaks"), b
   return(stat)
 }
 
+#' @title
+#' Create a time to stat where any occurrence is valid
+#'
+#' @param options set whether to summarize as continuousDistribution or breaks.
+#' A breaks option summarizes as categorial and requires a breaksStrategy
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories
+#'
+#' @return A stat object either continuousDistribution or breaks based on the options input
+#'
+#' @export
 timeToFirstStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
   options <- match.arg(options)
   if (options == "breaks") {
@@ -175,19 +220,19 @@ timeToFirstStat <- function(options = c("continuousDistribution", "breaks"), bre
   return(stat)
 }
 
-
-timeToLastStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
-  options <- match.arg(options)
-  if (options == "breaks") {
-    if (is.null(options)) {
-      stop("Breaks option requires a BreaksStrategy")
-    }
-    stat <- Breaks$new(personLine = "timeToLast", breaks = breaks)
-  } else {
-    stat <- ContinuousDistribution$new(personLine = "timeToLast")
-  }
-  return(stat)
-}
+#
+# timeToLastStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
+#   options <- match.arg(options)
+#   if (options == "breaks") {
+#     if (is.null(options)) {
+#       stop("Breaks option requires a BreaksStrategy")
+#     }
+#     stat <- Breaks$new(personLine = "timeToLast", breaks = breaks)
+#   } else {
+#     stat <- ContinuousDistribution$new(personLine = "timeToLast")
+#   }
+#   return(stat)
+# }
 
 
 
@@ -206,8 +251,6 @@ timeToLastStat <- function(options = c("continuousDistribution", "breaks"), brea
 #' @return A ConceptSetLineItem object
 #'
 #' @export
-
-
 createConceptSetLineItem <- function(sectionLabel = NA_character_,
                                      domain,
                                      conceptSet,
@@ -231,26 +274,6 @@ createConceptSetLineItem <- function(sectionLabel = NA_character_,
                                          visitOccurrenceConceptIds = visitOccurrenceConceptIds)
   return(csDefinition)
 }
-#
-# createConceptSetLineItem <- function(sectionLabel = NA_character_,
-#                                      domain,
-#                                      conceptSet,
-#                                      timeInterval,
-#                                      statistic,
-#                                      sourceConceptSet = NULL,
-#                                      typeConceptIds = c(),
-#                                      visitOccurrenceConceptIds = c()) {
-#
-#   csDefinition <- ConceptSetLineItem$new(sectionLabel = sectionLabel,
-#                                          domainTable = domain,
-#                                          conceptSet = conceptSet,
-#                                          timeInterval = timeInterval,
-#                                          statistic = statistic,
-#                                          sourceConceptSet = sourceConceptSet,
-#                                          typeConceptIds = typeConceptIds,
-#                                          visitOccurrenceConceptIds = visitOccurrenceConceptIds)
-#   return(csDefinition)
-# }
 
 
 
@@ -304,44 +327,16 @@ createConceptSetLineItemBatch <- function(
 
   return(csLiBatch)
 }
-#
-# createConceptSetLineItemBatch <- function(
-#     name,
-#     statistic,
-#     domain,
-#     conceptSets,
-#     timeIntervals,
-#     typeConceptIds = c(),
-#     visitOccurrenceConceptIds = c()) {
-#
-#   checkmate::assert_list(x = conceptSets, types = c("ConceptSet"), null.ok = FALSE, min.len = 1)
-#   checkmate::assert_list(x = timeIntervals, types = c("TimeInterval"), null.ok = FALSE, min.len = 1)
-#
-#   # build permutations of concepts and timeIntervals
-#   permDf <- .permuteTi(conceptSets, timeIntervals)
-#
-#   # create batch of concept set line items
-#   csLiBatch <- purrr::map2(
-#     permDf$objects,
-#     permDf$timeIntervals,
-#     ~createConceptSetLineItem(
-#       name = .x@Name,
-#       statistic = statistic,
-#       domain = domain,
-#       conceptSet = .x,
-#       timeInterval = .y,
-#       sourceConceptSet = NULL,
-#       typeConceptIds = typeConceptIds,
-#       visitOccurrenceConceptIds = visitOccurrenceConceptIds
-#     )
-#   ) |>
-#     unname()
-#
-#   return(csLiBatch)
-# }
 
 
 
+#' @title
+#' Create a demographic line item and set its attributes
+#'
+#' @param statistic The Statistic object to be used to evaluate the line item
+#' @return A DemographicLineItem object
+#'
+#' @export
 createDemographicLineItem <- function(statistic) {
   dcli <- DemographicLineItem$new(
     statistic = statistic
@@ -361,6 +356,13 @@ createDemographicLineItem <- function(statistic) {
   return(dcli)
 }
 
+#' @title
+#' Create a age statistic
+#'
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories
+#' @return A DemographicAge Statistic class object
+#'
+#' @export
 ageChar <- function(breaks = NULL) {
 
   if(is.null(breaks)) {
@@ -380,7 +382,12 @@ ageChar <- function(breaks = NULL) {
 
 }
 
-
+#' @title
+#' Create a male concept stat
+#'
+#' @return A DemographicConcept Statistic class object indicating a male concept
+#'
+#' @export
 maleGender <- function() {
   maleConcept <- DemographicConcept$new(
     demoCategory = "Gender",
@@ -391,6 +398,12 @@ maleGender <- function() {
   return(maleConcept)
 }
 
+#' @title
+#' Create a female concept stat
+#'
+#' @return A DemographicConcept Statistic class object indicating a female concept
+#'
+#' @export
 femaleGender <- function() {
   femaleConcept <- DemographicConcept$new(
     demoCategory = "Gender",
@@ -401,7 +414,16 @@ femaleGender <- function() {
   return(femaleConcept)
 }
 
-
+#' @title
+#' Create a breaks Strategy object for categorizing
+#'
+#' @param name the name of the breaks
+#' @param breaks a vector with cut points to user
+#' @param labels a character vector indicating how to label the cut-point. Can stay NULL where a default label is given
+#'
+#' @return A BreaksStreategy object
+#'
+#' @export
 newBreaks <- function(name, breaks, labels = NULL) {
   if (is.null(labels)) {
     a <- dplyr::lead(breaks)
@@ -448,20 +470,6 @@ createCohortLineItem <- function(sectionLabel = NA_character_,
   return(chDefinition)
 
 }
-#
-# createCohortLineItem_old <- function(name = NULL,
-#                                  statistic,
-#                                  cohort,
-#                                  timeInterval) {
-#   if (is.null(name)) {
-#     name = cohort$getName()
-#   }
-#   cohortLineItem <- CohortLineItem$new(name = name,
-#                                        statistic = statistic,
-#                                        cohort = cohort,
-#                                        timeInterval = timeInterval)
-#   return(cohortLineItem)
-# }
 
 #' @title
 #' Create a batch of cohort line items from a list of CohortInfo objects.
@@ -555,16 +563,4 @@ lineItems <- function(...) {
 
   return(listOfLineItems)
 }
-# lineItems <- function(...) {
-#   listOfLineItems <- list(...) |>
-#     purrr::list_flatten()
-#   # ensure that all elements are lineItems
-#   checkmate::assert_list(x = listOfLineItems, types = "LineItem", null.ok = FALSE, min.len = 1)
-#
-#   # add in ordinals
-#   ii <- seq_along(listOfLineItems)
-#   for(i in ii) {
-#     listOfLineItems[[i]]$ordinal <- ii[i]
-#   }
-#   return(listOfLineItems)
-# }
+
