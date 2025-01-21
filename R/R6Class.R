@@ -222,6 +222,11 @@ TableShell <- R6::R6Class("TableShell",
           tempEmulationSchema = executionSettings$tempEmulationSchema
         )
 
+      DatabaseConnector::executeSql(
+        connection = executionSettings$getConnection(),
+        sql = dropTempTableSql
+      )
+
       return(dropTempTableSql)
     }
 
@@ -496,7 +501,7 @@ TableShell <- R6::R6Class("TableShell",
       demoPatientLevelSql <- .buildDemoPatientLevelSql(tsm, executionSettings, buildOptions)
 
       # step 2b concept set pat level
-      csPatientLevelSql <- .buildOccurrencePatientLevelSql(tsm, buildOptions)
+      csPatientLevelSql <- .buildOccurrencePatientLevelSql(tsm, executionSettings, buildOptions)
 
       # step 2c cohort pat level
       chPatientLevelSql <- .buildCohortPatientLevelSql(tsm, buildOptions)

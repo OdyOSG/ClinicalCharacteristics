@@ -41,3 +41,103 @@ age10yrGrp <- function() {
 
   return(br)
 }
+
+#' @title
+#' Convenience function to add male and female line items for demographic characterization
+#'
+#' @return a list of two line items for male and female gender
+#'
+#' @export
+addDefaultGenderLineItems <- function() {
+  li <- list(
+    createDemographicLineItem(maleGender()),
+    createDemographicLineItem(femaleGender())
+  )
+  return(li)
+}
+
+
+#' @title
+#' Convenience function to add default race line items
+#'
+#' @return a list of line items for default race categories (white, black, asian, not reported)
+#'
+#' @export
+addDefaultRaceLineItems <- function() {
+
+  white <- DemographicConcept$new(
+    demoCategory = "Race",
+    demoLine = "White",
+    conceptColumn = "race_concept_id",
+    conceptId = 8527L
+  )
+
+  black <- DemographicConcept$new(
+    demoCategory = "Race",
+    demoLine = "Black",
+    conceptColumn = "race_concept_id",
+    conceptId = 8516L
+  )
+
+  asian <- DemographicConcept$new(
+    demoCategory = "Race",
+    demoLine = "Asian",
+    conceptColumn = "race_concept_id",
+    conceptId = 8515L
+  )
+
+  undefined <- DemographicConcept$new(
+    demoCategory = "Race",
+    demoLine = "Not Reported",
+    conceptColumn = "race_concept_id",
+    conceptId = 0L
+  )
+
+
+  li <- list(
+    createDemographicLineItem(statistic = white),
+    createDemographicLineItem(statistic = black),
+    createDemographicLineItem(statistic = asian),
+    createDemographicLineItem(statistic = undefined)
+  )
+  return(li)
+}
+
+
+#' @title
+#' Convenience function to add default ethnicity line items
+#'
+#' @return a list of line items for default ethnicity categories (hispanic, not hispanic, not reported)
+#'
+#' @export
+addDefaultEthnicityLineItems <- function() {
+
+  hispanic <- DemographicConcept$new(
+    demoCategory = "Ethnicity",
+    demoLine = "Hispanic",
+    conceptColumn = "ethnicity_concept_id",
+    conceptId = 38003563L
+  )
+
+  notHispanic <- DemographicConcept$new(
+    demoCategory = "Ethnicity",
+    demoLine = "Hispanic",
+    conceptColumn = "ethnicity_concept_id",
+    conceptId = 38003564L
+  )
+
+  undefined <- DemographicConcept$new(
+    demoCategory = "Ethnicity",
+    demoLine = "Not Reported",
+    conceptColumn = "ethnicity_concept_id",
+    conceptId = 0L
+  )
+
+
+  li <- list(
+    createDemographicLineItem(statistic = hispanic),
+    createDemographicLineItem(statistic = notHispanic),
+    createDemographicLineItem(statistic = undefined)
+  )
+  return(li)
+}
