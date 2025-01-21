@@ -182,7 +182,48 @@ TableShell <- R6::R6Class("TableShell",
       )
 
       return(res)
-    }
+    },
+
+    # function to drop all cs Tables
+    dropTempTables = function(executionSettings, buildOptions) {
+
+      # get temp table slot names
+      tempTableSlots <- names(buildOptions)[grepl("TempTable",names(buildOptions))]
+
+      # get table names
+      tempTableNames <- purrr::map_chr(
+        tempTableSlots,
+        ~buildOptions[[.x]]
+      )
+
+      tempTables <- tibble::tibble(
+        tempTableSlots = tempTableSlots,
+        tempTableNames = tempTableNames
+      ) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(
+          drop = grepl("\\#", tempTableNames) # check if temp
+        )
+
+      dropTempTableSql <- vector('list', length = nrow(tempTables))
+      for (i in 1:nrow(tempTables)) {
+        if (tempTables$drop[i]) {
+          dropTempTableSql[[i]] <- .truncDropTempTables(
+            tempTableName = tempTables$tempTableNames[i]
+          )
+        } else {
+          dropTempTableSql[[i]] <- ""
+        }
+      }
+      dropTempTableSql <- do.call("c", dropTempTableSql) |>
+        glue::glue_collapse("\n") |>
+        SqlRender::translate(
+          targetDialect = executionSettings$getDbms(),
+          tempEmulationSchema = executionSettings$tempEmulationSchema
+        )
+
+      return(dropTempTableSql)
+    },
 
     # function to aggregate categorical vars into table
     # aggregateTableShell = function(executionSettings, type, buildOptions) {
@@ -564,53 +605,6 @@ TableShell <- R6::R6Class("TableShell",
       return(allSql)
 
 
-    },
-
-
-
-    # function to drop all cs Tables
-    .dropTempTables = function(executionSettings, buildOptions) {
-
-      # get temp table slot names
-      tempTableSlots <- names(buildOptions)[grepl("TempTable",names(buildOptions))]
-
-      # get table names
-      tempTableNames <- purrr::map_chr(
-        tempTableSlots,
-        ~buildOptions[[.x]]
-      )
-
-      tempTables <- tibble::tibble(
-        tempTableSlots = tempTableSlots,
-        tempTableNames = tempTableNames
-      ) |>
-        dplyr::rowwise() |>
-        dplyr::mutate(
-          drop = grepl("\\#", tempTableNames) # check if temp
-        )
-
-      dropTempTableSql <- vector('list', length = nrow(tempTables))
-      for (i in 1:nrow(tempTables)) {
-        if (tempTables$drop[i]) {
-          dropTempTableSql[[i]] <- .truncDropTempTables(
-            tempTableName = tempTables$tempTableNames[i]
-          )
-        } else {
-          dropTempTableSql[[i]] <- ""
-        }
-      }
-      dropTempTableSql <- do.call("c", dropTempTableSql) |>
-        glue::glue_collapse("\n") |>
-        SqlRender::translate(
-          targetDialect = executionSettings$getDbms(),
-          tempEmulationSchema = executionSettings$tempEmulationSchema
-        )
-
-      return(dropTempTableSql)
-    },
-
-    .getLineItemsWithBreaks = function() {
-      tsm <- self$tabl
     }
   )
 )
@@ -649,8 +643,6 @@ BuildOptions <- R6::R6Class(
     }
   ),
   private = list(
-    .keepResultsTable = NULL,
-    .resultsTempTable = NULL,
     .codesetTempTable = NULL,
     .timeWindowTempTable = NULL,
     .targetCohortTempTable = NULL,
@@ -664,15 +656,6 @@ BuildOptions <- R6::R6Class(
   ),
 
   active = list(
-
-    keepResultsTable = function(value) {
-      .setActiveLogical(private = private, key = ".keepResultsTable", value = value)
-    },
-
-
-    resultsTempTable = function(value) {
-      .setActiveString(private = private, key = ".resultsTempTable", value = value)
-    },
 
 
     codesetTempTable = function(value) {
