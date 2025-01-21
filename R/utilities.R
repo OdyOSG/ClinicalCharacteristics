@@ -204,7 +204,7 @@
 
 ## Patient level Sql ---------------------
 
-.buildDemoPatientLevelSql <- function(tsm){
+.buildDemoPatientLevelSql <- function(tsm, executionSettings, buildOptions){
 
   demoLines <- tsm |>
     dplyr::filter(
@@ -235,14 +235,19 @@
   }
 
   demoSql2 <- do.call('c', demoSql) |>
-    glue::glue_collapse("\n\n")
+    glue::glue_collapse("\n\n") |>
+    SqlRender::render(
+      patient_level_data = buildOptions$patientLevelDataTempTable,
+      cdm_database_schema = executionSettings$cdmDatabaseSchema,
+      target_table = buildOptions$targetCohortTempTable
+    )
 
   return(demoSql2)
 }
 
 
 
-.buildOccurrencePatientLevelSql <- function(tsm) {
+.buildOccurrencePatientLevelSql <- function(tsm, buildOptions) {
 
   statTypes <- tsm |>
     dplyr::select(personLineTransformation, lineItemClass) |>
@@ -286,7 +291,11 @@
   }
 
   sql <- c(anyCountSql, observedCountSql, timeToFirstSql) |>
-    glue::glue_collapse(sep = "\n\n")
+    glue::glue_collapse(sep = "\n\n") |>
+    SqlRender::render(
+      patient_level_data = buildOptions$patientLevelDataTempTable,
+      concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable,
+    )
 
   return(sql)
 
@@ -295,7 +304,7 @@
 
 
 
-.buildCohortPatientLevelSql <- function(tsm) {
+.buildCohortPatientLevelSql <- function(tsm, buildOptions) {
 
   statTypes <- tsm |>
     dplyr::select(personLineTransformation, lineItemClass) |>
@@ -339,7 +348,11 @@
   }
 
   sql <- c(anyCountSql, observedCountSql, timeToFirstSql) |>
-    glue::glue_collapse(sep = "\n\n")
+    glue::glue_collapse(sep = "\n\n") |>
+    SqlRender::render(
+      patient_level_data = buildOptions$patientLevelDataTempTable,
+      cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable
+    )
 
   return(sql)
 

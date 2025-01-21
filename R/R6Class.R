@@ -129,8 +129,14 @@ TableShell <- R6::R6Class("TableShell",
           buildOptions = buildOptions
         ),
 
-        # Step 3: create concept set query
+        # Step 3a: create concept set query
         private$.buildConceptSetOccurrenceQuery(
+          executionSettings = executionSettings,
+          buildOptions = buildOptions
+        ),
+
+        # Step 3b: create cohort occ query
+        private$.buildCohortOccurrenceQuery(
           executionSettings = executionSettings,
           buildOptions = buildOptions
         ),
@@ -508,29 +514,26 @@ TableShell <- R6::R6Class("TableShell",
         "ClinicalCharacteristics",
         fs::path("sql", "patientLevelData.sql")
       ) |>
-        readr::read_file()
+        readr::read_file() |>
+        SqlRender::render(
+          patient_level_data = buildOptions$patientLevelDataTempTable
+        )
 
       # Step 2: run patient level queries
       tsm <- self$getTableShellMeta()
       # step 2a demographics
 
-      demoPatientLevelSql <- .buildDemoPatientLevelSql(tsm)
+      demoPatientLevelSql <- .buildDemoPatientLevelSql(tsm, executionSettings, buildOptions)
 
       # step 2b concept set pat level
-      csPatientLevelSql <- .buildOccurrencePatientLevelSql(tsm)
+      csPatientLevelSql <- .buildOccurrencePatientLevelSql(tsm, buildOptions)
 
       # step 2c cohort pat level
-      chPatientLevelSql <- .buildCohortPatientLevelSql(tsm)
+      chPatientLevelSql <- .buildCohortPatientLevelSql(tsm, buildOptions)
 
       # full sql for sql
       ptFullSql <- c(ptDatTbSql, demoPatientLevelSql, csPatientLevelSql, chPatientLevelSql) |>
         glue::glue_collapse(sep = "\n\n") |>
-        SqlRender::render(
-          patient_level_data = buildOptions$patientLevelDataTempTable,
-          concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable,
-          target_table = buildOptions$targetCohortTempTable,
-          cdm_database_schema = executionSettings$cdmDatabaseSchema
-        ) |>
         SqlRender::translate(
           targetDialect = executionSettings$getDbms(),
           tempEmulationSchema = executionSettings$tempEmulationSchema
