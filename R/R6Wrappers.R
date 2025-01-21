@@ -77,13 +77,12 @@ createExecutionSettings <- function(connectionDetails,
 }
 
 
-defaultTableShellBuildOptions <- function(keepResultsTable = FALSE,
-                                          resultsTempTable = "#results_table",
-                                          codesetTempTable = "#codeset",
+defaultTableShellBuildOptions <- function(codesetTempTable = "#codeset",
                                           timeWindowTempTable = "#time_windows",
                                           targetCohortTempTable = "#target_cohorts",
                                           tsMetaTempTable = "#ts_meta",
                                           conceptSetOccurrenceTempTable = "#concept_set_occ",
+                                          cohortOccurrenceTempTable = "#cohort_occ",
                                           patientLevelDataTempTable = "#patient_data",
                                           patientLevelTableShellTempTable = "#pat_ts_tab",
                                           categoricalSummaryTempTable = "#categorical_table",
@@ -91,13 +90,12 @@ defaultTableShellBuildOptions <- function(keepResultsTable = FALSE,
                                           ) {
 
   buildOpts <- BuildOptions$new(
-    keepResultsTable = keepResultsTable,
-    resultsTempTable = resultsTempTable,
     codesetTempTable = codesetTempTable,
     timeWindowTempTable = timeWindowTempTable,
     tsMetaTempTable = tsMetaTempTable,
     targetCohortTempTable = targetCohortTempTable,
     conceptSetOccurrenceTempTable = conceptSetOccurrenceTempTable,
+    cohortOccurrenceTempTable = cohortOccurrenceTempTable,
     patientLevelDataTempTable = patientLevelDataTempTable,
     patientLevelTableShellTempTable = patientLevelTableShellTempTable,
     categoricalSummaryTempTable = categoricalSummaryTempTable,
@@ -446,6 +444,7 @@ createCohortLineItem <- function(sectionLabel = NA_character_,
                                      covariateCohort = covariateCohort,
                                      timeInterval = timeInterval,
                                      statistic = statistic)
+  chDefinition$valueId <- covariateCohort$getId()
   return(chDefinition)
 
 }

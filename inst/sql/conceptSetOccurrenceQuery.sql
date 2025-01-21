@@ -1,4 +1,5 @@
 /* Find presence of covariate in {domain}*/
+
 SELECT
   t.cohort_definition_id AS target_cohort_id,
   t.subject_id,
