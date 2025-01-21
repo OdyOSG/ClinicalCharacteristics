@@ -223,78 +223,7 @@ TableShell <- R6::R6Class("TableShell",
         )
 
       return(dropTempTableSql)
-    },
-
-    # function to aggregate categorical vars into table
-    # aggregateTableShell = function(executionSettings, type, buildOptions) {
-    #
-    #   #identify which lineItems are continuous or categorical
-    #   idList <- private$.identifyCategoryIds()
-    #
-    #   # get sql for categorical
-    #   if (type == "categorical") {
-    #
-    #     categoricalIds <- idList |>
-    #       dplyr::filter(distributionType == "categorical") |>
-    #       dplyr::pull(categoryId) |>
-    #       paste(collapse = ", ")
-    #
-    #
-    #     sqlFile <- "aggregateCategorical.sql"
-    #     # get sql from package
-    #     sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-    #       readr::read_file() |>
-    #       glue::glue() |>
-    #       SqlRender::render(
-    #         workDatabaseSchema = executionSettings$workDatabaseSchema,
-    #         cohortTable = executionSettings$targetCohortTable,
-    #         dataTable = buildOptions$resultsTempTable
-    #       )
-    #   }
-    #
-    #   # get sql for continuous
-    #   if (type == "continuous") {
-    #
-    #     continuousIds <- idList |>
-    #       dplyr::filter(distributionType == "continuous") |>
-    #       dplyr::pull(categoryId) |>
-    #       paste(collapse = ", ")
-    #
-    #     sqlFile <- "aggregateContinuous.sql"
-    #     # get sql from package
-    #     sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-    #       readr::read_file() |>
-    #       glue::glue() |>
-    #       SqlRender::render(
-    #         dataTable = buildOptions$resultsTempTable
-    #       )
-    #   }
-    #
-    #   finalSql <- sql |>
-    #     SqlRender::translate(
-    #       targetDialect = executionSettings$getDbms(),
-    #       tempEmulationSchema = executionSettings$tempEmulationSchema
-    #     )
-    #
-    #   # get aggregateTable
-    #   aggregateTable <- DatabaseConnector::querySql(
-    #     connection = executionSettings$getConnection(),
-    #     sql = finalSql
-    #   ) |>
-    #     tibble::as_tibble() |>
-    #     dplyr::rename_with(tolower) |>
-    #     dplyr::arrange(cohort_id, category_id, time_id, value_id)
-    #
-    #   # format results
-    #   formattedTable <- private$.labelResults(
-    #     results = aggregateTable,
-    #     type = type
-    #   )
-    #
-    #   return(formattedTable)
-    #
-    # }
-
+    }
 
   ),
   private = list(

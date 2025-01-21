@@ -17,6 +17,21 @@ createTableShell <- function(title,
     return(tableShell)
 }
 
+#' @title
+#' Parse cohort info from a data frame
+#'
+#' @param df The data frame containing the information for the cohorts (id and name)
+#'
+#' @return A list of CohortInfo objects
+#'
+#' @export
+parseCohortInfoFromDf <- function(df) {
+  cohortInfo <- purrr::pmap(df, function(id, name) {
+    createCohortInfo(id, name)
+  })
+  return(cohortInfo)
+}
+
 
 #' @title
 #' Create a CohortInfo object for a cohort and set its attributes

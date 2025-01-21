@@ -19,3 +19,25 @@ age5yrGrp <- function() {
 
   return(br)
 }
+
+#' @title
+#' Create a breaks Strategy object for age into 10 year groups
+#'
+#' @return A BreaksStreategy object with defaults assumptions for 10 year age groups
+#'
+#' @export
+age10yrGrp <- function() {
+
+  x <- seq(0,130, by = 10)
+  a <- dplyr::lead(x) - 1
+  lab <- glue::glue("{x}-{a}")[-length(x)]
+
+  br <- newBreaks(
+    name = "10-Year Age Groups",
+    breaks = x
+  )
+
+  br$labels <- c(lab, paste0(dplyr::last(x), "+"))
+
+  return(br)
+}

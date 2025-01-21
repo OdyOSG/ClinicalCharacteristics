@@ -126,6 +126,43 @@ test_that("newBreaks makes a BreaksStrategy Object",{
 
 })
 
+
+test_that("maleGender makes a DemographicConcept Class", {
+  maleGenderChar <- maleGender()
+  expect_equal(maleGenderChar$getConceptId(), 8507)
+  expect_equal(maleGenderChar$getDemoLabel(), "Gender: Male")
+  expect_equal(maleGenderChar$getConceptColumn(), "gender_concept_id")
+})
+
+
+test_that("femaleGender makes a DemographicConcept Class", {
+  femaleGenderChar <- femaleGender()
+  expect_equal(femaleGenderChar$getConceptId(), 8532)
+  expect_equal(femaleGenderChar$getDemoLabel(), "Gender: Female")
+  expect_equal(femaleGenderChar$getConceptColumn(), "gender_concept_id")
+})
+
+
+
+test_that("ageChar makes a DemographicAge Class", {
+
+  ageChar1 <- ageChar()
+  expect_equal(ageChar1$getStatisticType(), "continuousDistribution")
+  expect_equal(ageChar1$getDemoLabel(), "Age")
+  expect_equal(ageChar1$getAggregationType(), "continuous")
+
+  ageChar2 <- ageChar(
+    breaks = newBreaks(name = "Child to Adult", breaks = c(0, 18, 65))
+  )
+
+  expect_equal(ageChar2$getStatisticType(), "breaks")
+  expect_equal(ageChar2$getDemoLabel(), "Age")
+  expect_equal(ageChar2$getAggregationType(), "categorical")
+  expect_true(inherits(ageChar2$getBreaksIfAny(), "BreaksStrategy"))
+
+})
+
+
 test_that("create a set of lineItems", {
 
   cs1 <- list(
