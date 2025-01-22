@@ -169,19 +169,14 @@ observedPresenceStat <- function() {
 #' @title
 #' Create a count stat where any occurrence is valid.
 #'
-#' @param options set whether to summarize as continuousDistribution or breaks.
-#' A breaks option summarizes as categorial and requires a breaksStrategy
-#' @param breaks a breaksStrategy object dictating how to classify counts into categories
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories.
+#' If null then this defaults to a continuous distribution
 #'
 #' @return A stat object either continuousDistribution or breaks based on the options input
 #'
 #' @export
-anyCountStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
-  options <- match.arg(options)
-  if (options == "breaks") {
-    if (is.null(options)) {
-      stop("Breaks option requires a BreaksStrategy")
-    }
+anyCountStat <- function( breaks = NULL) {
+  if (!is.null(breaks)) {
     stat <- Breaks$new(personLine = "anyCount", breaks = breaks)
   } else {
     stat <- ContinuousDistribution$new(personLine = "anyCount")
@@ -192,19 +187,14 @@ anyCountStat <- function(options = c("continuousDistribution", "breaks"), breaks
 #' @title
 #' Create a count stat where only occurrence during the observation period are valid
 #'
-#' @param options set whether to summarize as continuousDistribution or breaks.
-#' A breaks option summarizes as categorial and requires a breaksStrategy
-#' @param breaks a breaksStrategy object dictating how to classify counts into categories
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories.
+#' If null then this defaults to a continuous distribution
 #'
 #' @return A stat object either continuousDistribution or breaks based on the options input
 #'
 #' @export
-observedCountStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
-  options <- match.arg(options)
-  if (options == "breaks") {
-    if (is.null(options)) {
-      stop("Breaks option requires a BreaksStrategy")
-    }
+observedCountStat <- function(breaks = NULL) {
+  if (!is.null(breaks)) {
     stat <- Breaks$new(personLine = "observedCount", breaks = breaks)
   } else {
     stat <- ContinuousDistribution$new(personLine = "observedCount")
@@ -215,19 +205,14 @@ observedCountStat <- function(options = c("continuousDistribution", "breaks"), b
 #' @title
 #' Create a time to stat where any occurrence is valid
 #'
-#' @param options set whether to summarize as continuousDistribution or breaks.
-#' A breaks option summarizes as categorial and requires a breaksStrategy
-#' @param breaks a breaksStrategy object dictating how to classify counts into categories
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories.
+#' If null then this defaults to a continuous distribution
 #'
 #' @return A stat object either continuousDistribution or breaks based on the options input
 #'
 #' @export
-timeToFirstStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
-  options <- match.arg(options)
-  if (options == "breaks") {
-    if (is.null(options)) {
-      stop("Breaks option requires a BreaksStrategy")
-    }
+timeToFirstStat <- function(breaks = NULL) {
+  if (!is.null(breaks)) {
     stat <- Breaks$new(personLine = "timeToFirst", breaks = breaks)
   } else {
     stat <- ContinuousDistribution$new(personLine = "timeToFirst")
