@@ -36,47 +36,33 @@ TableShell <- R6::R6Class("TableShell",
       return(tsLineItems)
     },
 
-    # printJobDetails = function() {
-    #
-    #   titleNm <- self$getName()
-    #
-    #   tcs <- self$getTargetCohorts()
-    #   cohortPrintInfo <- purrr::map_chr(tcs, ~.x$targetCohortDetails())
-    #
-    #   # get line item info
-    #   lineItems <- self$getLineItems()
-    #   liPrintInfo <- purrr::map_chr(lineItems, ~.x$lineItemDetails())
-    #
-    #   cli::cat_bullet(
-    #     glue::glue_col("{yellow Job Details for Table Shell: {titleNm}}"),
-    #     bullet = "pointer",
-    #     bullet_col = "yellow"
-    #   )
-    #
-    #   cli::cat_bullet(
-    #     glue::glue("Target Cohort Details:"),
-    #     bullet = "pointer",
-    #     bullet_col = "yellow"
-    #   )
-    #
-    #   cli::cat_line(
-    #     glue::glue("\t{cohortPrintInfo}")
-    #   )
-    #
-    #
-    #   cli::cat_bullet(
-    #     glue::glue("Line Item tasks:"),
-    #     bullet = "pointer",
-    #     bullet_col = "yellow"
-    #   )
-    #
-    #   cli::cat_line(
-    #     glue::glue("\t{liPrintInfo}")
-    #   )
-    #
-    #   invisible(liPrintInfo)
-    #
-    # },
+    printJobDetails = function() {
+
+      tcs <- self$getTargetCohorts()
+      cohortPrintInfo <- purrr::map_chr(tcs, ~.x$cohortDetails())
+
+      # get line item info
+      tsm <- self$getTableShellMeta()
+      tsmInfo <- tsm |>
+        dplyr::select(ordinalId, sectionLabel, lineItemLabel, timeLabel, statisticType) |>
+        dplyr::distinct() |>
+        glue::glue_data_col(
+          "\t{ordinalId}) {green {sectionLabel}}: {yellow {lineItemLabel}} ({magenta {timeLabel}}) || Stat Type {blue {statisticType}}"
+        )|>
+        glue::glue_collapse("\n")
+
+
+      cli::cat_line(
+        glue::glue("Target Cohort Details:\n{cohortPrintInfo}")
+      )
+
+      cli::cat_line(
+        glue::glue("Line Item tasks:\n{tsmInfo}")
+      )
+
+      invisible(tsmInfo)
+
+    },
 
     # function to instantiate tables for queries
     instantiateTables = function(executionSettings, buildOptions) {
@@ -113,6 +99,7 @@ TableShell <- R6::R6Class("TableShell",
         bullet = "pointer",
         bullet_col = "yellow"
       )
+      self$printJobDetails()
 
       # collect all the sql
       fullSql <- c(
@@ -831,8 +818,9 @@ CohortInfo <- R6::R6Class("CohortInfo",
       name <- self$getName()
 
       info <- glue::glue_col(
-        "- CohortId: {green {id}}; CohortName: {green {name}}"
-      )
+        "\t- Cohort Id: {green {id}}; Cohort Name: {green {name}}"
+      ) |>
+        glue::glue_collapse("\n")
 
       return(info)
 
