@@ -825,15 +825,6 @@ CohortInfo <- R6::R6Class("CohortInfo",
       return(info)
 
     }
-    # DEFUNCT: this is now one cohort per class
-    # getSql = function() {
-    #   sqlFile <- "targetCohort.sql"
-    #   cohortId <- private$id
-    #   # get sql from package
-    #   sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-    #     readr::read_file() |>
-    #     glue::glue()
-    # }
   ),
   private = list(
     id = NULL,
