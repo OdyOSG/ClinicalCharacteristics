@@ -48,6 +48,16 @@ generateTableShell <- function(tableShell, executionSettings, buildOptions = NUL
     bullet_col = "yellow"
   )
   res <- tableShell$outputResults(executionSettings, buildOptions)
+
+
+  # Step 5: Drop Temp Tables
+  cli::cat_bullet(
+    glue::glue_col("{yellow Drop Temp Tables from Process}"),
+    bullet = "pointer",
+    bullet_col = "yellow"
+  )
+  tableShell$dropTempTables(executionSettings, buildOptions)
+
   return(res)
 }
 

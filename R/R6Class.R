@@ -36,47 +36,33 @@ TableShell <- R6::R6Class("TableShell",
       return(tsLineItems)
     },
 
-    # printJobDetails = function() {
-    #
-    #   titleNm <- self$getName()
-    #
-    #   tcs <- self$getTargetCohorts()
-    #   cohortPrintInfo <- purrr::map_chr(tcs, ~.x$targetCohortDetails())
-    #
-    #   # get line item info
-    #   lineItems <- self$getLineItems()
-    #   liPrintInfo <- purrr::map_chr(lineItems, ~.x$lineItemDetails())
-    #
-    #   cli::cat_bullet(
-    #     glue::glue_col("{yellow Job Details for Table Shell: {titleNm}}"),
-    #     bullet = "pointer",
-    #     bullet_col = "yellow"
-    #   )
-    #
-    #   cli::cat_bullet(
-    #     glue::glue("Target Cohort Details:"),
-    #     bullet = "pointer",
-    #     bullet_col = "yellow"
-    #   )
-    #
-    #   cli::cat_line(
-    #     glue::glue("\t{cohortPrintInfo}")
-    #   )
-    #
-    #
-    #   cli::cat_bullet(
-    #     glue::glue("Line Item tasks:"),
-    #     bullet = "pointer",
-    #     bullet_col = "yellow"
-    #   )
-    #
-    #   cli::cat_line(
-    #     glue::glue("\t{liPrintInfo}")
-    #   )
-    #
-    #   invisible(liPrintInfo)
-    #
-    # },
+    printJobDetails = function() {
+
+      tcs <- self$getTargetCohorts()
+      cohortPrintInfo <- purrr::map_chr(tcs, ~.x$cohortDetails())
+
+      # get line item info
+      tsm <- self$getTableShellMeta()
+      tsmInfo <- tsm |>
+        dplyr::select(ordinalId, sectionLabel, lineItemLabel, timeLabel, statisticType) |>
+        dplyr::distinct() |>
+        glue::glue_data_col(
+          "\t{ordinalId}) {green {sectionLabel}}: {yellow {lineItemLabel}} ({magenta {timeLabel}}) || Stat Type {blue {statisticType}}"
+        )|>
+        glue::glue_collapse("\n")
+
+
+      cli::cat_line(
+        glue::glue("Target Cohort Details:\n{cohortPrintInfo}")
+      )
+
+      cli::cat_line(
+        glue::glue("Line Item tasks:\n{tsmInfo}")
+      )
+
+      invisible(tsmInfo)
+
+    },
 
     # function to instantiate tables for queries
     instantiateTables = function(executionSettings, buildOptions) {
@@ -113,6 +99,7 @@ TableShell <- R6::R6Class("TableShell",
         bullet = "pointer",
         bullet_col = "yellow"
       )
+      self$printJobDetails()
 
       # collect all the sql
       fullSql <- c(
@@ -182,78 +169,53 @@ TableShell <- R6::R6Class("TableShell",
       )
 
       return(res)
+    },
+
+    # function to drop all cs Tables
+    dropTempTables = function(executionSettings, buildOptions) {
+
+      # get temp table slot names
+      tempTableSlots <- names(buildOptions)[grepl("TempTable",names(buildOptions))]
+
+      # get table names
+      tempTableNames <- purrr::map_chr(
+        tempTableSlots,
+        ~buildOptions[[.x]]
+      )
+
+      tempTables <- tibble::tibble(
+        tempTableSlots = tempTableSlots,
+        tempTableNames = tempTableNames
+      ) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(
+          drop = grepl("\\#", tempTableNames) # check if temp
+        )
+
+      dropTempTableSql <- vector('list', length = nrow(tempTables))
+      for (i in 1:nrow(tempTables)) {
+        if (tempTables$drop[i]) {
+          dropTempTableSql[[i]] <- .truncDropTempTables(
+            tempTableName = tempTables$tempTableNames[i]
+          )
+        } else {
+          dropTempTableSql[[i]] <- ""
+        }
+      }
+      dropTempTableSql <- do.call("c", dropTempTableSql) |>
+        glue::glue_collapse("\n") |>
+        SqlRender::translate(
+          targetDialect = executionSettings$getDbms(),
+          tempEmulationSchema = executionSettings$tempEmulationSchema
+        )
+
+      DatabaseConnector::executeSql(
+        connection = executionSettings$getConnection(),
+        sql = dropTempTableSql
+      )
+
+      return(dropTempTableSql)
     }
-
-    # function to aggregate categorical vars into table
-    # aggregateTableShell = function(executionSettings, type, buildOptions) {
-    #
-    #   #identify which lineItems are continuous or categorical
-    #   idList <- private$.identifyCategoryIds()
-    #
-    #   # get sql for categorical
-    #   if (type == "categorical") {
-    #
-    #     categoricalIds <- idList |>
-    #       dplyr::filter(distributionType == "categorical") |>
-    #       dplyr::pull(categoryId) |>
-    #       paste(collapse = ", ")
-    #
-    #
-    #     sqlFile <- "aggregateCategorical.sql"
-    #     # get sql from package
-    #     sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-    #       readr::read_file() |>
-    #       glue::glue() |>
-    #       SqlRender::render(
-    #         workDatabaseSchema = executionSettings$workDatabaseSchema,
-    #         cohortTable = executionSettings$targetCohortTable,
-    #         dataTable = buildOptions$resultsTempTable
-    #       )
-    #   }
-    #
-    #   # get sql for continuous
-    #   if (type == "continuous") {
-    #
-    #     continuousIds <- idList |>
-    #       dplyr::filter(distributionType == "continuous") |>
-    #       dplyr::pull(categoryId) |>
-    #       paste(collapse = ", ")
-    #
-    #     sqlFile <- "aggregateContinuous.sql"
-    #     # get sql from package
-    #     sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-    #       readr::read_file() |>
-    #       glue::glue() |>
-    #       SqlRender::render(
-    #         dataTable = buildOptions$resultsTempTable
-    #       )
-    #   }
-    #
-    #   finalSql <- sql |>
-    #     SqlRender::translate(
-    #       targetDialect = executionSettings$getDbms(),
-    #       tempEmulationSchema = executionSettings$tempEmulationSchema
-    #     )
-    #
-    #   # get aggregateTable
-    #   aggregateTable <- DatabaseConnector::querySql(
-    #     connection = executionSettings$getConnection(),
-    #     sql = finalSql
-    #   ) |>
-    #     tibble::as_tibble() |>
-    #     dplyr::rename_with(tolower) |>
-    #     dplyr::arrange(cohort_id, category_id, time_id, value_id)
-    #
-    #   # format results
-    #   formattedTable <- private$.labelResults(
-    #     results = aggregateTable,
-    #     type = type
-    #   )
-    #
-    #   return(formattedTable)
-    #
-    # }
-
 
   ),
   private = list(
@@ -526,7 +488,7 @@ TableShell <- R6::R6Class("TableShell",
       demoPatientLevelSql <- .buildDemoPatientLevelSql(tsm, executionSettings, buildOptions)
 
       # step 2b concept set pat level
-      csPatientLevelSql <- .buildOccurrencePatientLevelSql(tsm, buildOptions)
+      csPatientLevelSql <- .buildOccurrencePatientLevelSql(tsm, executionSettings, buildOptions)
 
       # step 2c cohort pat level
       chPatientLevelSql <- .buildCohortPatientLevelSql(tsm, buildOptions)
@@ -564,53 +526,6 @@ TableShell <- R6::R6Class("TableShell",
       return(allSql)
 
 
-    },
-
-
-
-    # function to drop all cs Tables
-    .dropTempTables = function(executionSettings, buildOptions) {
-
-      # get temp table slot names
-      tempTableSlots <- names(buildOptions)[grepl("TempTable",names(buildOptions))]
-
-      # get table names
-      tempTableNames <- purrr::map_chr(
-        tempTableSlots,
-        ~buildOptions[[.x]]
-      )
-
-      tempTables <- tibble::tibble(
-        tempTableSlots = tempTableSlots,
-        tempTableNames = tempTableNames
-      ) |>
-        dplyr::rowwise() |>
-        dplyr::mutate(
-          drop = grepl("\\#", tempTableNames) # check if temp
-        )
-
-      dropTempTableSql <- vector('list', length = nrow(tempTables))
-      for (i in 1:nrow(tempTables)) {
-        if (tempTables$drop[i]) {
-          dropTempTableSql[[i]] <- .truncDropTempTables(
-            tempTableName = tempTables$tempTableNames[i]
-          )
-        } else {
-          dropTempTableSql[[i]] <- ""
-        }
-      }
-      dropTempTableSql <- do.call("c", dropTempTableSql) |>
-        glue::glue_collapse("\n") |>
-        SqlRender::translate(
-          targetDialect = executionSettings$getDbms(),
-          tempEmulationSchema = executionSettings$tempEmulationSchema
-        )
-
-      return(dropTempTableSql)
-    },
-
-    .getLineItemsWithBreaks = function() {
-      tsm <- self$tabl
     }
   )
 )
@@ -649,8 +564,6 @@ BuildOptions <- R6::R6Class(
     }
   ),
   private = list(
-    .keepResultsTable = NULL,
-    .resultsTempTable = NULL,
     .codesetTempTable = NULL,
     .timeWindowTempTable = NULL,
     .targetCohortTempTable = NULL,
@@ -664,15 +577,6 @@ BuildOptions <- R6::R6Class(
   ),
 
   active = list(
-
-    keepResultsTable = function(value) {
-      .setActiveLogical(private = private, key = ".keepResultsTable", value = value)
-    },
-
-
-    resultsTempTable = function(value) {
-      .setActiveString(private = private, key = ".resultsTempTable", value = value)
-    },
 
 
     codesetTempTable = function(value) {
@@ -914,21 +818,13 @@ CohortInfo <- R6::R6Class("CohortInfo",
       name <- self$getName()
 
       info <- glue::glue_col(
-        "- CohortId: {green {id}}; CohortName: {green {name}}"
-      )
+        "\t- Cohort Id: {green {id}}; Cohort Name: {green {name}}"
+      ) |>
+        glue::glue_collapse("\n")
 
       return(info)
 
     }
-    # DEFUNCT: this is now one cohort per class
-    # getSql = function() {
-    #   sqlFile <- "targetCohort.sql"
-    #   cohortId <- private$id
-    #   # get sql from package
-    #   sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-    #     readr::read_file() |>
-    #     glue::glue()
-    # }
   ),
   private = list(
     id = NULL,

@@ -114,6 +114,7 @@ test_that("createCohorttLineItemBatch creates a list of CohortLineItem objects",
   expect_equal(cohortList[[1]]$lineItemLabel, "A")
 })
 
+# Breaks Strategy --------------------
 
 test_that("newBreaks makes a BreaksStrategy Object",{
   newBreaksStrategy <- newBreaks(name = "test", breaks = c(0,2,4))
@@ -125,6 +126,137 @@ test_that("newBreaks makes a BreaksStrategy Object",{
   expect_equal(newBreaksStrategy$labels[1], "0-1")
 
 })
+
+
+# Stat Builders -------------------------
+
+## Demographics -------------------------
+
+test_that("maleGender makes a DemographicConcept Class", {
+  maleGenderChar <- maleGender()
+  expect_equal(maleGenderChar$getConceptId(), 8507)
+  expect_equal(maleGenderChar$getDemoLabel(), "Gender: Male")
+  expect_equal(maleGenderChar$getConceptColumn(), "gender_concept_id")
+})
+
+
+test_that("femaleGender makes a DemographicConcept Class", {
+  femaleGenderChar <- femaleGender()
+  expect_equal(femaleGenderChar$getConceptId(), 8532)
+  expect_equal(femaleGenderChar$getDemoLabel(), "Gender: Female")
+  expect_equal(femaleGenderChar$getConceptColumn(), "gender_concept_id")
+})
+
+
+
+test_that("ageChar makes a DemographicAge Class", {
+
+  ageChar1 <- ageChar()
+  expect_equal(ageChar1$getStatisticType(), "continuousDistribution")
+  expect_equal(ageChar1$getDemoLabel(), "Age")
+  expect_equal(ageChar1$getAggregationType(), "continuous")
+
+  ageChar2 <- ageChar(
+    breaks = newBreaks(name = "Child to Adult", breaks = c(0, 18, 65))
+  )
+
+  expect_equal(ageChar2$getStatisticType(), "breaks")
+  expect_equal(ageChar2$getDemoLabel(), "Age")
+  expect_equal(ageChar2$getAggregationType(), "categorical")
+  expect_true(inherits(ageChar2$getBreaksIfAny(), "BreaksStrategy"))
+
+})
+
+## Other stats ----------------------
+
+test_that("anyPresenceStat makes a Presence Class", {
+
+  pres <- anyPresenceStat()
+  expect_equal(pres$getStatisticType(), "presence")
+  expect_equal(pres$getPersonLineTransformation(), "anyCount")
+  expect_equal(pres$getAggregationType(), "categorical")
+  expect_true(inherits(pres, "Presence"))
+})
+
+
+test_that("observedPresenceStat makes a Presence Class", {
+
+  obsPres <- observedPresenceStat()
+  expect_equal(obsPres$getStatisticType(), "presence")
+  expect_equal(obsPres$getPersonLineTransformation(), "observedCount")
+  expect_equal(obsPres$getAggregationType(), "categorical")
+  expect_true(inherits(obsPres, "Presence"))
+})
+
+
+test_that("anyCountStat with null breaks makes a ContinuousDistribution Class", {
+
+  tst1 <- anyCountStat()
+  expect_equal(tst1$getStatisticType(), "continuousDistribution")
+  expect_equal(tst1$getPersonLineTransformation(), "anyCount")
+  expect_equal(tst1$getAggregationType(), "continuous")
+  expect_true(inherits(tst1, "ContinuousDistribution"))
+
+})
+
+
+test_that("observedCountStat with null breaks makes a ContinuousDistribution Class", {
+
+  tst1 <- observedCountStat()
+  expect_equal(tst1$getStatisticType(), "continuousDistribution")
+  expect_equal(tst1$getPersonLineTransformation(), "observedCount")
+  expect_equal(tst1$getAggregationType(), "continuous")
+  expect_true(inherits(tst1, "ContinuousDistribution"))
+
+})
+
+test_that("anyCountStat with breaks makes a breaks Class", {
+
+  br <- newBreaks(name = "test", breaks = c(1,2,3))
+  tst1 <- anyCountStat(breaks = br)
+  expect_equal(tst1$getStatisticType(), "breaks")
+  expect_equal(tst1$getPersonLineTransformation(), "anyCount")
+  expect_equal(tst1$getAggregationType(), "categorical")
+  expect_true(inherits(tst1, "Breaks"))
+
+})
+
+
+test_that("observedCountStat with breaks makes a breaks Class", {
+
+  br <- newBreaks(name = "test", breaks = c(1,2,3))
+  tst1 <- anyCountStat(breaks = br)
+  expect_equal(tst1$getStatisticType(), "breaks")
+  expect_equal(tst1$getPersonLineTransformation(), "observedCount")
+  expect_equal(tst1$getAggregationType(), "categorical")
+  expect_true(inherits(tst1, "Breaks"))
+
+})
+
+
+test_that("timeToFirstStat with breaks makes a breaks Class", {
+
+  br <- newBreaks(name = "test", breaks = c(1,2,3))
+  tst1 <- timeToFirstStat(breaks = br)
+  expect_equal(tst1$getStatisticType(), "breaks")
+  expect_equal(tst1$getPersonLineTransformation(), "timeToFirst")
+  expect_equal(tst1$getAggregationType(), "categorical")
+  expect_true(inherits(tst1, "Breaks"))
+
+})
+
+
+test_that("timeToFirstStat with null breaks makes a ContinuousDistribution Class", {
+
+  tst1 <- timeToFirstStat()
+  expect_equal(tst1$getStatisticType(), "continuousDistribution")
+  expect_equal(tst1$getPersonLineTransformation(), "timeToFirst")
+  expect_equal(tst1$getAggregationType(), "continuous")
+  expect_true(inherits(tst1, "ContinuousDistribution"))
+
+})
+
+# Line Item Builder ---------------------
 
 test_that("create a set of lineItems", {
 
