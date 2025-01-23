@@ -39,7 +39,8 @@ TableShell <- R6::R6Class("TableShell",
     printJobDetails = function() {
 
       tcs <- self$getTargetCohorts()
-      cohortPrintInfo <- purrr::map_chr(tcs, ~.x$cohortDetails())
+      cohortPrintInfo <- purrr::map_chr(tcs, ~.x$cohortDetails()) |>
+        glue::glue_collapse("\n")
 
       # get line item info
       tsm <- self$getTableShellMeta()
@@ -491,7 +492,7 @@ TableShell <- R6::R6Class("TableShell",
       csPatientLevelSql <- .buildOccurrencePatientLevelSql(tsm, executionSettings, buildOptions)
 
       # step 2c cohort pat level
-      chPatientLevelSql <- .buildCohortPatientLevelSql(tsm, buildOptions)
+      chPatientLevelSql <- .buildCohortPatientLevelSql(tsm, executionSettings, buildOptions)
 
       # full sql for sql
       ptFullSql <- c(ptDatTbSql, demoPatientLevelSql, csPatientLevelSql, chPatientLevelSql) |>
@@ -819,8 +820,7 @@ CohortInfo <- R6::R6Class("CohortInfo",
 
       info <- glue::glue_col(
         "\t- Cohort Id: {green {id}}; Cohort Name: {green {name}}"
-      ) |>
-        glue::glue_collapse("\n")
+      )
 
       return(info)
 

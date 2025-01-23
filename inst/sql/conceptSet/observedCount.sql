@@ -11,7 +11,7 @@ FROM (
   SELECT cc.*, m.ordinal_id, m.statistic_type, m.line_item_class, op.observation_period_start_date
   FROM @concept_set_occurrence_table cc
   JOIN (
-    SELECT * FROM @ts_meta_table WHERE personLineTransformation = 'observedCount'
+    SELECT * FROM @ts_meta_table WHERE person_line_transformation = 'observedCount'
   ) m
   ON cc.raw_occurrence_id = m.value_id AND cc.time_label = m.time_label
   JOIN @cdm_database_schema.observation_period OP

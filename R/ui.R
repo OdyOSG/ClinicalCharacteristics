@@ -72,11 +72,25 @@ generateTableShell <- function(tableShell, executionSettings, buildOptions = NUL
 #' @return A monaco widget in the viewer tab of RStudio with the sql script
 #'
 #' @export
-reviewTableShellSql <- function(tableShell, executionSettings, buildOptions = NULL){
+reviewTableShellSql <- function(tableShell,
+                                executionSettings,
+                                buildOptions = NULL,
+                                saveName = NULL,
+                                savePath = here::here()){
 
   if (is.null(buildOptions)){
     buildOptions <- defaultTableShellBuildOptions()
   }
+
+  if (is.null(saveName)) {
+    saveName <- glue::glue("{tableShell$getName()}_table_shell") |>
+      tolower() |>
+      snakecase::to_snake_case() |>
+      fs::path(ext = "sql")
+  }
+
+  # make save path
+  savePath <- fs::path(savePath, saveName)
 
   # make sql file for table shell run
   tsSql <- tableShell$buildTableShellSql(
@@ -85,18 +99,17 @@ reviewTableShellSql <- function(tableShell, executionSettings, buildOptions = NU
   )
 
   cli::cat_bullet(
-    glue::glue("Opening Table Shell Query Sql in Monaco widget"),
+    glue::glue_col("Saving Table Shell SQL to {cyan {savePath}}"),
     bullet = "pointer",
     bullet_col = "yellow"
   )
 
-  mnc <- monaco::monaco(
-    contents = tsSql,
-    language = "sql",
-    theme = "vs"
+  readr::write_file(
+    x = tsSql,
+    file = savePath
   )
 
-  return(mnc)
+  invisible(tsSql)
 }
 
 # Archive -------------------------

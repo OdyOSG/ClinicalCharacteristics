@@ -285,7 +285,8 @@
       SqlRender::render(
         patient_level_data = buildOptions$patientLevelDataTempTable,
         concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable,
-        cdm_database_schema = executionSettings$cdmDatabaseSchema
+        cdm_database_schema = executionSettings$cdmDatabaseSchema,
+        ts_meta_table = buildOptions$tsMetaTempTable
       )
   } else{
     observedCountSql <- ""
@@ -314,7 +315,7 @@
 
 
 
-.buildCohortPatientLevelSql <- function(tsm, buildOptions) {
+.buildCohortPatientLevelSql <- function(tsm, executionSettings, buildOptions) {
 
   statTypes <- tsm |>
     dplyr::select(personLineTransformation, lineItemClass) |>
@@ -336,7 +337,11 @@
   # concept set anyCount
   if (any(statType == "anyCount")) { # this label will change
     anyCountSql <- fs::path(sqlConceptSetPath, "anyCount.sql") |>
-      readr::read_file()
+      readr::read_file() |>
+      SqlRender::render(
+        patient_level_data = buildOptions$patientLevelDataTempTable,
+        cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable
+      )
   } else{
     anyCountSql <- ""
   }
@@ -344,7 +349,13 @@
   # concept set observedCount
   if (any(statType == "observedCount")) { # this label will change
     observedCountSql <- fs::path(sqlConceptSetPath, "observedCount.sql") |>
-      readr::read_file()
+      readr::read_file() |>
+      SqlRender::render(
+        patient_level_data = buildOptions$patientLevelDataTempTable,
+        cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable,
+        cdm_database_schema = executionSettings$cdmDatabaseSchema,
+        ts_meta_table = buildOptions$tsMetaTempTable
+      )
   } else{
     observedCountSql <- ""
   }
@@ -352,17 +363,18 @@
   # concept set timeTo
   if (any(statType == "timeToFirst")) {
     timeToFirstSql <- fs::path(sqlConceptSetPath, "timeToFirst.sql") |>
-      readr::read_file()
+      readr::read_file() |>
+      SqlRender::render(
+        patient_level_data = buildOptions$patientLevelDataTempTable,
+        cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable,
+        first = TRUE
+      )
   } else{
     timeToFirstSql <- ""
   }
 
   sql <- c(anyCountSql, observedCountSql, timeToFirstSql) |>
-    glue::glue_collapse(sep = "\n\n") |>
-    SqlRender::render(
-      patient_level_data = buildOptions$patientLevelDataTempTable,
-      cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable
-    )
+    glue::glue_collapse(sep = "\n\n")
 
   return(sql)
 
