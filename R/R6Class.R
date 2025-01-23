@@ -382,7 +382,7 @@ TableShell <- R6::R6Class("TableShell",
         dplyr::filter(grepl("ConceptSet", lineItemClass))
 
       # only run if CSD in ts
-      if (!is.null(csMeta)) {
+      if (nrow(csMeta) > 0) {
 
         # Step 2: Prep the concept set extraction
         csTables <- csMeta |>
@@ -433,7 +433,7 @@ TableShell <- R6::R6Class("TableShell",
         dplyr::filter(grepl("Cohort", lineItemClass))
 
       # only run if Cohorts are in ts
-      if (!is.null(chMeta)) {
+      if (nrow(chMeta) > 0) {
 
         # Step 2: Prep the cohort extraction
         cohort_ids <- chMeta$valueId |> unique() |> glue::glue_collapse(", ")
@@ -515,13 +515,10 @@ TableShell <- R6::R6Class("TableShell",
       # make temp continuous + categorical table
       initSummaryTableSql <- .initAggregationTables(executionSettings, buildOptions)
 
-      # get denominator
-      denomSql <- .getDenominator(executionSettings, buildOptions)
-
       # make all the aggregate sql queries
       aggregateSqlQuery <- .aggregateSql(tsm, executionSettings, buildOptions)
 
-      allSql <- c(patTsSql, initSummaryTableSql, denomSql, aggregateSqlQuery) |>
+      allSql <- c(patTsSql, initSummaryTableSql, aggregateSqlQuery) |>
         glue::glue_collapse(sep = "\n\n")
 
       return(allSql)

@@ -17,14 +17,14 @@ generateTableShell <- function(tableShell, executionSettings, buildOptions = NUL
     buildOptions <- defaultTableShellBuildOptions()
   }
 
-  # Step 1: instantiate Tables
-  tableShell$instantiateTables(
+  # Step 1: Build Sql
+  tsSql <- tableShell$buildTableShellSql(
     executionSettings = executionSettings,
     buildOptions = buildOptions
   )
 
-  # Step 2: Build Sql
-  tsSql <- tableShell$buildTableShellSql(
+  # Step 2: instantiate Tables
+  tableShell$instantiateTables(
     executionSettings = executionSettings,
     buildOptions = buildOptions
   )
@@ -57,6 +57,8 @@ generateTableShell <- function(tableShell, executionSettings, buildOptions = NUL
     bullet_col = "yellow"
   )
   tableShell$dropTempTables(executionSettings, buildOptions)
+
+  executionSettings$disconnect()
 
   return(res)
 }
