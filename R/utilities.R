@@ -198,7 +198,7 @@
 }
 
 .truncDropTempTables <- function(tempTableName) {
-  sql <- glue::glue("TRUNCATE TABLE {tempTableName}; DROP TABLE {tempTableName};")
+  sql <- glue::glue("DROP TABLE IF EXISTS {tempTableName};")
   return(sql)
 }
 
@@ -285,7 +285,8 @@
       SqlRender::render(
         patient_level_data = buildOptions$patientLevelDataTempTable,
         concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable,
-        cdm_database_schema = executionSettings$cdmDatabaseSchema
+        cdm_database_schema = executionSettings$cdmDatabaseSchema,
+        ts_meta_table = buildOptions$tsMetaTempTable
       )
   } else{
     observedCountSql <- ""
@@ -314,7 +315,7 @@
 
 
 
-.buildCohortPatientLevelSql <- function(tsm, buildOptions) {
+.buildCohortPatientLevelSql <- function(tsm, executionSettings, buildOptions) {
 
   statTypes <- tsm |>
     dplyr::select(personLineTransformation, lineItemClass) |>
@@ -336,7 +337,11 @@
   # concept set anyCount
   if (any(statType == "anyCount")) { # this label will change
     anyCountSql <- fs::path(sqlConceptSetPath, "anyCount.sql") |>
-      readr::read_file()
+      readr::read_file() |>
+      SqlRender::render(
+        patient_level_data = buildOptions$patientLevelDataTempTable,
+        cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable
+      )
   } else{
     anyCountSql <- ""
   }
@@ -344,7 +349,13 @@
   # concept set observedCount
   if (any(statType == "observedCount")) { # this label will change
     observedCountSql <- fs::path(sqlConceptSetPath, "observedCount.sql") |>
-      readr::read_file()
+      readr::read_file() |>
+      SqlRender::render(
+        patient_level_data = buildOptions$patientLevelDataTempTable,
+        cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable,
+        cdm_database_schema = executionSettings$cdmDatabaseSchema,
+        ts_meta_table = buildOptions$tsMetaTempTable
+      )
   } else{
     observedCountSql <- ""
   }
@@ -352,17 +363,18 @@
   # concept set timeTo
   if (any(statType == "timeToFirst")) {
     timeToFirstSql <- fs::path(sqlConceptSetPath, "timeToFirst.sql") |>
-      readr::read_file()
+      readr::read_file() |>
+      SqlRender::render(
+        patient_level_data = buildOptions$patientLevelDataTempTable,
+        cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable,
+        first = TRUE
+      )
   } else{
     timeToFirstSql <- ""
   }
 
   sql <- c(anyCountSql, observedCountSql, timeToFirstSql) |>
-    glue::glue_collapse(sep = "\n\n") |>
-    SqlRender::render(
-      patient_level_data = buildOptions$patientLevelDataTempTable,
-      cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable
-    )
+    glue::glue_collapse(sep = "\n\n")
 
   return(sql)
 
@@ -373,18 +385,16 @@
 
 .tempPsDatTable <- function(executionSettings, buildOptions) {
 
-   # Create temp table joining patient date with ts meta
-  patTsSql <- "
-        DROP TABLE IF EXISTS @pat_ts_tab;
-        CREATE TABLE @pat_ts_tab AS
-        SELECT
-          a.*, b.ordinal_id, b.section_label, b.line_item_label,
-          b.value_description, b.statistic_type,
-          b.aggregation_type, b.line_item_class
-        FROM @patient_data a
-        JOIN @ts_meta b
-        ON a.value_id = b.value_id AND a.time_label = b.time_label;" |>
+
+  patTsSql <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql/aggregate/denom.sql")
+  ) |>
+    readr::read_file() |>
     SqlRender::render(
+      target_cohort_table = buildOptions$targetCohortTempTable,
+      time_window = buildOptions$timeWindowTempTable,
+      cdm_database_schema = executionSettings$cdmDatabaseSchema,
       patient_data = buildOptions$patientLevelDataTempTable,
       pat_ts_tab = buildOptions$patientLevelTableShellTempTable,
       ts_meta = buildOptions$tsMetaTempTable
@@ -393,6 +403,27 @@
       targetDialect = executionSettings$getDbms(),
       tempEmulationSchema = executionSettings$tempEmulationSchema
     )
+
+  #  # Create temp table joining patient date with ts meta
+  # patTsSql <- "
+  #       DROP TABLE IF EXISTS @pat_ts_tab;
+  #       CREATE TABLE @pat_ts_tab AS
+  #       SELECT
+  #         a.*, b.ordinal_id, b.section_label, b.line_item_label,
+  #         b.value_description, b.statistic_type,
+  #         b.aggregation_type, b.line_item_class
+  #       FROM @patient_data a
+  #       JOIN @ts_meta b
+  #       ON a.value_id = b.value_id AND a.time_label = b.time_label;" |>
+  #   SqlRender::render(
+  #     patient_data = buildOptions$patientLevelDataTempTable,
+  #     pat_ts_tab = buildOptions$patientLevelTableShellTempTable,
+  #     ts_meta = buildOptions$tsMetaTempTable
+  #   ) |>
+  #   SqlRender::translate(
+  #     targetDialect = executionSettings$getDbms(),
+  #     tempEmulationSchema = executionSettings$tempEmulationSchema
+  #   )
   return(patTsSql)
 }
 
@@ -413,25 +444,6 @@
     )
 
   return(initSummaryTableSql)
-
-}
-
-.getDenominator <- function(executionSettings, buildOptions) {
-
-  denomSql <- fs::path_package(
-    package = "ClinicalCharacteristics",
-    fs::path("sql/aggregate/denom_any.sql")
-  ) |>
-    readr::read_file() |>
-    SqlRender::render(
-      target_cohort_table = buildOptions$targetCohortTempTable
-    ) |>
-    SqlRender::translate(
-      targetDialect = executionSettings$getDbms(),
-      tempEmulationSchema = executionSettings$tempEmulationSchema
-    )
-
-  return(denomSql)
 
 }
 
@@ -462,8 +474,7 @@
 }
 
 
-.aggregateSql <- function(tsm, executionSettings, buildOptions) {
-
+.prepAggTables <- function(buildOptions) {
   aggregateSqlPaths <- fs::path_package(
     package = "ClinicalCharacteristics",
     fs::path("sql/aggregate")
@@ -488,6 +499,14 @@
       ),
       by = c("aggType")
     )
+
+  return(aggSqlTb)
+}
+
+.aggregateSql <- function(tsm, executionSettings, buildOptions) {
+
+  # Step 1: Prep Agg Sqls
+  aggSqlTb <- .prepAggTables(buildOptions)
 
   # Step 3: Find the distinct stat types from the table shell
   statTypes <- tsm |>
@@ -566,15 +585,16 @@
 
   categoricalResults <- jj |>
     dplyr::inner_join(
-      tsm |> dplyr::select(ordinalId, sectionLabel),
-      by = c("ordinalId")
+      tsm |> dplyr::select(ordinalId, personLineTransformation, sectionLabel),
+      by = c("ordinalId", "patientLine" = "personLineTransformation"),
+      relationship = "many-to-many"
     ) |>
     dplyr::left_join(
       tc,
       by = c("targetCohortId")
     ) |>
     dplyr::select(
-      targetCohortId, targetCohortName, ordinalId, sectionLabel, lineItemLabel, timeLabel, subjectCount, pct
+      targetCohortId, targetCohortName, ordinalId, sectionLabel, lineItemLabel, patientLine, timeLabel, subjectCount, pct
     ) |>
     dplyr::arrange(
       targetCohortId, ordinalId, lineItemLabel

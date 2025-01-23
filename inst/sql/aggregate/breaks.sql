@@ -17,11 +17,7 @@ FROM (
     t1.break_id,
     t1.tot_subjects,
     COUNT(DISTINCT SUBJECT_ID) AS subject_count
-  FROM (
-      SELECT p.*, d.tot_subjects
-      FROM #pat_ts_break p
-      JOIN #cohort_denom d ON p.target_cohort_id = d.target_cohort_id
-  ) t1
+  FROM #pat_ts_break t1
   GROUP BY target_cohort_id, ordinal_id, time_label, line_item_label, patient_line, break_id, tot_subjects
 ) t2
 

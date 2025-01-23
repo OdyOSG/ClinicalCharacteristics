@@ -39,7 +39,8 @@ TableShell <- R6::R6Class("TableShell",
     printJobDetails = function() {
 
       tcs <- self$getTargetCohorts()
-      cohortPrintInfo <- purrr::map_chr(tcs, ~.x$cohortDetails())
+      cohortPrintInfo <- purrr::map_chr(tcs, ~.x$cohortDetails()) |>
+        glue::glue_collapse("\n")
 
       # get line item info
       tsm <- self$getTableShellMeta()
@@ -381,7 +382,7 @@ TableShell <- R6::R6Class("TableShell",
         dplyr::filter(grepl("ConceptSet", lineItemClass))
 
       # only run if CSD in ts
-      if (!is.null(csMeta)) {
+      if (nrow(csMeta) > 0) {
 
         # Step 2: Prep the concept set extraction
         csTables <- csMeta |>
@@ -432,7 +433,7 @@ TableShell <- R6::R6Class("TableShell",
         dplyr::filter(grepl("Cohort", lineItemClass))
 
       # only run if Cohorts are in ts
-      if (!is.null(chMeta)) {
+      if (nrow(chMeta) > 0) {
 
         # Step 2: Prep the cohort extraction
         cohort_ids <- chMeta$valueId |> unique() |> glue::glue_collapse(", ")
@@ -491,7 +492,7 @@ TableShell <- R6::R6Class("TableShell",
       csPatientLevelSql <- .buildOccurrencePatientLevelSql(tsm, executionSettings, buildOptions)
 
       # step 2c cohort pat level
-      chPatientLevelSql <- .buildCohortPatientLevelSql(tsm, buildOptions)
+      chPatientLevelSql <- .buildCohortPatientLevelSql(tsm, executionSettings, buildOptions)
 
       # full sql for sql
       ptFullSql <- c(ptDatTbSql, demoPatientLevelSql, csPatientLevelSql, chPatientLevelSql) |>
@@ -514,13 +515,10 @@ TableShell <- R6::R6Class("TableShell",
       # make temp continuous + categorical table
       initSummaryTableSql <- .initAggregationTables(executionSettings, buildOptions)
 
-      # get denominator
-      denomSql <- .getDenominator(executionSettings, buildOptions)
-
       # make all the aggregate sql queries
       aggregateSqlQuery <- .aggregateSql(tsm, executionSettings, buildOptions)
 
-      allSql <- c(patTsSql, initSummaryTableSql, denomSql, aggregateSqlQuery) |>
+      allSql <- c(patTsSql, initSummaryTableSql, aggregateSqlQuery) |>
         glue::glue_collapse(sep = "\n\n")
 
       return(allSql)
@@ -819,8 +817,7 @@ CohortInfo <- R6::R6Class("CohortInfo",
 
       info <- glue::glue_col(
         "\t- Cohort Id: {green {id}}; Cohort Name: {green {name}}"
-      ) |>
-        glue::glue_collapse("\n")
+      )
 
       return(info)
 
