@@ -31,3 +31,7 @@ Imports:
     reactable,
     methods
 Additional_repositories: https://OHDSI.github.io/drat
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

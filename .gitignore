@@ -6,3 +6,4 @@ clinCharQuery.sql
 hidden/
 .vscode/
 test_table_shell.sql
+inst/doc

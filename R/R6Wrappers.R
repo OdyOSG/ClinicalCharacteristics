@@ -169,70 +169,108 @@ observedPresenceStat <- function() {
 #' @title
 #' Create a count stat where any occurrence is valid.
 #'
+#'
+#' @return A stat object continuousDistribution
+#'
+#' @export
+anyCountCtsStat <- function() {
+    stat <- ContinuousDistribution$new(personLine = "anyCount")
+  return(stat)
+}
+
+#' @title
+#' Create a count stat with breaks where any occurrence is valid.
+#'
 #' @param breaks a breaksStrategy object dictating how to classify counts into categories.
 #' If null then this defaults to a continuous distribution
 #'
-#' @return A stat object either continuousDistribution or breaks based on the options input
+#' @return A stat object breaks
 #'
 #' @export
-anyCountStat <- function( breaks = NULL) {
-  if (!is.null(breaks)) {
-    stat <- Breaks$new(personLine = "anyCount", breaks = breaks)
-  } else {
-    stat <- ContinuousDistribution$new(personLine = "anyCount")
-  }
+anyCountBreaksStat <- function(breaks) {
+  stat <- Breaks$new(personLine = "anyCount", breaks = breaks)
   return(stat)
 }
 
 #' @title
 #' Create a count stat where only occurrence during the observation period are valid
 #'
-#' @param breaks a breaksStrategy object dictating how to classify counts into categories.
-#' If null then this defaults to a continuous distribution
 #'
-#' @return A stat object either continuousDistribution or breaks based on the options input
+#' @return A stat object continuousDistribution
 #'
 #' @export
-observedCountStat <- function(breaks = NULL) {
-  if (!is.null(breaks)) {
-    stat <- Breaks$new(personLine = "observedCount", breaks = breaks)
-  } else {
-    stat <- ContinuousDistribution$new(personLine = "observedCount")
-  }
+observedCountCtsStat <- function() {
+  stat <- ContinuousDistribution$new(personLine = "observedCount")
   return(stat)
 }
 
 #' @title
-#' Create a time to stat where any occurrence is valid
+#' Create a count stat with breaks where only occurrence during the observation period are valid
 #'
 #' @param breaks a breaksStrategy object dictating how to classify counts into categories.
 #' If null then this defaults to a continuous distribution
 #'
-#' @return A stat object either continuousDistribution or breaks based on the options input
+#' @return A stat object breaks
 #'
 #' @export
-timeToFirstStat <- function(breaks = NULL) {
-  if (!is.null(breaks)) {
-    stat <- Breaks$new(personLine = "timeToFirst", breaks = breaks)
-  } else {
-    stat <- ContinuousDistribution$new(personLine = "timeToFirst")
-  }
+observedCountBreaksStat <- function(breaks) {
+  stat <- Breaks$new(personLine = "observedCount", breaks = breaks)
   return(stat)
 }
 
-#
-# timeToLastStat <- function(options = c("continuousDistribution", "breaks"), breaks = NULL) {
-#   options <- match.arg(options)
-#   if (options == "breaks") {
-#     if (is.null(options)) {
-#       stop("Breaks option requires a BreaksStrategy")
-#     }
-#     stat <- Breaks$new(personLine = "timeToLast", breaks = breaks)
-#   } else {
-#     stat <- ContinuousDistribution$new(personLine = "timeToLast")
-#   }
-#   return(stat)
-# }
+
+#' @title
+#' Create a time to stat where any occurrence is valid
+#'
+#'
+#' @return A stat object continuousDistribution
+#'
+#' @export
+anyTimeToFirstCtsStat <- function() {
+  stat <- ContinuousDistribution$new(personLine = "anyTimeToFirst")
+  return(stat)
+}
+
+#' @title
+#' Create a time to stat with breaks where any occurrence is valid
+#'
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories.
+#' If null then this defaults to a continuous distribution
+#'
+#' @return A stat object breaks
+#'
+#' @export
+anyTimeToFirstBreaksStat <- function(breaks) {
+  stat <- Breaks$new(personLine = "anyTimeToFirst", breaks = breaks)
+  return(stat)
+}
+
+#' @title
+#' Create a continuous time to stat where only occurrence during the observation period are valid
+#'
+#'
+#' @return A stat object continuousDistribution
+#'
+#' @export
+observedTimeToFirstCtsStat <- function() {
+  stat <- ContinuousDistribution$new(personLine = "observedTimeToFirst")
+  return(stat)
+}
+
+#' @title
+#' Create a time to stat with breaks where only occurrence during the observation period are valid
+#'
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories.
+#' If null then this defaults to a continuous distribution
+#'
+#' @return A stat object breaks
+#'
+#' @export
+observedTimeToFirstBreaksStat <- function(breaks) {
+  stat <- Breaks$new(personLine = "observedTimeToFirst", breaks = breaks)
+  return(stat)
+}
+
 
 
 

@@ -189,9 +189,9 @@ test_that("observedPresenceStat makes a Presence Class", {
 })
 
 
-test_that("anyCountStat with null breaks makes a ContinuousDistribution Class", {
+test_that("anyCountCtsStat makes a ContinuousDistribution Class", {
 
-  tst1 <- anyCountStat()
+  tst1 <- anyCountCtsStat()
   expect_equal(tst1$getStatisticType(), "continuousDistribution")
   expect_equal(tst1$getPersonLineTransformation(), "anyCount")
   expect_equal(tst1$getAggregationType(), "continuous")
@@ -200,9 +200,9 @@ test_that("anyCountStat with null breaks makes a ContinuousDistribution Class", 
 })
 
 
-test_that("observedCountStat with null breaks makes a ContinuousDistribution Class", {
+test_that("observedCountCtsStat makes a ContinuousDistribution Class", {
 
-  tst1 <- observedCountStat()
+  tst1 <- observedCountCtsStat()
   expect_equal(tst1$getStatisticType(), "continuousDistribution")
   expect_equal(tst1$getPersonLineTransformation(), "observedCount")
   expect_equal(tst1$getAggregationType(), "continuous")
@@ -210,10 +210,10 @@ test_that("observedCountStat with null breaks makes a ContinuousDistribution Cla
 
 })
 
-test_that("anyCountStat with breaks makes a breaks Class", {
+test_that("anyCountBreaksStat with breaks makes a breaks Class", {
 
   br <- newBreaks(name = "test", breaks = c(1,2,3))
-  tst1 <- anyCountStat(breaks = br)
+  tst1 <- anyCountBreaksStat(breaks = br)
   expect_equal(tst1$getStatisticType(), "breaks")
   expect_equal(tst1$getPersonLineTransformation(), "anyCount")
   expect_equal(tst1$getAggregationType(), "categorical")
@@ -222,10 +222,10 @@ test_that("anyCountStat with breaks makes a breaks Class", {
 })
 
 
-test_that("observedCountStat with breaks makes a breaks Class", {
+test_that("observedCountBreaksStat with breaks makes a breaks Class", {
 
   br <- newBreaks(name = "test", breaks = c(1,2,3))
-  tst1 <- anyCountStat(breaks = br)
+  tst1 <- observedCountBreaksStat(breaks = br)
   expect_equal(tst1$getStatisticType(), "breaks")
   expect_equal(tst1$getPersonLineTransformation(), "observedCount")
   expect_equal(tst1$getAggregationType(), "categorical")
@@ -234,23 +234,23 @@ test_that("observedCountStat with breaks makes a breaks Class", {
 })
 
 
-test_that("timeToFirstStat with breaks makes a breaks Class", {
+test_that("anyTimeToFirstBreaksStat with breaks makes a breaks Class", {
 
   br <- newBreaks(name = "test", breaks = c(1,2,3))
-  tst1 <- timeToFirstStat(breaks = br)
+  tst1 <- anyTimeToFirstBreaksStat(breaks = br)
   expect_equal(tst1$getStatisticType(), "breaks")
-  expect_equal(tst1$getPersonLineTransformation(), "timeToFirst")
+  expect_equal(tst1$getPersonLineTransformation(), "anyTimeToFirst")
   expect_equal(tst1$getAggregationType(), "categorical")
   expect_true(inherits(tst1, "Breaks"))
 
 })
 
 
-test_that("timeToFirstStat with null breaks makes a ContinuousDistribution Class", {
+test_that("anyTimeToFirstCtsStat makes a ContinuousDistribution Class", {
 
-  tst1 <- timeToFirstStat()
+  tst1 <- anyTimeToFirstCtsStat()
   expect_equal(tst1$getStatisticType(), "continuousDistribution")
-  expect_equal(tst1$getPersonLineTransformation(), "timeToFirst")
+  expect_equal(tst1$getPersonLineTransformation(), "anyTimeToFirst")
   expect_equal(tst1$getAggregationType(), "continuous")
   expect_true(inherits(tst1, "ContinuousDistribution"))
 
