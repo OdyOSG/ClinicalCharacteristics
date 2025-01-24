@@ -221,7 +221,7 @@ tw1 <- timeInterval(lb = -365, rb = -1)
 tw2 <- timeInterval(lb = 0, rb = 90)
 
 # define table shell
-ts <- creatTableShell(
+ts <- createTableShell(
   name = "Demo 1",
   targetCohorts = list(
     createCohortInfo(id = 1, name = "Type 2 Diabetes")
@@ -302,7 +302,7 @@ tw2 <- list(
 )
 
 # define table shell
-ts2 <- creatTableShell(
+ts2 <- createTableShell(
   name = "Demo 1",
   targetCohorts = list(
     createCohortInfo(id = 1, name = "Type 2 Diabetes")
@@ -388,7 +388,7 @@ tw2 <- list(
 )
 
 # define table shell
-ts3 <- creatTableShell(
+ts3 <- createTableShell(
   name = "Demo 1",
   targetCohorts = list(
     createCohortInfo(id = 1, name = "Type 2 Diabetes")
