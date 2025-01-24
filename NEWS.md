@@ -1,3 +1,7 @@
+# ClinicalCharacteristics 1.0.0
+
+* Re-structure ClinChar using R6 classes
+
 # ClinicalCharacteristics 0.3.4
 
 * Hot fix...count distinct subjects in continuous summary
