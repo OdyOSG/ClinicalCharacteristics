@@ -4,7 +4,13 @@
 \alias{reviewTableShellSql}
 \title{Function that previews sql script used to generate results for table shell}
 \usage{
-reviewTableShellSql(tableShell, executionSettings, buildOptions = NULL)
+reviewTableShellSql(
+  tableShell,
+  executionSettings,
+  buildOptions = NULL,
+  saveName = NULL,
+  savePath = here::here()
+)
 }
 \arguments{
 \item{tableShell}{The TableShell object to used for generation}
