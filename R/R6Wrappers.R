@@ -314,6 +314,29 @@ createConceptSetLineItem <- function(sectionLabel = NA_character_,
 }
 
 
+createSourceConceptSetLineItem <- function(sectionLabel = NA_character_,
+                                           domain,
+                                           sourceConceptSet,
+                                           timeInterval,
+                                           statistic,
+                                           typeConceptIds = c()) {
+
+  if(is.na(sectionLabel)) {
+    sectionLabel <- sourceConceptSet$sourceConceptName
+  }
+
+  scsDefinition <- SourceConceptSetLineItem$new(
+    sectionLabel = sectionLabel,
+    domainTable = domain,
+    sourceConceptSet = sourceConceptSet,
+    timeInterval = timeInterval,
+    statistic = statistic,
+    typeConceptIds = typeConceptIds
+  )
+  return(scsDefinition)
+
+}
+
 
 #' @title
 #' Create a batch of concept set line items from a list of Capr concept sets.
@@ -598,6 +621,9 @@ lineItems <- function(...) {
 
   # add value ids for the concept sets
   listOfLineItems <- .setCsValueId(listOfLineItems)
+
+  # add value ids for the source concept sets
+  listOfLineItems <-  .setSourceValueId(listOfLineItems)
 
   return(listOfLineItems)
 }

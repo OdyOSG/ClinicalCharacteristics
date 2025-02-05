@@ -86,6 +86,7 @@
   # make a table identifying the codeset id for the query, unique to each cs
   tb <- .caprToMetaTable(caprCs)
 
+  # deal with duplicate ord ids for concept set group line items
   if (length(conceptSetGroupLineItems) > 0) {
     # get length of each conceptSetGroup
     csgLiLength <- lineItems[conceptSetGroupLineItems] |>
@@ -102,13 +103,13 @@
   }
 
 
-# add the full list to tb to identify the ordinal of csId
+  # add the full list to tb to identify the ordinal of csId
   tb <- tb |>
     dplyr::mutate(
       ord = fullListOfIds
     )
 
-
+  # loop throug table and get the codeset ids
   for (i in 1:nrow(tb)) {
 
     ordId <- tb$ord[i] # plock ord
@@ -126,6 +127,52 @@
 }
 
 
+.setSourceValueId <- function(lineItems) {
+  #make a subsetting vector of list ids
+  idsToPluck <- .findLineItemId(lineItems = lineItems, classType = "SourceConceptSet")
+  # only manipulate if there are sourceConcept Sets
+  if (length(idsToPluck) > 0) {
+    #filted line items to those with concepts
+    filteredLineItems <- lineItems[idsToPluck]
+
+    # get the source concept sets for all the concepts
+    scs <- purrr::map(
+      filteredLineItems,
+      ~.x$grabSourceConceptSet()
+    )
+    # make table of ids and names for source concepts
+    tb <- tibble::tibble(
+      id = purrr::map_chr(scs, ~.x$sourceConceptId),
+      name = purrr::map_chr(scs, ~.x$sourceConceptName)
+    ) |>
+      dplyr::mutate(
+        scsId = dplyr::dense_rank(id)
+      ) |>
+      tibble::rownames_to_column(var = "rowId")
+
+    # add the full list to tb to identify the ordinal of csId
+    tb <- tb |>
+      dplyr::mutate(
+        ord = idsToPluck
+      )
+
+    # loop throug table and get the source concept ids
+    for (i in 1:nrow(tb)) {
+
+      ordId <- tb$ord[i] # plock ord
+      scsId <- tb |> # get vector of scsId corresponding to ord slot.
+        dplyr::filter(
+          ord == ordId
+        ) |>
+        dplyr::pull(scsId)
+
+      lineItems[[ordId]]$valueId <- scsId
+    }
+  }
+
+  return(lineItems)
+
+}
 
 # function to get timeInterval and concept set / cohort combinations
 .permuteTi <- function(lineItemObjects, timeIntervals) {
@@ -163,7 +210,7 @@
 
 }
 
-.prepConceptSetOccurrenceQuerySql <- function(csTables, domain) {
+.prepConceptSetOccurrenceQuerySql <- function(csTables, domain, type = c("standard", "source")) {
 
   domainGroup <- csTables |>
     dplyr::filter(
@@ -186,10 +233,20 @@
 
   domainTranslation <- .domainTranslate(domain)
 
-  sql <- fs::path_package(
-    package = "ClinicalCharacteristics",
-    fs::path("sql", "conceptSetOccurrenceQuery.sql")
-  ) |>
+  if (type == "standard") {
+    sql <- fs::path_package(
+      package = "ClinicalCharacteristics",
+      fs::path("sql", "conceptSetOccurrenceQuery.sql")
+    )
+  }
+
+  if (type == "source") {
+    sql <- fs::path_package(
+      package = "ClinicalCharacteristics",
+      fs::path("sql", "sourceConceptSetOccurrenceQuery.sql")
+    )
+  }
+   sql <- sql |>
     readr::read_file() |>
     glue::glue()
 

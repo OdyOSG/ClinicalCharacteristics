@@ -379,7 +379,7 @@ TableShell <- R6::R6Class("TableShell",
 
       # Step 1: Get the concept set meta
       csMeta <- self$getTableShellMeta() |>
-        dplyr::filter(grepl("ConceptSet", lineItemClass))
+        dplyr::filter(lineItemClass %in% c("ConceptSet", "ConceptSetGroup"))
 
       # only run if CSD in ts
       if (nrow(csMeta) > 0) {
@@ -395,7 +395,8 @@ TableShell <- R6::R6Class("TableShell",
           domainTablesInUse,
           ~.prepConceptSetOccurrenceQuerySql(
             csTables = csTables,
-            domain = .x
+            domain = .x,
+            type = "standard"
           )
         ) |>
           glue::glue_collapse(sep = "\n\nUNION ALL\n\n")
@@ -424,6 +425,59 @@ TableShell <- R6::R6Class("TableShell",
       }
 
       return(conceptSetOccurrenceSql)
+
+    },
+
+    .buildSourceConceptOccurrenceQuery = function(executionSettings, buildOptions) {
+
+      # Step 1: Get the concept set meta
+      scsMeta <- self$getTableShellMeta() |>
+        dplyr::filter(lineItemClass == "SourceConceptSet")
+
+      # only run if CSD in ts
+      if (nrow(csMeta) > 0) {
+
+        # Step 2: Prep the concept set extraction
+        scsTables <- scsMeta |>
+          dplyr::select(valueId, valueDescription, timeLabel, domainTable)
+
+        # Step 3: get the domains to join
+        domainTablesInUse <- unique(scsTables$domainTable)
+        # step 4: make the source concept set occurrence sql
+        sourceSonceptSetOccurrenceSqlGrp <- purrr::map(
+          domainTablesInUse,
+          ~.prepConceptSetOccurrenceQuerySql(
+            csTables = csTables,
+            domain = .x,
+            type = "source"
+          )
+        ) |>
+          glue::glue_collapse(sep = "\n\nUNION ALL\n\n")
+
+        sourceConceptSetOccurrenceSql <- glue::glue(
+          "CREATE TABLE @source_concept_set_occurrence_table AS
+          {sourceSonceptSetOccurrenceSqlGrp}
+          ;
+          "
+        )
+        sourceConceptSetOccurrenceSql <- sourceConceptSetOccurrenceSql |>
+          SqlRender::render(
+            target_cohort_table = buildOptions$targetCohortTempTable,
+            concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable,
+            time_window_table = buildOptions$timeWindowTempTable,
+            source_codeset_table = buildOptions$sourceCodesetTempTable,
+            cdm_database_schema = executionSettings$cdmDatabaseSchema
+          ) |>
+          SqlRender::translate(
+            targetDialect = executionSettings$getDbms(),
+            tempEmulationSchema = executionSettings$tempEmulationSchema
+          )
+
+      } else {
+        sourceConceptSetOccurrenceSql <- ""
+      }
+
+      return(sourceConceptSetOccurrenceSql)
 
     },
 
@@ -1233,6 +1287,90 @@ ConceptSetLineItem <- R6::R6Class(
   ),
   active = list()
 )
+
+SourceConcepSet <- R6::R6Class(
+  classname = "SourceConceptSet",
+  public = list(
+
+    initialize = function(
+      sourceConceptId,
+      sourceConceptName,
+      sourceConceptSet
+    ) {
+      .setString(private = private, key = ".sourceConceptId", value = sourceConceptId)
+      .setString(private = private, key = ".sourceConceptName", value = sourceConceptName)
+      .setDataFrame(private = private, key = "sourceConceptSet",
+                    colN = 4,
+                    value = sourceConceptSet)
+    },
+
+    getSourceConceptTable = function() {
+      tt <- private$sourceConceptSet
+      return(tt)
+    }
+
+  ),
+  private = list(
+    .sourceConceptId = NA_character_,
+    .sourceConceptName = NA_character_,
+    sourceConceptSet = NULL
+  ),
+  active = list(
+    sourceConceptName = function(sourceConceptName) {
+      .setActiveString(private = private, key = ".sourceConceptName", value = sourceConceptName)
+    },
+    sourceConceptId = function(sourceConceptId) {
+      .setActiveString(private = private, key = ".sourceConceptId", value = sourceConceptId)
+    }
+  )
+)
+
+## SourceConceptSetLineItem ----
+
+#' @description
+#' An R6 class to define a SourceConceptSetLineItem
+#'
+#' @export
+SourceConceptSetLineItem <- R6::R6Class(
+  classname = "SourceConceptSetLineItem",
+  inherit = LineItem,
+  public = list(
+    initialize = function(
+    sectionLabel,
+    domainTable,
+    sourceConceptSet,
+    timeInterval,
+    statistic,
+    typeConceptIds = c()
+    ) {
+      super$initialize(
+        sectionLabel = sectionLabel,
+        domainTable = domainTable,
+        lineItemClass = "SourceConceptSet",
+        valueDescription = "source_codeset_id",
+        statistic = statistic,
+        lineItemLabel = sourceConceptSet$sourceConceptName,
+        timeInterval = timeInterval
+      )
+
+      .setClass(private = private, key = "sourceConceptSet", value = sourceConceptSet, class = "SourceConceptSet")
+      .setNumber(private = private, key = "typeConceptIds", value = typeConceptIds, nullable = TRUE)
+
+    },
+
+    grabSourceConceptSet = function() {
+      scs <- private$sourceConceptSet
+      return(scs)
+    }
+  ),
+  private = list(
+    sourceConceptSet = NULL,
+    typeConceptIds = c()
+  ),
+  active = list()
+)
+
+
 
 # DemographicLineItem -----
 
