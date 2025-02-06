@@ -15,6 +15,8 @@ createConceptSetLineItemBatch(
 )
 }
 \arguments{
+\item{sectionLabel}{The name of the concept set batch}
+
 \item{domain}{The domain of the concept sets (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')}
 
 \item{conceptSets}{A list of concept set Capr objects}
@@ -26,8 +28,6 @@ createConceptSetLineItemBatch(
 \item{typeConceptIds}{(OPTIONAL) A list of type concept IDs to use to limit the concept set}
 
 \item{visitOccurrenceConceptIds}{(OPTIONAL) A list of visit occurrence concept IDs to use to limit the concept set}
-
-\item{name}{The name of the concept set batch}
 }
 \value{
 A list of ConceptSetLineItem objects

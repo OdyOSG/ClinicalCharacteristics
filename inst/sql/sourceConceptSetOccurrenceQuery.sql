@@ -1,4 +1,4 @@
-/* Find presence of concept set covariate in {domain}*/
+/* Find presence of source concept set covariate in {domain}*/
 
 SELECT
   t.cohort_definition_id AS target_cohort_id,
@@ -8,16 +8,16 @@ SELECT
   '{domain}' AS domain_table,
   tw.time_label,
   cs.codeset_id AS raw_occurrence_id,
-  'codeset_id' AS raw_occurrence_description,
+  'source_codeset_id' AS raw_occurrence_description,
   {domainTranslation$event_date} AS event_date
 FROM @target_cohort_table t
 JOIN @cdm_database_schema.{domain} d ON t.subject_id = d.person_id
 JOIN (
   /* Get codesets */
   SELECT *
-  FROM @codeset_table cc
+  FROM @source_codeset_table cc
   WHERE codeset_id IN ({codeset_ids})
-) cs ON (d.{domainTranslation$concept_id} = cs.concept_id)
+) cs ON (d.{domainTranslation$source_concept_id} = cs.concept_id)
 INNER JOIN (
   /* Get time windows */
   SELECT *

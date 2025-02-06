@@ -5,6 +5,7 @@ SELECT
   'Static at Index' AS time_label,
   'person' AS domain_table,
   'binary' AS patient_line,
+  '{valueDescription}' AS value_type,
   {valueId} AS  value_id,
   1 AS value
 FROM (

@@ -42,6 +42,13 @@
   invisible(private)
 }
 
+.setDataFrame <- function(private, key, value, colN, nullable = FALSE) {
+  checkmate::assert_data_frame(x = value, ncols = colN, null.ok = nullable)
+  private[[key]] <- value
+  invisible(private)
+}
+
+
 .setListofClasses <- function(private, key, value, classes) {
   checkmate::assert_list(x = value, types = classes, null.ok = FALSE, min.len = 1)
   private[[key]] <- value

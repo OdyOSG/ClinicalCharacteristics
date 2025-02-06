@@ -13,11 +13,11 @@ createCohortLineItem(
 )
 }
 \arguments{
+\item{sectionLabel}{(OPTIONAL) The name of the line item (if not provided, the name will be set to the cohort name from the CohortInfo object)}
+
 \item{timeInterval}{The TimeInterval object used for the line item}
 
 \item{statistic}{The Statistic object to be used to evaluate the line item}
-
-\item{name}{(OPTIONAL) The name of the line item (if not provided, the name will be set to the cohort name from the CohortInfo object)}
 
 \item{cohort}{A CohortInfo object}
 }
