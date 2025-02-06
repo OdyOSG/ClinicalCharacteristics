@@ -602,7 +602,7 @@ TableShell <- R6::R6Class("TableShell",
     .aggregateResults = function(executionSettings, buildOptions) {
 
       # tsm <- self$getTableShellMeta()
-      # ts <- self
+      ts <- self
 
       # Create temp table joining patient date with ts meta
       patTsSql <- .tempPsDatTable(executionSettings, buildOptions)
@@ -611,14 +611,12 @@ TableShell <- R6::R6Class("TableShell",
       initSummaryTableSql <- .initAggregationTables(executionSettings, buildOptions)
 
       # make all the aggregate sql queries
-      aggregateSqlQuery <- .aggregateSql(ts = self, executionSettings, buildOptions)
+      aggregateSqlQuery <- .aggregateSql(ts, executionSettings, buildOptions)
 
       allSql <- c(patTsSql, initSummaryTableSql, aggregateSqlQuery) |>
         glue::glue_collapse(sep = "\n\n")
 
       return(allSql)
-
-
     }
   )
 )

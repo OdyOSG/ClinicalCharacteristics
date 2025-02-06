@@ -5,7 +5,7 @@ SELECT
   'Static at Index' AS time_label,
   'person' AS domain_table,
   'age' AS patient_line,
-  'demographic' AS value_type,
+  'year_of_birth' AS value_type,
   -999 AS  value_id,
   a.value
 FROM (
