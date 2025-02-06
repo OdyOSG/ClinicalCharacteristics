@@ -259,6 +259,65 @@
   return(sql)
 }
 
+.pasteSourceConceptsIntoCodeset <- function(sourceCodesetId, sourceConceptIds) {
+  sourceConceptIds <- sourceConceptIds |> glue::glue_collapse(sep = ", ")
+  sourceCodesetSql <- "
+  SELECT
+  {sourceCodesetId} AS codeset_id,
+  c.concept_id FROM (
+    SELECT concept_id
+    FROM @vocabulary_database_schema.CONCEPT
+    WHERE concept_id IN ({sourceConceptIds})
+  ) c
+  " |>
+    glue::glue()
+  return(sourceCodesetSql)
+}
+
+
+.sourceConceptQuery <- function(lineItems, scsMeta, executionSettings, buildOptions) {
+
+  #temporary change with class
+  sourceCodesetTable <-  buildOptions$sourceCodesetTempTable
+
+  # get source concept line items
+  ordIds <- scsMeta$ordinalId
+  filteredLineItems <- lineItems[ordIds]
+
+  # get the source concept ids for all source concept line items
+  sourceConceptIds <- purrr::map(
+    filteredLineItems, # only the source concept line items
+    ~.x$grabSourceConceptSet()$getSourceConceptTable()$conceptId
+  )
+
+  sourceConceptSql <- purrr::map2(
+    scsMeta$valueId, # get the value id for source concept set,
+    sourceConceptIds, # list of ids for source concepts from line items
+    ~.pasteSourceConceptsIntoCodeset(
+      sourceCodesetId = .x,
+      sourceConceptIds = .y
+    )
+  ) |>
+    purrr::list_c() |>
+    glue::glue_collapse(sep = "\n\nUNION ALL\n\n")
+
+  sourceConceptSqlFinal <- glue::glue(
+    "CREATE TABLE @source_codeset_table AS
+          {sourceConceptSql}
+          ;") |>
+    SqlRender::render(
+      vocabulary_database_schema = executionSettings$cdmDatabaseSchema,
+      source_codeset_table = sourceCodesetTable
+    ) |>
+    SqlRender::translate(
+      targetDialect = executionSettings$getDbms(),
+      tempEmulationSchema = executionSettings$tempEmulationSchema
+    )
+
+  return(sourceConceptSqlFinal)
+
+}
+
 ## Patient level Sql ---------------------
 
 .buildDemoPatientLevelSql <- function(tsm, executionSettings, buildOptions){
@@ -504,7 +563,7 @@
 
 }
 
-.prepBreaksTable <- function(tsm, executionSettings) {
+.prepBreaksTable <- function(ts, tsm, executionSettings) {
 
   breakLines <- tsm |>
     dplyr::filter(
@@ -513,7 +572,7 @@
     dplyr::pull(ordinalId)
 
 
-  breakLineItems <- tableShell$getLineItems()[c(breakLines)]
+  breakLineItems <- ts$getLineItems()[c(breakLines)]
   kk <- purrr::map(breakLineItems, ~.x$getStatistic()) |>
     purrr::map(~.x$getBreaksIfAny())
 
@@ -560,7 +619,9 @@
   return(aggSqlTb)
 }
 
-.aggregateSql <- function(tsm, executionSettings, buildOptions) {
+.aggregateSql <- function(ts, executionSettings, buildOptions) {
+
+  tsm <- ts$getTableShellMeta()
 
   # Step 1: Prep Agg Sqls
   aggSqlTb <- .prepAggTables(buildOptions)
@@ -583,7 +644,7 @@
     if (aggSqlTb2$aggType[i] == "categorical") {
 
       if (aggSqlTb2$aggName[i] == "breaks") {
-        breaksSql <- .prepBreaksTable(tsm, executionSettings)
+        breaksSql <- .prepBreaksTable(ts, tsm, executionSettings)
         aggSql <- c(breaksSql, aggSqlTb2$aggSql[i]) |>
           glue::glue_collapse("\n\n")
       } else {

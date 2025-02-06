@@ -1,7 +1,7 @@
 
 sourceConceptSet <- function(sourceConceptTable, name) {
   scs <- SourceConcepSet$new(
-    sourceConceptName = name,
+    sourceConceptName = glue::glue("{name} (Source Concept)"),
     sourceConceptId = digest::digest(sourceConceptTable, algo = "md5"),
     sourceConceptSet = sourceConceptTable
   )

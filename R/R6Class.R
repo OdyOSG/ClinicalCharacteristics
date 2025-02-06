@@ -84,6 +84,32 @@ TableShell <- R6::R6Class("TableShell",
         buildOptions = buildOptions
       )
 
+      # create concept set occurrence table
+      createOccurrenceTableSql <- fs::path_package(
+        package = "ClinicalCharacteristics",
+        fs::path("sql", "createOccurrenceTable.sql")
+      ) |>
+        readr::read_file() |>
+        SqlRender::render(
+          concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable
+        ) |>
+        SqlRender::translate(
+          targetDialect = executionSettings$getDbms(),
+          tempEmulationSchema = executionSettings$tempEmulationSchema
+        )
+
+      cli::cat_bullet(
+        glue::glue_col("Create conceptSetOccurrence table ---> {cyan {buildOptions$conceptSetOccurrenceTempTable}}"),
+        bullet = "info",
+        bullet_col = "blue"
+      )
+
+      DatabaseConnector::executeSql(
+        connection = executionSettings$getConnection(),
+        sql = createOccurrenceTableSql
+      )
+
+
       invisible(executionSettings)
 
     },
@@ -119,6 +145,12 @@ TableShell <- R6::R6Class("TableShell",
 
         # Step 3a: create concept set query
         private$.buildConceptSetOccurrenceQuery(
+          executionSettings = executionSettings,
+          buildOptions = buildOptions
+        ),
+
+        # Step 3a: create concept set query
+        private$.buildSourceConceptOccurrenceQuery(
           executionSettings = executionSettings,
           buildOptions = buildOptions
         ),
@@ -402,7 +434,7 @@ TableShell <- R6::R6Class("TableShell",
           glue::glue_collapse(sep = "\n\nUNION ALL\n\n")
 
         conceptSetOccurrenceSql <- glue::glue(
-          "CREATE TABLE @concept_set_occurrence_table AS
+          "INSERT INTO @concept_set_occurrence_table
           {conceptSetOccurrenceSqlGrp}
           ;
           "
@@ -435,7 +467,15 @@ TableShell <- R6::R6Class("TableShell",
         dplyr::filter(lineItemClass == "SourceConceptSet")
 
       # only run if CSD in ts
-      if (nrow(csMeta) > 0) {
+      if (nrow(scsMeta) > 0) {
+
+        li <- self$getLineItems()
+        sourceCodeSetQuery <- .sourceConceptQuery(
+          lineItems = li,
+          scsMeta = scsMeta,
+          executionSettings = executionSettings,
+          buildOptions = buildOptions
+        )
 
         # Step 2: Prep the concept set extraction
         scsTables <- scsMeta |>
@@ -447,7 +487,7 @@ TableShell <- R6::R6Class("TableShell",
         sourceSonceptSetOccurrenceSqlGrp <- purrr::map(
           domainTablesInUse,
           ~.prepConceptSetOccurrenceQuerySql(
-            csTables = csTables,
+            csTables = scsTables,
             domain = .x,
             type = "source"
           )
@@ -455,11 +495,11 @@ TableShell <- R6::R6Class("TableShell",
           glue::glue_collapse(sep = "\n\nUNION ALL\n\n")
 
         sourceConceptSetOccurrenceSql <- glue::glue(
-          "CREATE TABLE @source_concept_set_occurrence_table AS
+          "{sourceCodeSetQuery}
+          INSERT INTO @concept_set_occurrence_table
           {sourceSonceptSetOccurrenceSqlGrp}
           ;
-          "
-        )
+          ")
         sourceConceptSetOccurrenceSql <- sourceConceptSetOccurrenceSql |>
           SqlRender::render(
             target_cohort_table = buildOptions$targetCohortTempTable,
@@ -561,7 +601,8 @@ TableShell <- R6::R6Class("TableShell",
 
     .aggregateResults = function(executionSettings, buildOptions) {
 
-      tsm <- self$getTableShellMeta()
+      # tsm <- self$getTableShellMeta()
+      # ts <- self
 
       # Create temp table joining patient date with ts meta
       patTsSql <- .tempPsDatTable(executionSettings, buildOptions)
@@ -570,7 +611,7 @@ TableShell <- R6::R6Class("TableShell",
       initSummaryTableSql <- .initAggregationTables(executionSettings, buildOptions)
 
       # make all the aggregate sql queries
-      aggregateSqlQuery <- .aggregateSql(tsm, executionSettings, buildOptions)
+      aggregateSqlQuery <- .aggregateSql(ts = self, executionSettings, buildOptions)
 
       allSql <- c(patTsSql, initSummaryTableSql, aggregateSqlQuery) |>
         glue::glue_collapse(sep = "\n\n")
@@ -593,6 +634,7 @@ BuildOptions <- R6::R6Class(
   classname = "BuildOptions",
   public = list(
     initialize = function(codesetTempTable = NULL,
+                          sourceCodesetTempTable = NULL,
                           timeWindowTempTable = NULL,
                           targetCohortTempTable = NULL,
                           tsMetaTempTable = NULL,
@@ -604,6 +646,7 @@ BuildOptions <- R6::R6Class(
                           continuousSummaryTempTable = NULL
                           ) {
       .setString(private = private, key = ".codesetTempTable", value = codesetTempTable)
+      .setString(private = private, key = ".sourceCodesetTempTable", value = sourceCodesetTempTable)
       .setString(private = private, key = ".timeWindowTempTable", value = timeWindowTempTable)
       .setString(private = private, key = ".tsMetaTempTable", value = tsMetaTempTable)
       .setString(private = private, key = ".targetCohortTempTable", value = targetCohortTempTable)
@@ -617,6 +660,7 @@ BuildOptions <- R6::R6Class(
   ),
   private = list(
     .codesetTempTable = NULL,
+    .sourceCodesetTempTable = NULL,
     .timeWindowTempTable = NULL,
     .targetCohortTempTable = NULL,
     .tsMetaTempTable = NULL,
@@ -633,6 +677,10 @@ BuildOptions <- R6::R6Class(
 
     codesetTempTable = function(value) {
       .setActiveString(private = private, key = ".codesetTempTable", value = value)
+    },
+
+    sourceCodesetTempTable = function(value) {
+      .setActiveString(private = private, key = ".sourceCodesetTempTable", value = value)
     },
 
 

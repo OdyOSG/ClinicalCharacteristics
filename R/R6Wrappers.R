@@ -95,6 +95,7 @@ createExecutionSettings <- function(connectionDetails,
 #' @return A BuildOptions object
 #' @export
 defaultTableShellBuildOptions <- function(codesetTempTable = "#codeset",
+                                          sourceCodesetTempTable = "#source_codeset",
                                           timeWindowTempTable = "#time_windows",
                                           targetCohortTempTable = "#target_cohorts",
                                           tsMetaTempTable = "#ts_meta",
@@ -108,6 +109,7 @@ defaultTableShellBuildOptions <- function(codesetTempTable = "#codeset",
 
   buildOpts <- BuildOptions$new(
     codesetTempTable = codesetTempTable,
+    sourceCodesetTempTable = sourceCodesetTempTable,
     timeWindowTempTable = timeWindowTempTable,
     tsMetaTempTable = tsMetaTempTable,
     targetCohortTempTable = targetCohortTempTable,

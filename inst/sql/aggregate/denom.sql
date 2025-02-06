@@ -6,13 +6,13 @@ SELECT ta.*,
 FROM (
   SELECT
     a.*, b.ordinal_id, b.section_label, b.line_item_label,
-    b.value_description, b.statistic_type,
+    b.statistic_type,
     b.aggregation_type, b.line_item_class,
     cd.tot_subjects AS observed_subjects,
     cda.tot_subjects AS all_subjects
   FROM @patient_data a
   JOIN @ts_meta b
-    ON a.value_id = b.value_id AND a.time_label = b.time_label
+    ON a.value_id = b.value_id AND a.value_type = b.value_description AND a.time_label = b.time_label
   LEFT JOIN (
             /* Get Cohort Counts within observed time for observed denominator */
             SELECT

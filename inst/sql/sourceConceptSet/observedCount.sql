@@ -5,7 +5,6 @@ SELECT
         d.time_label,
         d.domain_table,
         'observedCount' AS patient_line,
-        d.raw_occurrence_description as value_type,
         d.raw_occurrence_id as value_id,
         COUNT(DISTINCT d.event_date) AS value
 FROM (
@@ -19,5 +18,5 @@ FROM (
   on cc.subject_id = OP.person_id and cc.cohort_start_date >= OP.observation_period_start_date and cc.cohort_start_date <= op.observation_period_end_date
   WHERE cc.cohort_end_date >= cc.event_date AND OP.observation_period_start_date <= cc.event_date
 ) d
-GROUP BY d.target_cohort_id, d.subject_id, d.time_label, d.domain_table, d.raw_occurrence_description, d.raw_occurrence_id
+GROUP BY d.target_cohort_id, d.subject_id, d.time_label, d.domain_table, d.raw_occurrence_id
 ;
