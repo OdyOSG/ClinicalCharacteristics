@@ -279,7 +279,7 @@ observedTimeToFirstBreaksStat <- function(breaks) {
 #' @title
 #' Create a concept set line item and set its attributes
 #'
-#' @param name (OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)
+#' @param sectionLabel (OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)
 #' @param statistic The Statistic object to be used to evaluate the line item
 #' @param domain The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')
 #' @param conceptSet The Capr concept set object
@@ -316,36 +316,13 @@ createConceptSetLineItem <- function(sectionLabel = NA_character_,
 }
 
 
-createSourceConceptSetLineItem <- function(sectionLabel = NA_character_,
-                                           domain,
-                                           sourceConceptSet,
-                                           timeInterval,
-                                           statistic,
-                                           typeConceptIds = c()) {
-
-  if(is.na(sectionLabel)) {
-    sectionLabel <- sourceConceptSet$sourceConceptName
-  }
-
-  scsDefinition <- SourceConceptSetLineItem$new(
-    sectionLabel = sectionLabel,
-    domainTable = domain,
-    sourceConceptSet = sourceConceptSet,
-    timeInterval = timeInterval,
-    statistic = statistic,
-    typeConceptIds = typeConceptIds
-  )
-  return(scsDefinition)
-
-}
-
 
 #' @title
 #' Create a batch of concept set line items from a list of Capr concept sets.
 #'
 #' @description
 #' The name of each line item will be set to the name of its Capr concept set. All line items will use the same statistic, domain, type concepts, and visit concepts. It is not possible to specify source concept IDs.
-#' @param name The name of the concept set batch
+#' @param sectionLabel The name of the concept set batch
 #' @param statistic The Statistic object to be used to evaluate the line items
 #' @param domain The domain of the concept sets (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')
 #' @param conceptSets A list of concept set Capr objects
@@ -390,6 +367,90 @@ createConceptSetLineItemBatch <- function(
 
   return(csLiBatch)
 }
+
+
+#' @title
+#' Create a source concept set line item and set its attributes
+#'
+#' @param sectionLabel (OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)
+#' @param statistic The Statistic object to be used to evaluate the line item
+#' @param domain The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')
+#' @param sourceConceptSet A SourceConcept R6 object created using the `sourceConceptSet` function
+#' @param timeInterval The Time Interval object used for the line item
+#' @param typeConceptIds (OPTIONAL) A list of type concept IDs to use to limit the concept set
+#'
+#' @return A SourceConceptSetLineItem object
+#'
+#' @export
+createSourceConceptSetLineItem <- function(sectionLabel = NA_character_,
+                                           domain,
+                                           sourceConceptSet,
+                                           timeInterval,
+                                           statistic,
+                                           typeConceptIds = c()) {
+
+  if(is.na(sectionLabel)) {
+    sectionLabel <- sourceConceptSet$sourceConceptName
+  }
+
+  scsDefinition <- SourceConceptSetLineItem$new(
+    sectionLabel = sectionLabel,
+    domainTable = domain,
+    sourceConceptSet = sourceConceptSet,
+    timeInterval = timeInterval,
+    statistic = statistic,
+    typeConceptIds = typeConceptIds
+  )
+  return(scsDefinition)
+
+}
+
+
+#' @title
+#' Create a batch of source concept set line items from a list of SourceConceptSet classes.
+#'
+#' @param sectionLabel (OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)
+#' @param statistic The Statistic object to be used to evaluate the line item
+#' @param domain The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')
+#' @param sourceConceptSet A list of SourceConcept R6 object created using the `sourceConceptSet` function
+#' @param timeIntervals A list of TimeInterval class objects
+#' @param typeConceptIds (OPTIONAL) A list of type concept IDs to use to limit the concept set
+#'
+#' @return A list of SourceConceptSetLineItem objects
+#'
+#' @export
+createSourceConceptSetLineItemBatch <- function(sectionLabel,
+                                           domain,
+                                           sourceConceptSets,
+                                           timeIntervals,
+                                           statistic,
+                                           typeConceptIds = c()) {
+
+
+  checkmate::assert_list(x = sourceConceptSets, types = c("SourceConceptSet"), null.ok = FALSE, min.len = 1)
+  checkmate::assert_list(x = timeIntervals, types = c("TimeInterval"), null.ok = FALSE, min.len = 1)
+
+  # build permutations of concepts and timeIntervals
+  permDf <- .permuteTi(sourceConceptSets, timeIntervals)
+
+  # create batch of concept set line items
+  scsLiBatch <- purrr::map2(
+    permDf$objects,
+    permDf$timeIntervals,
+    ~createSourceConceptSetLineItem(
+      sectionLabel = sectionLabel,
+      statistic = statistic,
+      domain = domain,
+      sourceConceptSet = .x,
+      timeInterval = .y,
+      typeConceptIds = typeConceptIds
+    )
+  ) |>
+    unname()
+
+  return(scsLiBatch)
+}
+
 
 
 
@@ -506,7 +567,7 @@ newBreaks <- function(name, breaks, labels = NULL) {
 #' @title
 #' Create a cohort line item and set its attributes
 #'
-#' @param name (OPTIONAL) The name of the line item (if not provided, the name will be set to the cohort name from the CohortInfo object)
+#' @param sectionLabel (OPTIONAL) The name of the line item (if not provided, the name will be set to the cohort name from the CohortInfo object)
 #' @param statistic The Statistic object to be used to evaluate the line item
 #' @param cohort A CohortInfo object
 #' @param timeInterval The TimeInterval object used for the line item

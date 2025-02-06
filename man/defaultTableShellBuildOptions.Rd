@@ -6,6 +6,7 @@
 \usage{
 defaultTableShellBuildOptions(
   codesetTempTable = "#codeset",
+  sourceCodesetTempTable = "#source_codeset",
   timeWindowTempTable = "#time_windows",
   targetCohortTempTable = "#target_cohorts",
   tsMetaTempTable = "#ts_meta",

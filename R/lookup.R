@@ -1,4 +1,10 @@
-
+#' Function to create a source concept set
+#'
+#' @param sourceConceptTable a dataframe with source concepts from the OMOP vocabulary
+#' @param name the name of source concept set
+#'
+#' @return a SourceConceptSet R6 class specifing the source concepts in use
+#' @export
 sourceConceptSet <- function(sourceConceptTable, name) {
   scs <- SourceConcepSet$new(
     sourceConceptName = glue::glue("{name} (Source Concept)"),
@@ -8,6 +14,15 @@ sourceConceptSet <- function(sourceConceptTable, name) {
   return(scs)
 }
 
+#' Function to look up source concepts in the OMOP Vocabulary
+#'
+#' @param codes a character string of codes to search
+#' @param vocabulary the vocabulary to use in search of codes
+#' @param executionSettings The ExecutionSettings object used to connect to the dbms
+#'
+#' @return a tibble of four columns: conceptId, conceptName, conceptCode, vocabularyId
+#'
+#' @export
 lookupSourceConcepts <- function(codes, vocabulary, executionSettings) {
 
   # collapse codes to a string
