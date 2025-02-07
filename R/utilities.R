@@ -590,6 +590,27 @@
 }
 
 
+.prepScoreTable <- function(ts) {
+  scoreLines <- ts$getTableShellMeta() |>
+    dplyr::filter(
+      statisticType == "scoreTransformation"
+    ) |>
+    dplyr::pull(ordinalId)
+
+  scoreLineItems <- ts$getLineItems()[scoreLines]
+  ww <- purrr::map(scoreLineItems, ~.x$getStatistic()) |>
+    purrr::map_dbl(~.x$getWeightsIfAny())
+
+  scoreTb <- tibble::tibble(
+    scoreOrdId = scoreLines,
+    scoreWeights = ww
+  )
+
+  return(scoreSql)
+
+}
+
+
 .prepAggTables <- function(buildOptions) {
   aggregateSqlPaths <- fs::path_package(
     package = "ClinicalCharacteristics",

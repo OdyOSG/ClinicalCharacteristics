@@ -25,4 +25,4 @@ FROM (
 ) t2
 ;
 
-/*@continuous_table*/
+/*INSERT INTO @continuous_table*/

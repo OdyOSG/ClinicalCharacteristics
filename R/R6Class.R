@@ -970,6 +970,14 @@ Statistic <- R6::R6Class(
         br <- NULL
       }
       return(br)
+    },
+    getWeightsIfAny = function() {
+      if (self$getStatisticType() == "scoreTransformation") {
+        ww <- self$weight
+      } else {
+        ww <- NULL
+      }
+      return(ww)
     }
   ),
   private = list(
