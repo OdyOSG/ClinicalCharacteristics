@@ -18,9 +18,13 @@ reviewTableShellSql(
 \item{executionSettings}{The ExecutionSettings object used to generate table shell}
 
 \item{buildOptions}{The BuildOptions object used to generate table shell}
+
+\item{saveName}{The name of the table shell sql file}
+
+\item{savePath}{the folder location to save the file}
 }
 \value{
-A monaco widget in the viewer tab of RStudio with the sql script
+A sql file written to a specific location
 }
 \description{
 Function that previews sql script used to generate results for table shell

@@ -70,8 +70,10 @@ generateTableShell <- function(tableShell, executionSettings, buildOptions = NUL
 #' @param tableShell The TableShell object to used for generation
 #' @param executionSettings The ExecutionSettings object used to generate table shell
 #' @param buildOptions The BuildOptions object used to generate table shell
+#' @param saveName The name of the table shell sql file
+#' @param savePath the folder location to save the file
 #'
-#' @return A monaco widget in the viewer tab of RStudio with the sql script
+#' @return A sql file written to a specific location
 #'
 #' @export
 reviewTableShellSql <- function(tableShell,
@@ -105,7 +107,7 @@ reviewTableShellSql <- function(tableShell,
     bullet = "pointer",
     bullet_col = "yellow"
   )
-
+  # write sql to file
   readr::write_file(
     x = tsSql,
     file = savePath
@@ -113,6 +115,55 @@ reviewTableShellSql <- function(tableShell,
 
   invisible(tsSql)
 }
+
+#' @title
+#' Function that previews sql script used to generate results for table shell
+#'
+#' @param result the list output from `generateTableShell` containing a categorical and continuous tibble
+#' @param saveName The save name of the csv files
+#' @param savePath the folder location to save the csv files
+#'
+#' @return A sql file written to a specific location
+#'
+#' @export
+saveTableShellResults <- function(result, saveName, savePath = here::here()) {
+
+  cli::cat_bullet(
+    "Saving Table Shell results",
+    bullet = "pointer",
+    bullet_col = "yellow"
+  )
+
+  if (nrow(result$categorical > 0)) {
+    categoricalResult <- result$categorical
+    categoricalFileName <- fs::path(savePath, glue::glue("{saveName}_categorical.csv"))
+
+    cli::cat_line(
+      glue::glue_col("\tCategorical Results: {cyan {categoricalFileName}}")
+    )
+    readr::write_csv(
+      x = categoricalResult,
+      file = categoricalFileName
+    )
+  }
+
+  if (nrow(result$continuous > 0)) {
+    continuousResult <- result$continuous
+    continuousFileName <- fs::path(savePath, glue::glue("{saveName}_continuous.csv"))
+
+    cli::cat_line(
+      glue::glue_col("\tContinuous Results: {cyan {categoricalFileName}}")
+    )
+    readr::write_csv(
+      x = continuousResult,
+      file = continuousFileName
+    )
+  }
+
+  invisible(result)
+
+}
+
 
 # Archive -------------------------
 # generateTableShell2 <- function(tableShell, executionSettings, buildOptions = NULL) {
@@ -207,9 +258,7 @@ reviewTableShellSql <- function(tableShell,
 # }
 #
 # # function to save table shell results
-# saveTableShell <- function(result, outputPath) {
-#
-# }
+
 
 # creates reactable output of the tables shells
 # previewTableShell <- function(results, type) {
