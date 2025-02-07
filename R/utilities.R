@@ -598,8 +598,8 @@
 
   # Step 1: Make a table with all the aggregation types
   aggSqlTb <- tibble::tibble(
-    aggName = c("presence", "continuousDistribution", "breaks", "score"),
-    aggType = c("categorical", "continuous", "categorical", "continuous"),
+    aggName = c("presence", "continuousDistribution", "breaks", "scoreTransformation"),
+    aggType = c("categorical", "continuous", "categorical", "both"),
     aggSqlPath = fs::path(aggregateSqlPaths, aggName, ext = "sql")
   ) |>
     dplyr::rowwise() |>
@@ -610,8 +610,8 @@
   aggSqlTb <- aggSqlTb |>
     dplyr::left_join(
       tibble::tibble(
-        aggType = c("categorical", "continuous"),
-        aggTable = c(buildOptions$categoricalSummaryTempTable, buildOptions$continuousSummaryTempTable)
+        aggType = c("categorical", "continuous", "both"),
+        aggTable = c(buildOptions$categoricalSummaryTempTable, buildOptions$continuousSummaryTempTable, "both")
       ),
       by = c("aggType")
     )
@@ -666,6 +666,21 @@
       aggSqlBind[[i]] <- SqlRender::render(
         sql = aggSqlTb2$aggSql[i],
         continuous_table = aggSqlTb2$aggTable[i],
+        pat_ts_tab  = buildOptions$patientLevelTableShellTempTable
+      ) |>
+        SqlRender::translate(
+          targetDialect = executionSettings$getDbms(),
+          tempEmulationSchema = executionSettings$tempEmulationSchema
+        )
+    }
+
+    # if both render to both tables
+    if (aggSqlTb2$aggType[i] == "both") {
+
+      aggSqlBind[[i]] <- SqlRender::render(
+        sql = aggSqlTb2$aggSql[i],
+        categorical_table = buildOptions$categoricalSummaryTempTable,
+        continuous_table = buildOptions$continuousSummaryTempTable,
         pat_ts_tab  = buildOptions$patientLevelTableShellTempTable
       ) |>
         SqlRender::translate(
