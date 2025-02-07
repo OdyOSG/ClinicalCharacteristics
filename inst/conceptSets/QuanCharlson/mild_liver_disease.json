@@ -1,0 +1,916 @@
+{
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 4212540,
+"CONCEPT_NAME": "Chronic liver disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "328383001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4064161,
+"CONCEPT_NAME": "Cirrhosis of liver",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "19943007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 201343,
+"CONCEPT_NAME": "Acute alcoholic liver disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "9953008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 196463,
+"CONCEPT_NAME": "Alcoholic cirrhosis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "420054005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1138665600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 193256,
+"CONCEPT_NAME": "Alcoholic fatty liver",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "50325005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4340385,
+"CONCEPT_NAME": "Alcoholic fibrosis and sclerosis of liver",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "235880004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4340383,
+"CONCEPT_NAME": "Alcoholic hepatitis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "235875008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 201612,
+"CONCEPT_NAME": "Alcoholic liver damage",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "41309000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 46269816,
+"CONCEPT_NAME": "Ascites due to alcoholic cirrhosis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "1082601000119104",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1438300800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 200762,
+"CONCEPT_NAME": "Autoimmune hepatitis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "408335007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1075507200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 192675,
+"CONCEPT_NAME": "Biliary cirrhosis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "1761006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4058696,
+"CONCEPT_NAME": "Central hemorrhagic necrosis of liver",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "197364000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4026125,
+"CONCEPT_NAME": "Chronic active hepatitis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "197284004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 200763,
+"CONCEPT_NAME": "Chronic hepatitis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "76783007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 198964,
+"CONCEPT_NAME": "Chronic hepatitis C",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "128302006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4238978,
+"CONCEPT_NAME": "Chronic lobular hepatitis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "57339008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 201613,
+"CONCEPT_NAME": "Chronic nonalcoholic liver disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "79720007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 199867,
+"CONCEPT_NAME": "Chronic persistent hepatitis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "41889008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4012113,
+"CONCEPT_NAME": "Chronic viral hepatitis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "10295004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 192240,
+"CONCEPT_NAME": "Chronic viral hepatitis B with hepatitis D",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "235869004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 439674,
+"CONCEPT_NAME": "Chronic viral hepatitis B without delta-agent",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "186639003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 763021,
+"CONCEPT_NAME": "Chronic viral hepatitis C with hepatic coma",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "435101000124104",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1377993600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 194692,
+"CONCEPT_NAME": "Cirrhosis - non-alcoholic",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "266468003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4059284,
+"CONCEPT_NAME": "Cirrhosis and chronic liver disease",
+"STANDARD_CONCEPT": "N",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard",
+"INVALID_REASON": "D",
+"INVALID_REASON_CAPTION": "Invalid",
+"CONCEPT_CODE": "197279005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            1612051200000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 194984,
+"CONCEPT_NAME": "Disease of liver",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "235856003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 46273476,
+"CONCEPT_NAME": "Hepatic ascites co-occurrent with chronic active hepatitis due to toxic liver disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "1092801000119102",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1438300800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 46269835,
+"CONCEPT_NAME": "Hepatic ascites due to chronic alcoholic hepatitis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "1085021000119106",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1438300800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 439675,
+"CONCEPT_NAME": "Hepatic coma due to acute hepatitis B with delta agent",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "186624004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4308946,
+"CONCEPT_NAME": "Hepatic coma due to chronic hepatitis B",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "424340000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1170201600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 196029,
+"CONCEPT_NAME": "Hepatic coma due to viral hepatitis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "40946000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4267417,
+"CONCEPT_NAME": "Hepatic fibrosis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "62484002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4340948,
+"CONCEPT_NAME": "Hepatic fibrosis with hepatic sclerosis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "235901004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 194417,
+"CONCEPT_NAME": "Hepatic infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "17890003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4337543,
+"CONCEPT_NAME": "Hepatic necrosis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "87248009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4340394,
+"CONCEPT_NAME": "Hepatic sclerosis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "235899008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4159144,
+"CONCEPT_NAME": "Hepatopulmonary syndrome",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "371067004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1028073600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 194990,
+"CONCEPT_NAME": "Inflammatory disease of liver",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "128241005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4240725,
+"CONCEPT_NAME": "Peliosis hepatis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "58008004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4135822,
+"CONCEPT_NAME": "Primary biliary cholangitis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "31712002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4046123,
+"CONCEPT_NAME": "Secondary biliary cirrhosis",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "12368000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4059290,
+"CONCEPT_NAME": "Steatosis of liver",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "197321007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4059299,
+"CONCEPT_NAME": "Toxic liver disease with chronic active hepatitis",
+"STANDARD_CONCEPT": "N",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard",
+"INVALID_REASON": "D",
+"INVALID_REASON_CAPTION": "Invalid",
+"CONCEPT_CODE": "197361008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            1667174400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4059298,
+"CONCEPT_NAME": "Toxic liver disease with chronic persistent hepatitis",
+"STANDARD_CONCEPT": "N",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard",
+"INVALID_REASON": "D",
+"INVALID_REASON_CAPTION": "Invalid",
+"CONCEPT_CODE": "197359004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            1667174400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4058695,
+"CONCEPT_NAME": "Toxic liver disease with fibrosis and cirrhosis of liver",
+"STANDARD_CONCEPT": "N",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard",
+"INVALID_REASON": "D",
+"INVALID_REASON_CAPTION": "Invalid",
+"CONCEPT_CODE": "197362001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            1667174400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 42537742,
+"CONCEPT_NAME": "Transplanted liver present",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "737297006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"VALID_START_DATE":            1517356800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 198683,
+"CONCEPT_NAME": "Viral hepatitis B without hepatic coma",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "111891008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 193693,
+"CONCEPT_NAME": "Viral hepatitis without hepatic coma",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "111896003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4055224,
+"CONCEPT_NAME": "Toxic liver disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "197354009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+} 
+] 
+}

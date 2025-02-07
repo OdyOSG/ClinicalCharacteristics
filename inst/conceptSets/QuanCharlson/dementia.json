@@ -1,0 +1,764 @@
+{
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 378419,
+"CONCEPT_NAME": "Alzheimer's disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "26929004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37111242,
+"CONCEPT_NAME": "Delirium co-occurrent with dementia",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "725898002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1501459200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 44782726,
+"CONCEPT_NAME": "Delusions in Alzheimer's disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "141991000119109",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1391126400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4182210,
+"CONCEPT_NAME": "Dementia",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "52448006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4314734,
+"CONCEPT_NAME": "Dementia associated with Parkinson's Disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "425390006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1170201600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 374888,
+"CONCEPT_NAME": "Dementia associated with another disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "191519005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4180284,
+"CONCEPT_NAME": "Dementia due to Creutzfeldt Jakob disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "429458009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1201737600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 40483103,
+"CONCEPT_NAME": "Dementia due to Huntington chorea",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "442344002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1248998400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 44782422,
+"CONCEPT_NAME": "Dementia due to Parkinson's disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "101421000119107",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1391126400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 44782710,
+"CONCEPT_NAME": "Dementia due to Pick's disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "21921000119103",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1391126400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4228133,
+"CONCEPT_NAME": "Dementia with AIDS (acquired immunodeficiency syndrome)",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "421529006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1154304000000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 43530666,
+"CONCEPT_NAME": "Dementia with behavioral disturbance",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "1591000119103",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1346457600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 44782727,
+"CONCEPT_NAME": "Depressed mood in Alzheimer's disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "142001000119106",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1391126400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37017319,
+"CONCEPT_NAME": "Disorder of central nervous system co-occurrent with human immunodeficiency virus infection",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "713571008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1454198400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 36687122,
+"CONCEPT_NAME": "Human immunodeficiency virus infection with cognitive impairment",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "15928141000119107",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1548892800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4046090,
+"CONCEPT_NAME": "Mixed cortical and subcortical vascular dementia",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "230287006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 379778,
+"CONCEPT_NAME": "Multi-infarct dementia",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "56267009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 444091,
+"CONCEPT_NAME": "Multi-infarct dementia with delirium",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "10349009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 443790,
+"CONCEPT_NAME": "Multi-infarct dementia with delusions",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "25772007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 443864,
+"CONCEPT_NAME": "Multi-infarct dementia with depression",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "14070001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 377254,
+"CONCEPT_NAME": "Multi-infarct dementia, uncomplicated",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "70936005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 378125,
+"CONCEPT_NAME": "Presenile dementia",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "12348006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 381832,
+"CONCEPT_NAME": "Presenile dementia with delirium",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "191452002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 44782771,
+"CONCEPT_NAME": "Presenile dementia with delusions",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "31081000119101",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1391126400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 377527,
+"CONCEPT_NAME": "Presenile dementia with depression",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "191455000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4218017,
+"CONCEPT_NAME": "Primary degenerative dementia of the Alzheimer type, presenile onset",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "416780008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1122768000000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4220313,
+"CONCEPT_NAME": "Primary degenerative dementia of the Alzheimer type, senile onset",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "416975007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1122768000000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4152048,
+"CONCEPT_NAME": "Senile and presenile organic psychotic conditions",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "268612007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 373179,
+"CONCEPT_NAME": "Senile degeneration of brain",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "45864009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4048875,
+"CONCEPT_NAME": "Senile dementia",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "15662003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 376946,
+"CONCEPT_NAME": "Senile dementia with delirium",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "191461002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 380986,
+"CONCEPT_NAME": "Senile dementia with delusion",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "371024007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1028073600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 379784,
+"CONCEPT_NAME": "Senile dementia with depression",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "191459006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4047747,
+"CONCEPT_NAME": "Subcortical vascular dementia",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "230286002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 376085,
+"CONCEPT_NAME": "Uncomplicated presenile dementia",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "191451009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 375791,
+"CONCEPT_NAME": "Uncomplicated senile dementia",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "191449005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 443605,
+"CONCEPT_NAME": "Vascular dementia",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "429998004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1217462400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4046089,
+"CONCEPT_NAME": "Vascular dementia of acute onset",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "230285003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37018688,
+"CONCEPT_NAME": "Vascular dementia with behavioral disturbance",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "288631000119104",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1454198400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37109056,
+"CONCEPT_NAME": "Vascular dementia without behavioral disturbance",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "16276361000119109",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1501459200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+} 
+] 
+}

@@ -1,0 +1,213 @@
+{
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 37017595,
+"CONCEPT_NAME": "Burkitt lymphoma co-occurrent with human immunodeficiency virus infection",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "713897006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1454198400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37017319,
+"CONCEPT_NAME": "Disorder of central nervous system co-occurrent with human immunodeficiency virus infection",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "713571008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1454198400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37017244,
+"CONCEPT_NAME": "Disorder of respiratory system co-occurrent with human immunodeficiency virus infection",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "713484001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1454198400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4262297,
+"CONCEPT_NAME": "Human immunodeficiency virus encephalopathy",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "397763006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1059609600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 439727,
+"CONCEPT_NAME": "Human immunodeficiency virus infection",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "86406008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4092686,
+"CONCEPT_NAME": "Human immunodeficiency virus infection with secondary clinical infectious disease",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "186708007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37017446,
+"CONCEPT_NAME": "Infection caused by Cytomegalovirus co-occurrent with human immunodeficiency virus infection",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "713722001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1454198400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37017248,
+"CONCEPT_NAME": "Infection caused by Pneumocystis co-occurrent with human immunodeficiency virus infection",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "713490002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1454198400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37017320,
+"CONCEPT_NAME": "Malignant neoplastic disease co-occurrent with human immunodeficiency virus infection",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "713572001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1454198400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 40484012,
+"CONCEPT_NAME": "Non-Hodgkin lymphoma associated with Human immunodeficiency virus infection",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "442537007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1248998400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37017579,
+"CONCEPT_NAME": "Opportunistic mycosis co-occurrent with human immunodeficiency virus infection",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "713880000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1454198400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+} 
+] 
+}

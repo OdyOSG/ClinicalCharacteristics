@@ -141,3 +141,59 @@ addDefaultEthnicityLineItems <- function() {
   )
   return(li)
 }
+
+
+charlsonComorbidities <- function(timeWindow = NULL) {
+
+  if (is.null(timeWindow)) {
+    timeWindow <- list(timeInterval(lb = -365, rb = -1))
+  }
+
+  # get quan charlson concept files
+  quanCharlsonConceptFiles <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    "conceptSets/QuanCharlson"
+  ) |>
+    fs::dir_ls()
+  quanCharlsonConceptNames <- tools::file_path_sans_ext(basename(quanCharlsonConceptFiles)) |>
+    snakecase::to_title_case()
+
+  quanCharlsonConcepts <- purrr::map2(
+    quanCharlsonConceptFiles, # json files
+    quanCharlsonConceptNames, # comorbidity names,
+    ~Capr::readConceptSet(path = .x, name = .y)
+  ) |>
+    purrr::set_names(quanCharlsonConceptNames)
+
+  weights <- list(
+    anyScore(weight = 4), # aids/hiv
+    anyScore(weight = 2), # any malignancy
+    anyScore(weight = 0), # cerebrovascular disease
+    anyScore(weight = 1), # chronic pulmonary disease
+    anyScore(weight = 2), # congestive heart failure
+    anyScore(weight = 2), # dementia
+    anyScore(weight = 0), # mild/moderate diabetes
+    anyScore(weight = 1), # diabetes with chronic complications
+    anyScore(weight = 2), # hemiplegia or paralegia
+    anyScore(weight = 6), # metastatic tumor
+    anyScore(weight = 2), # mild liver disease
+    anyScore(weight = 4), # moderate to severe liver disease
+    anyScore(weight = 0), # myocardial infarction
+    anyScore(weight = 0), # peptic ulcer disease
+    anyScore(weight = 0), # peripheral vascular disease
+    anyScore(weight = 1), # renal disease
+    anyScore(weight = 1) # rheumotological disease
+  )
+
+
+  batchLines <- createConceptSetLineItemBatch(
+    sectionLabel = "Quan Charlson",
+    domain = "condition_occurrence",
+    conceptSets = quanCharlsonConcepts,
+    timeIntervals = timeWindow,
+    statistic = weights
+  )
+
+  return(batchLines)
+
+}

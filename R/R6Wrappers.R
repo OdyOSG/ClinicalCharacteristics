@@ -273,7 +273,13 @@ observedTimeToFirstBreaksStat <- function(breaks) {
   return(stat)
 }
 
-
+anyScore <- function(weight) {
+  stat <- Score$new(
+    personLine = "anyCount",
+    weight = weight
+  )
+  return(stat)
+}
 
 
 #' @title
@@ -348,16 +354,36 @@ createConceptSetLineItemBatch <- function(
   # build permutations of concepts and timeIntervals
   permDf <- .permuteTi(conceptSets, timeIntervals)
 
+  # deal with different statistic input
+  # typical only add a single statistic class
+  # but if there is a list of statistics for a score handle it
+  if (class(statistic) == "list") {
+    if (length(statistic) != length(permDf[[1]])) {
+      stop("If the statistic is a list, it must be the same length as all combinations of conceptSets and timeIntervals")
+    }
+    statPerm <- statistic
+  } else {
+    if (class(statistic)[[2]] == "Statistic") {
+      statPerm <- rep(list(statistic), each = length(permDf[[1]]))
+    } else{
+      stop("statistic slot is not of Statistic Class")
+    }
+  }
+
+
   # create batch of concept set line items
-  csLiBatch <- purrr::map2(
-    permDf$objects,
-    permDf$timeIntervals,
+  csLiBatch <- purrr::pmap(
+    list(
+      permDf$objects,
+      permDf$timeIntervals,
+      statPerm
+    ),
     ~createConceptSetLineItem(
       sectionLabel = sectionLabel,
-      statistic = statistic,
+      statistic = ..3,
       domain = domain,
-      conceptSet = .x,
-      timeInterval = .y,
+      conceptSet = ..1,
+      timeInterval = ..2,
       sourceConceptSet = NULL,
       typeConceptIds = typeConceptIds,
       visitOccurrenceConceptIds = visitOccurrenceConceptIds
@@ -481,29 +507,34 @@ createDemographicLineItem <- function(statistic) {
 }
 
 #' @title
-#' Create a age statistic
+#' Create a age statistic with breaks
 #'
 #' @param breaks a breaksStrategy object dictating how to classify counts into categories
-#' @return A DemographicAge Statistic class object
+#' @return A DemographicAge Statistic class object with breaks
 #'
 #' @export
-ageChar <- function(breaks = NULL) {
-
-  if(is.null(breaks)) {
-    ageChar <- DemographicAge$new(
-      statType = "continuousDistribution",
-      aggType = "continuous",
-      breaks = NULL
-    )
-  } else {
-    ageChar <- DemographicAge$new(
-      statType = "breaks",
-      aggType = "categorical",
-      breaks = breaks
-    )
-  }
+ageCharBreaks <- function(breaks) {
+  ageChar <- DemographicAge$new(
+    statType = "breaks",
+    aggType = "categorical",
+    breaks = breaks
+  )
   return(ageChar)
+}
 
+#' @title
+#' Create a age statistic as continuous
+#'
+#' @return A DemographicAge Statistic class object as continuous
+#'
+#' @export
+ageCharCts <- function() {
+  ageChar <- DemographicAge$new(
+    statType = "continuousDistribution",
+    aggType = "continuous",
+    breaks = NULL
+  )
+  return(ageChar)
 }
 
 #' @title
