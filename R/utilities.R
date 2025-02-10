@@ -591,20 +591,43 @@
 
 
 .prepScoreTable <- function(ts) {
+
   scoreLines <- ts$getTableShellMeta() |>
     dplyr::filter(
       statisticType == "scoreTransformation"
-    ) |>
+    )
+  timeLabel <- scoreLines |> dplyr::distinct(timeLabel) |> dplyr::pull()
+  patientLine <- scoreLines |> dplyr::distinct(personLineTransformation) |> dplyr::pull()
+  sectionLabel <- scoreLines |> dplyr::distinct(sectionLabel) |> dplyr::pull()
+
+  scoreOrd <- scoreLines |>
     dplyr::pull(ordinalId)
 
-  scoreLineItems <- ts$getLineItems()[scoreLines]
+  # collect the weights
+  scoreLineItems <- ts$getLineItems()[scoreOrd]
   ww <- purrr::map(scoreLineItems, ~.x$getStatistic()) |>
     purrr::map_dbl(~.x$getWeightsIfAny())
 
+  # match the ordinals to the weights
   scoreTb <- tibble::tibble(
-    scoreOrdId = scoreLines,
+    scoreOrdId = scoreOrd,
     scoreWeights = ww
   )
+  # create a case when statement to link the weights to the ord ids
+  scoreCaseWhen <- scoreTb |>
+    dplyr::mutate(
+      expr_weights = glue::glue("WHEN a.ordinal_id = {scoreOrdId} THEN {scoreWeights}")
+    ) |>
+    dplyr::pull(expr_weights) |>
+    glue::glue_collapse(sep = "\n\t")
+
+  # Make the score temp table
+  scoreSql <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql/aggregate", "scoreTemp.sql")
+  ) |>
+    readr::read_file() |>
+    glue::glue()
 
   return(scoreSql)
 
@@ -698,11 +721,16 @@
     # if both render to both tables
     if (aggSqlTb2$aggType[i] == "both") {
 
+      scoreSql <- .prepScoreTable(ts)
+      aggSql <- c(scoreSql, aggSqlTb2$aggSql[i]) |>
+        glue::glue_collapse("\n\n")
+
       aggSqlBind[[i]] <- SqlRender::render(
-        sql = aggSqlTb2$aggSql[i],
+        sql = aggSql,
         categorical_table = buildOptions$categoricalSummaryTempTable,
         continuous_table = buildOptions$continuousSummaryTempTable,
-        pat_ts_tab  = buildOptions$patientLevelTableShellTempTable
+        pat_ts_tab  = buildOptions$patientLevelTableShellTempTable,
+        target_cohort_table = buildOptions$targetCohortTempTable
       ) |>
         SqlRender::translate(
           targetDialect = executionSettings$getDbms(),
@@ -719,6 +747,12 @@
 
 
 # Get Results ------------------
+
+.checkAnyScoreTransformation <- function(tsm) {
+
+
+
+}
 
 .getCategoricalResults <- function(tsm, tc, executionSettings, buildOptions) {
 
@@ -777,9 +811,26 @@
     snakeCaseToCamelCase = TRUE
   )
 
+  if (any(grepl("scoreTransformation", tsm$statisticType))) {
+    tsm_score <- tsm |>
+      dplyr::filter(statisticType == "scoreTransformation") |>
+      dplyr::select(sectionLabel) |>
+      dplyr::distinct() |>
+      dplyr::mutate(
+        ordinalId = 9999, .before = 1
+      )
+    tsm_select <- dplyr::bind_rows(
+      tsm |> dplyr::select(ordinalId, sectionLabel),
+      tsm_score
+    )
+  } else {
+    tsm_select <- tsm |> dplyr::select(ordinalId, sectionLabel)
+  }
+
+
   continuousResults <- jj |>
     dplyr::inner_join(
-      tsm |> dplyr::select(ordinalId, sectionLabel),
+      tsm_select,
       by = c("ordinalId")
     ) |>
     dplyr::left_join(
