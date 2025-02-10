@@ -348,6 +348,11 @@
       demoSql[[i]] <- readr::read_file(file = fs::path(sqlDemographicsPath, "demoAge.sql")) |>
         glue::glue_collapse("\n\n")
     }
+
+    if (demoLines$personLineTransformation[i] == "year") {
+      demoSql[[i]] <- readr::read_file(file = fs::path(sqlDemographicsPath, "demoYear.sql")) |>
+        glue::glue_collapse("\n\n")
+    }
   }
 
   demoSql2 <- do.call('c', demoSql) |>

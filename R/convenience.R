@@ -4,6 +4,29 @@
 #' @return A BreaksStreategy object with defaults assumptions for 5 year age groups
 #'
 #' @export
+defaultYearGrp <- function() {
+  thisYear <- lubridate::year(lubridate::today())
+  x <- seq(2000, thisYear, by = 1)
+  #a <- dplyr::lead(x) - 1
+  lab <- glue::glue("{x}")
+
+  br <- newBreaks(
+    name = "Default Years (2000-2025)",
+    breaks = x
+  )
+
+  br$labels <- lab
+
+  return(br)
+}
+
+
+#' @title
+#' Create a breaks Strategy object for age into 5 year groups
+#'
+#' @return A BreaksStreategy object with defaults assumptions for 5 year age groups
+#'
+#' @export
 age5yrGrp <- function() {
 
   x <- seq(0,130, by = 5)

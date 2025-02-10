@@ -1059,7 +1059,38 @@ DemographicAge <- R6::R6Class(
   )
 )
 
+### Demographic Index Year ---------------------
+DemographicIndexYear <- R6::R6Class(
+  classname = "DemographicIndexYear",
+  inherit = Statistic,
+  public = list(
+    initialize = function(breaks) {
+      super$initialize(
+        personLine = "year",
+        statType = "breaks",
+        aggType = "categorical")
+      .setString(private = private, key = "demoCategory", value = "Year")
+      .setClass(private = private, key = "breaks", value = breaks,
+                class = "BreaksStrategy", nullable = FALSE)
+    },
 
+    getDemoLabel = function() {
+      rr <- glue::glue("{private$demoCategory}")
+      return(rr)
+    },
+
+
+    modifyBreaksLabels = function(newLabels) {
+      br <- private$breaks
+      br$labels <- newLabels
+    }
+
+  ),
+  private = list(
+    demoCategory = NA_character_,
+    breaks = NULL
+  )
+)
 
 
 

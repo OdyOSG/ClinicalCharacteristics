@@ -357,7 +357,7 @@ createConceptSetLineItemBatch <- function(
   # deal with different statistic input
   # typical only add a single statistic class
   # but if there is a list of statistics for a score handle it
-  if (class(statistic) == "list") {
+  if (class(statistic)[[1]] == "list") {
     if (length(statistic) != length(permDf[[1]])) {
       stop("If the statistic is a list, it must be the same length as all combinations of conceptSets and timeIntervals")
     }
@@ -503,8 +503,33 @@ createDemographicLineItem <- function(statistic) {
     dcli$valueDescription <- statistic$getConceptColumn()
   }
 
+  if (statLabel == "DemographicIndexYear") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "cohort_start_date"
+  }
+
   return(dcli)
 }
+
+
+#' @title
+#' Create an index year char
+#'
+#' @param breaks a breaksStrategy object dictating how to classify years into categories. by default this will do each year from 2000 to current day.
+#'
+#' @return A DemographicIndexYear Statistic class object
+#'
+#' @export
+indexYear <- function(breaks = NULL) {
+
+  if (is.null(breaks)) {
+    breaks <- defaultYearGrp()
+  }
+
+  indexYearChar <- DemographicIndexYear$new(breaks)
+  return(indexYearChar)
+}
+
 
 #' @title
 #' Create a age statistic with breaks
