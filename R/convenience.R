@@ -1,23 +1,48 @@
 #' @title
-#' Create a breaks Strategy object for age into 5 year groups
+#' Create a breaks Strategy object for year
+#'
+#' @param startYear the year to start the year group sequence. By default this is the year 2000
 #'
 #' @return A BreaksStreategy object with defaults assumptions for 5 year age groups
 #'
 #' @export
-defaultYearGrp <- function() {
+defaultYearGrp <- function(startYear = NULL) {
+
+  if(is.null(startYear)) {
+    startYear <- 2000
+  }
+
   thisYear <- lubridate::year(lubridate::today())
-  x <- seq(2000, thisYear, by = 1)
+  x <- seq(startYear, thisYear, by = 1)
   #a <- dplyr::lead(x) - 1
   lab <- glue::glue("{x}")
 
   br <- newBreaks(
-    name = "Default Years (2000-2025)",
+    name = glue::glue("Default Years ({startYear}-{thisYear})"),
     breaks = x
   )
 
   br$labels <- lab
 
   return(br)
+}
+
+soptPayers <- function() {
+  soptPayersTypes <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("csv", "soptPayerTypes.csv")
+  ) |>
+    readr::read_csv(show_col_types = FALSE)
+
+  br <- newBreaks(
+    name = glue::glue("SOPT Payer Types"),
+    breaks = soptPayersTypes$conceptId
+  )
+
+  br$labels <- soptPayersTypes$conceptName
+
+  return(br)
+
 }
 
 

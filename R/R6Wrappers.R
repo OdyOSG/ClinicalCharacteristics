@@ -508,6 +508,11 @@ createDemographicLineItem <- function(statistic) {
     dcli$valueDescription <- "cohort_start_date"
   }
 
+  if (statLabel == "DemographicPayerType") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "payer_concept_id"
+  }
+
   return(dcli)
 }
 
@@ -528,6 +533,25 @@ indexYear <- function(breaks = NULL) {
 
   indexYearChar <- DemographicIndexYear$new(breaks)
   return(indexYearChar)
+}
+
+
+#' @title
+#' Create an payer type char
+#'
+#' @param breaks a breaksStrategy object dictating how to classify payer types into categories. by default this will use the SOPT vocabulary
+#'
+#' @return A DemographicIndexYear Statistic class object
+#'
+#' @export
+payerType <- function(breaks = NULL) {
+
+  if (is.null(breaks)) {
+    breaks <- soptPayers()
+  }
+
+  payerTypeChar <- DemographicPayerType$new(breaks)
+  return(payerTypeChar)
 }
 
 
