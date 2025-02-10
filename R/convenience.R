@@ -142,8 +142,23 @@ addDefaultEthnicityLineItems <- function() {
   return(li)
 }
 
-
-charlsonComorbidities <- function(timeWindow = NULL) {
+#' @title
+#' Convenience function to add quan charlson comorbidity score
+#'
+#' @description
+#' The Quan Charlson Comorbidity score is a measure for predicting 10 year survival. It is a modification to the
+#' Charlson Score by Quan et al (doi: 10.1097/01.mlr.0000182534.19832.83). The method presented in this packages follows
+#' the SNOMED adaption of Quan Charlson tested on OMOP CDM by Fortin et al (doi: 10.1186/s12911-022-02006-1). This function
+#' will add the elements needed for each comorbidity line item and the appropriate weights needed to convert the categorization
+#' of comorbidities into a score.
+#'
+#' @param timeWindow the interval to assess the comorbidity score, by default baseline it -365 to -1 days
+#'
+#' @return a list of line items for running quan charlson comorbidity score. This will determine the proportion of persons with
+#' each comorbidity and the overall score per patient in the cohort
+#'
+#' @export
+quanCharlsonComorbidityScore <- function(timeWindow = NULL) {
 
   if (is.null(timeWindow)) {
     timeWindow <- list(timeInterval(lb = -365, rb = -1))

@@ -15,6 +15,7 @@ Specific types of statistics are defined in derived classes
 \item \href{#method-Statistic-getAggregationType}{\code{Statistic$getAggregationType()}}
 \item \href{#method-Statistic-getPersonLineTransformation}{\code{Statistic$getPersonLineTransformation()}}
 \item \href{#method-Statistic-getBreaksIfAny}{\code{Statistic$getBreaksIfAny()}}
+\item \href{#method-Statistic-getWeightsIfAny}{\code{Statistic$getWeightsIfAny()}}
 \item \href{#method-Statistic-clone}{\code{Statistic$clone()}}
 }
 }
@@ -60,6 +61,15 @@ Specific types of statistics are defined in derived classes
 \subsection{Method \code{getBreaksIfAny()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$getBreaksIfAny()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Statistic-getWeightsIfAny"></a>}}
+\if{latex}{\out{\hypertarget{method-Statistic-getWeightsIfAny}{}}}
+\subsection{Method \code{getWeightsIfAny()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$getWeightsIfAny()}\if{html}{\out{</div>}}
 }
 
 }
