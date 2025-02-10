@@ -1,0 +1,460 @@
+{
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 4296653,
+"CONCEPT_NAME": "Acute ST segment elevation myocardial infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "401303003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1059609600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 46270162,
+"CONCEPT_NAME": "Acute ST segment elevation myocardial infarction due to left coronary artery occlusion",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "15713081000119108",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1438300800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 46270163,
+"CONCEPT_NAME": "Acute ST segment elevation myocardial infarction due to right coronary artery occlusion",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "15713121000119105",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1438300800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 43020460,
+"CONCEPT_NAME": "Acute ST segment elevation myocardial infarction involving left anterior descending coronary artery",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "285981000119103",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1359590400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 45766116,
+"CONCEPT_NAME": "Acute ST segment elevation myocardial infarction of inferior wall",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "703213009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1406764800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 45766075,
+"CONCEPT_NAME": "Acute anterior ST segment elevation myocardial infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "703164000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1406764800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 312327,
+"CONCEPT_NAME": "Acute myocardial infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "57054005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 434376,
+"CONCEPT_NAME": "Acute myocardial infarction of anterior wall",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "54329005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 438438,
+"CONCEPT_NAME": "Acute myocardial infarction of anterolateral wall",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "70211005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 438170,
+"CONCEPT_NAME": "Acute myocardial infarction of inferior wall",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "73795002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 438447,
+"CONCEPT_NAME": "Acute myocardial infarction of inferolateral wall",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "65547006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 441579,
+"CONCEPT_NAME": "Acute myocardial infarction of inferoposterior wall",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "76593002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 436706,
+"CONCEPT_NAME": "Acute myocardial infarction of lateral wall",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "58612006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4270024,
+"CONCEPT_NAME": "Acute non-ST segment elevation myocardial infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "401314000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1059609600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 444406,
+"CONCEPT_NAME": "Acute subendocardial infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "70422006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4329847,
+"CONCEPT_NAME": "Myocardial infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "22298006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37309626,
+"CONCEPT_NAME": "Myocardial infarction due to demand ischemia",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "16837681000119104",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1580428800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 314666,
+"CONCEPT_NAME": "Old myocardial infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "1755008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 45766114,
+"CONCEPT_NAME": "Subsequent ST segment elevation myocardial infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "703211006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1406764800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4108217,
+"CONCEPT_NAME": "Subsequent myocardial infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "194856005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4108677,
+"CONCEPT_NAME": "Subsequent myocardial infarction of anterior wall",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "194857001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4108218,
+"CONCEPT_NAME": "Subsequent myocardial infarction of inferior wall",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "194858006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 45766241,
+"CONCEPT_NAME": "Subsequent non-ST segment elevation myocardial infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "703360004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1406764800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 439693,
+"CONCEPT_NAME": "True posterior myocardial infarction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "194802003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+} 
+] 
+}

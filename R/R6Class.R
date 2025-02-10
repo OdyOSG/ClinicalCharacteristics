@@ -970,6 +970,14 @@ Statistic <- R6::R6Class(
         br <- NULL
       }
       return(br)
+    },
+    getWeightsIfAny = function() {
+      if (self$getStatisticType() == "scoreTransformation") {
+        ww <- self$weight
+      } else {
+        ww <- NULL
+      }
+      return(ww)
     }
   ),
   private = list(
@@ -1135,47 +1143,25 @@ Score <- R6::R6Class(
   classname = "Score",
   inherit = Statistic,
   public = list(
-    initialize = function(personLine, score) {
+    initialize = function(personLine, weight) {
       super$initialize(
         personLine = personLine,
         statType = "scoreTransformation",
         aggType = "continuous"
       )
-      .setClass(private = private, key = "score", value = score, class = "ScoreWeight")
+      .setNumber(private = private, key = ".weight", value = weight)
     }
   ),
   private = list(
-    score = NULL
+    .weight = NULL
+  ),
+  active =list(
+    weight = function(weight) {
+      .setActiveNumber(private = private, key = ".weight", value = weight)
+    }
   )
 )
 
-
-## Count -----------------------
-
-# Count <- R6::R6Class("Count",
-#                      inherit = Statistic,
-#                      public = list(
-#                        initialize = function(breaks = NULL) {
-#                          super$initialize(type = "Count")
-#                          if (!is.null(breaks)) {
-#                            .setClass(private = private, key = "breaks", value = breaks, class = "Breaks")
-#                          }
-#                          invisible(private)
-#                        },
-#                        getSql = function() {
-#
-#                          sqlFile <- "countStat.sql"
-#                           # get sql from package
-#                          sql <- fs::path_package("ClinicalCharacteristics", fs::path("sql", sqlFile)) |>
-#                            readr::read_file() |>
-#                            glue::glue()
-#                          return(sql)
-#                        }
-#                      ),
-#                      private = list(
-#                        breaks = NULL
-#                      )
-# )
 
 
 # LineItem Classes -----

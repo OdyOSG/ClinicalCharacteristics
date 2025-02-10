@@ -1,0 +1,23 @@
+{
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 432851,
+"CONCEPT_NAME": "Metastatic malignant neoplasm",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "128462008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": true,
+"includeMapped": false 
+} 
+] 
+}

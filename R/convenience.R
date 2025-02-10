@@ -141,3 +141,74 @@ addDefaultEthnicityLineItems <- function() {
   )
   return(li)
 }
+
+#' @title
+#' Convenience function to add quan charlson comorbidity score
+#'
+#' @description
+#' The Quan Charlson Comorbidity score is a measure for predicting 10 year survival. It is a modification to the
+#' Charlson Score by Quan et al (doi: 10.1097/01.mlr.0000182534.19832.83). The method presented in this packages follows
+#' the SNOMED adaption of Quan Charlson tested on OMOP CDM by Fortin et al (doi: 10.1186/s12911-022-02006-1). This function
+#' will add the elements needed for each comorbidity line item and the appropriate weights needed to convert the categorization
+#' of comorbidities into a score.
+#'
+#' @param timeWindow the interval to assess the comorbidity score, by default baseline it -365 to -1 days
+#'
+#' @return a list of line items for running quan charlson comorbidity score. This will determine the proportion of persons with
+#' each comorbidity and the overall score per patient in the cohort
+#'
+#' @export
+quanCharlsonComorbidityScore <- function(timeWindow = NULL) {
+
+  if (is.null(timeWindow)) {
+    timeWindow <- list(timeInterval(lb = -365, rb = -1))
+  }
+
+  # get quan charlson concept files
+  quanCharlsonConceptFiles <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    "conceptSets/QuanCharlson"
+  ) |>
+    fs::dir_ls()
+  quanCharlsonConceptNames <- tools::file_path_sans_ext(basename(quanCharlsonConceptFiles)) |>
+    snakecase::to_title_case()
+
+  quanCharlsonConcepts <- purrr::map2(
+    quanCharlsonConceptFiles, # json files
+    quanCharlsonConceptNames, # comorbidity names,
+    ~Capr::readConceptSet(path = .x, name = .y)
+  ) |>
+    purrr::set_names(quanCharlsonConceptNames)
+
+  weights <- list(
+    anyScore(weight = 4), # aids/hiv
+    anyScore(weight = 2), # any malignancy
+    anyScore(weight = 0), # cerebrovascular disease
+    anyScore(weight = 1), # chronic pulmonary disease
+    anyScore(weight = 2), # congestive heart failure
+    anyScore(weight = 2), # dementia
+    anyScore(weight = 0), # mild/moderate diabetes
+    anyScore(weight = 1), # diabetes with chronic complications
+    anyScore(weight = 2), # hemiplegia or paralegia
+    anyScore(weight = 6), # metastatic tumor
+    anyScore(weight = 2), # mild liver disease
+    anyScore(weight = 4), # moderate to severe liver disease
+    anyScore(weight = 0), # myocardial infarction
+    anyScore(weight = 0), # peptic ulcer disease
+    anyScore(weight = 0), # peripheral vascular disease
+    anyScore(weight = 1), # renal disease
+    anyScore(weight = 1) # rheumotological disease
+  )
+
+
+  batchLines <- createConceptSetLineItemBatch(
+    sectionLabel = "Quan Charlson",
+    domain = "condition_occurrence",
+    conceptSets = quanCharlsonConcepts,
+    timeIntervals = timeWindow,
+    statistic = weights
+  )
+
+  return(batchLines)
+
+}
