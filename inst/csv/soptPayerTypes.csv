@@ -25,7 +25,7 @@ conceptId,conceptName,conceptCode,vocabularyId
 367,Medicaid Primary Care Case Management (PCCM),213,SOPT
 368,Medicaid Managed Care - Other,219,SOPT
 293,Medicaid Non-managed Care,22,SOPT
-369,Medicaid/State Children's Health Insurance Program (SCHIP),23,SOPT
+369,Medicaid/State Childrens Health Insurance Program (SCHIP),23,SOPT
 371,Medicaid Out of State,25,SOPT
 372,Medicaid Long Term Care,26,SOPT
 294,Medicaid - Other,29,SOPT
@@ -74,9 +74,9 @@ conceptId,conceptName,conceptCode,vocabularyId
 310,HRSA Ryan White HIV/AIDS Program,343,SOPT
 732314,HRSA Disaster-related (includes Covid-19) program,344,SOPT
 311,HSRA - Other,349,SOPT
-400,Division of Coal Mine Workers' Compensation (DCMWC) - Black Lung,35,SOPT
+400,Division of Coal Mine Workers Compensation (DCMWC) - Black Lung,35,SOPT
 312,State Government Program,36,SOPT
-313,State Children's Health Insurance Program (SCHIP) - individual state code,361,SOPT
+313,State Childrens Health Insurance Program (SCHIP) - individual state code,361,SOPT
 401,Specific state program (list/local code),362,SOPT
 314,State program - not otherwise specified (other state),369,SOPT
 315,Local Government Program,37,SOPT
@@ -154,10 +154,10 @@ conceptId,conceptName,conceptCode,vocabularyId
 444,Foreign National,91,SOPT
 445,Disability Insurance,93,SOPT
 446,Long-term Care Insurance,94,SOPT
-447,Worker's Compensation,95,SOPT
-347,Worker's Compensation Health Management Organization (HMO),951,SOPT
-348,Worker's Comp Fee-for-Service (FFS),953,SOPT
-448,Worker's Comp Other Managed Care,954,SOPT
-449,"Worker's Comp, Other unspecified",959,SOPT
+447,Workers Compensation,95,SOPT
+347,Workers Compensation Health Management Organization (HMO),951,SOPT
+348,Workers Comp Fee-for-Service (FFS),953,SOPT
+448,Workers Comp Other Managed Care,954,SOPT
+449,"Workers Comp, Other unspecified",959,SOPT
 450,Auto Insurance,96,SOPT
 451,Liability Insurance,97,SOPT

@@ -32,7 +32,8 @@ soptPayers <- function() {
     package = "ClinicalCharacteristics",
     fs::path("csv", "soptPayerTypes.csv")
   ) |>
-    readr::read_csv(show_col_types = FALSE)
+    readr::read_csv(show_col_types = FALSE) |>
+    dplyr::arrange(conceptId)
 
   br <- newBreaks(
     name = glue::glue("SOPT Payer Types"),

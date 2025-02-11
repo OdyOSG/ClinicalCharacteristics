@@ -762,11 +762,17 @@ lineItems <- function(...) {
     listOfLineItems[[i]]$ordinalId <- i
   }
 
-  # add value ids for the concept sets
-  listOfLineItems <- .setCsValueId(listOfLineItems)
+  lineItemClassType <- purrr::map_chr(listOfLineItems, ~.x$lineItemClass)
 
+  if (any(lineItemClassType == "ConceptSet")) {
+    # add value ids for the concept sets
+    listOfLineItems <- .setCsValueId(listOfLineItems)
+  }
+
+  if (any(lineItemClassType == "SourceConceptSet")) {
   # add value ids for the source concept sets
   listOfLineItems <-  .setSourceValueId(listOfLineItems)
+  }
 
   return(listOfLineItems)
 }
