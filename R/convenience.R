@@ -17,9 +17,9 @@ defaultYearGrp <- function(startYear = NULL) {
   #a <- dplyr::lead(x) - 1
   lab <- glue::glue("{x}")
 
-  br <- newBreaks(
+  br <- newValueBreaks(
     name = glue::glue("Default Years ({startYear}-{thisYear})"),
-    breaks = x
+    breaks = x |> as.list()
   )
 
   br$labels <- lab
@@ -35,12 +35,11 @@ soptPayers <- function() {
     readr::read_csv(show_col_types = FALSE) |>
     dplyr::arrange(conceptId)
 
-  br <- newBreaks(
+  br <- newConceptBreaks(
     name = glue::glue("SOPT Payer Types"),
-    breaks = soptPayersTypes$conceptId
+    breaks = as.list(soptPayersTypes$conceptId),
+    labels = soptPayersTypes$conceptName
   )
-
-  br$labels <- soptPayersTypes$conceptName
 
   return(br)
 
@@ -59,9 +58,9 @@ age5yrGrp <- function() {
   a <- dplyr::lead(x) - 1
   lab <- glue::glue("{x}-{a}")[-length(x)]
 
-  br <- newBreaks(
+  br <- newValueBreaks(
     name = "5-Year Age Groups",
-    breaks = x
+    breaks = x |> as.list()
   )
 
   br$labels <- c(lab, paste0(dplyr::last(x), "+"))
@@ -81,9 +80,9 @@ age10yrGrp <- function() {
   a <- dplyr::lead(x) - 1
   lab <- glue::glue("{x}-{a}")[-length(x)]
 
-  br <- newBreaks(
+  br <- newValueBreaks(
     name = "10-Year Age Groups",
-    breaks = x
+    breaks = x |> as.list()
   )
 
   br$labels <- c(lab, paste0(dplyr::last(x), "+"))

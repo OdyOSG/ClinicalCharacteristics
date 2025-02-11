@@ -1,3 +1,4 @@
+/* Identify Patient payer type (rank by lowest payer concept)*/
 INSERT INTO @patient_level_data
 SELECT
   b.cohort_definition_id AS target_cohort_id,

@@ -518,6 +518,12 @@ createDemographicLineItem <- function(statistic) {
     dcli$valueDescription <- "payer_concept_id"
   }
 
+  if (statLabel == "DemographicLocation") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "location_id"
+  }
+
+
   return(dcli)
 }
 
@@ -551,6 +557,21 @@ cohortFollowupTime <- function() {
 
   cohortFollowupChar <- DemographicCohortTime$new()
   return(cohortFollowupChar)
+}
+
+
+#' @title
+#' Create a location char
+#'
+#' @param breaks a breaksStrategy object dictating how to classify locations into categories.
+#'
+#' @return A DemographicLocation Statistic class object
+#'
+#' @export
+personLocation <- function(breaks) {
+
+  personLocationChar <- DemographicLocation$new(breaks)
+  return(personLocationChar)
 }
 
 
@@ -646,7 +667,7 @@ femaleGender <- function() {
 #' @return A BreaksStreategy object
 #'
 #' @export
-newBreaks <- function(name, breaks, labels = NULL) {
+newValueBreaks <- function(name, breaks, labels = NULL) {
   if (is.null(labels)) {
     a <- dplyr::lead(breaks)
     lab <- glue::glue("[{breaks}-{a})")[-length(breaks)]
@@ -656,11 +677,25 @@ newBreaks <- function(name, breaks, labels = NULL) {
   br <- BreaksStrategy$new(
     name = name,
     breaks = breaks,
-    labels = labels
+    labels = labels,
+    type = "value"
   )
 
   return(br)
 }
+
+newConceptBreaks <- function(name, breaks, labels) {
+
+  br <- BreaksStrategy$new(
+    name = name,
+    breaks = breaks,
+    labels = labels,
+    type = "concept"
+  )
+
+  return(br)
+}
+
 
 #' @title
 #' Create a cohort line item and set its attributes

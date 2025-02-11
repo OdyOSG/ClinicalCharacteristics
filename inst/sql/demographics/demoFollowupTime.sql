@@ -1,3 +1,4 @@
+/* Identify patient follow up time in cohort */
 INSERT INTO @patient_level_data
 SELECT
   b.cohort_definition_id AS target_cohort_id,
