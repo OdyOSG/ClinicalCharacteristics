@@ -508,6 +508,11 @@ createDemographicLineItem <- function(statistic) {
     dcli$valueDescription <- "cohort_start_date"
   }
 
+  if (statLabel == "DemographicCohortTime") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "cohort_follow_up"
+  }
+
   if (statLabel == "DemographicPayerType") {
     dcli$valueId <- -999
     dcli$valueDescription <- "payer_concept_id"
@@ -533,6 +538,19 @@ indexYear <- function(breaks = NULL) {
 
   indexYearChar <- DemographicIndexYear$new(breaks)
   return(indexYearChar)
+}
+
+
+#' @title
+#' Create a cohort follow up time char
+#'
+#' @return A DemographicCohortTime Statistic class object
+#'
+#' @export
+cohortFollowupTime <- function() {
+
+  cohortFollowupChar <- DemographicCohortTime$new()
+  return(cohortFollowupChar)
 }
 
 

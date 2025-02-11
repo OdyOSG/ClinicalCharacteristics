@@ -1092,7 +1092,31 @@ DemographicIndexYear <- R6::R6Class(
   )
 )
 
-### Demographic Index Year ---------------------
+### Demographic Cohort Follow up ---------------------
+DemographicCohortTime <- R6::R6Class(
+  classname = "DemographicCohortTime",
+  inherit = Statistic,
+  public = list(
+    initialize = function() {
+      super$initialize(
+        personLine = "cohort_follow_up",
+        statType = "continuousDistribution",
+        aggType = "continuous")
+      .setString(private = private, key = "demoCategory", value = "Cohort Follow up")
+    },
+
+    getDemoLabel = function() {
+      rr <- glue::glue("{private$demoCategory}")
+      return(rr)
+    }
+
+  ),
+  private = list(
+    demoCategory = NA_character_
+  )
+)
+
+### Demographic Payer Type ---------------------
 DemographicPayerType <- R6::R6Class(
   classname = "DemographicPayerType",
   inherit = Statistic,
@@ -1125,25 +1149,6 @@ DemographicPayerType <- R6::R6Class(
   )
 )
 
-### Demographic Year -----------------
-# DemographicYear <- R6::R6Class("DemographicYear",
-#                            inherit = Statistic,
-#                            public = list(
-#                              initialize = function(breaks = NULL) {
-#                                super$initialize(type = "Year")
-#                                if (!is.null(breaks)) {
-#                                  .setClass(private = private,
-#                                            key = "breaks",
-#                                            value = breaks,
-#                                            class = "Breaks")
-#                                }
-#                                invisible(private)
-#                              }
-#                            ),
-#                            private = list(
-#                              breaks = NULL
-#                            )
-# )
 
 ## CS, CSG, Cohort Stats -----------------------------
 
