@@ -333,6 +333,8 @@
     fs::path("sql", "demographics")
   )
 
+  if (nrow(demoLines) > 0) {
+
   demoSql <- vector('list', length = nrow(demoLines))
   for (i in 1:nrow(demoLines)) {
 
@@ -378,6 +380,10 @@
       cdm_database_schema = executionSettings$cdmDatabaseSchema,
       target_table = buildOptions$targetCohortTempTable
     )
+  } else {
+    demoSql2 <- ""
+  }
+
 
   return(demoSql2)
 }
@@ -769,11 +775,10 @@
 
 # Get Results ------------------
 
-.checkAnyScoreTransformation <- function(tsm) {
-
-
-
-}
+# .checkAnyScoreTransformation <- function(tsm) {
+#
+#
+# }
 
 .getCategoricalResults <- function(tsm, tc, executionSettings, buildOptions) {
 
