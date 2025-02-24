@@ -333,6 +333,8 @@
     fs::path("sql", "demographics")
   )
 
+  if (nrow(demoLines) > 0) {
+
   demoSql <- vector('list', length = nrow(demoLines))
   for (i in 1:nrow(demoLines)) {
 
@@ -348,6 +350,27 @@
       demoSql[[i]] <- readr::read_file(file = fs::path(sqlDemographicsPath, "demoAge.sql")) |>
         glue::glue_collapse("\n\n")
     }
+
+    if (demoLines$personLineTransformation[i] == "year") {
+      demoSql[[i]] <- readr::read_file(file = fs::path(sqlDemographicsPath, "demoYear.sql")) |>
+        glue::glue_collapse("\n\n")
+    }
+
+    if (demoLines$personLineTransformation[i] == "cohort_follow_up") {
+      demoSql[[i]] <- readr::read_file(file = fs::path(sqlDemographicsPath, "demoFollowupTime.sql")) |>
+        glue::glue_collapse("\n\n")
+    }
+
+    if (demoLines$personLineTransformation[i] == "payer_type") {
+      demoSql[[i]] <- readr::read_file(file = fs::path(sqlDemographicsPath, "demoPayerType.sql")) |>
+        glue::glue_collapse("\n\n")
+    }
+
+    if (demoLines$personLineTransformation[i] == "location") {
+      demoSql[[i]] <- readr::read_file(file = fs::path(sqlDemographicsPath, "demoLocation.sql")) |>
+        glue::glue_collapse("\n\n")
+    }
+
   }
 
   demoSql2 <- do.call('c', demoSql) |>
@@ -357,6 +380,10 @@
       cdm_database_schema = executionSettings$cdmDatabaseSchema,
       target_table = buildOptions$targetCohortTempTable
     )
+  } else {
+    demoSql2 <- ""
+  }
+
 
   return(demoSql2)
 }
@@ -748,11 +775,10 @@
 
 # Get Results ------------------
 
-.checkAnyScoreTransformation <- function(tsm) {
-
-
-
-}
+# .checkAnyScoreTransformation <- function(tsm) {
+#
+#
+# }
 
 .getCategoricalResults <- function(tsm, tc, executionSettings, buildOptions) {
 

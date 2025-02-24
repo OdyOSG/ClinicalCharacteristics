@@ -48,7 +48,6 @@
   invisible(private)
 }
 
-
 .setListofClasses <- function(private, key, value, classes) {
   checkmate::assert_list(x = value, types = classes, null.ok = FALSE, min.len = 1)
   private[[key]] <- value
@@ -102,4 +101,14 @@
     return(vv)
   }
   .setNumber(private = private, key = key, value = value)
+}
+
+
+.setActiveList <- function(private, key, classes, value) {
+  # return the value if nothing added
+  if(missing(value)) {
+    vv <- private[[key]]
+    return(vv)
+  }
+  .setListofClasses(private = private, key = key, value = value, classes = classes)
 }

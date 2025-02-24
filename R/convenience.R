@@ -1,4 +1,52 @@
 #' @title
+#' Create a breaks Strategy object for year
+#'
+#' @param startYear the year to start the year group sequence. By default this is the year 2000
+#'
+#' @return A BreaksStreategy object with defaults assumptions for 5 year age groups
+#'
+#' @export
+defaultYearGrp <- function(startYear = NULL) {
+
+  if(is.null(startYear)) {
+    startYear <- 2000
+  }
+
+  thisYear <- lubridate::year(lubridate::today())
+  x <- seq(startYear, thisYear, by = 1)
+  #a <- dplyr::lead(x) - 1
+  lab <- glue::glue("{x}")
+
+  br <- newValueBreaks(
+    name = glue::glue("Default Years ({startYear}-{thisYear})"),
+    breaks = x |> as.list()
+  )
+
+  br$labels <- lab
+
+  return(br)
+}
+
+soptPayers <- function() {
+  soptPayersTypes <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("csv", "soptPayerTypes.csv")
+  ) |>
+    readr::read_csv(show_col_types = FALSE) |>
+    dplyr::arrange(conceptId)
+
+  br <- newConceptBreaks(
+    name = glue::glue("SOPT Payer Types"),
+    breaks = as.list(soptPayersTypes$conceptId),
+    labels = soptPayersTypes$conceptName
+  )
+
+  return(br)
+
+}
+
+
+#' @title
 #' Create a breaks Strategy object for age into 5 year groups
 #'
 #' @return A BreaksStreategy object with defaults assumptions for 5 year age groups
@@ -10,9 +58,9 @@ age5yrGrp <- function() {
   a <- dplyr::lead(x) - 1
   lab <- glue::glue("{x}-{a}")[-length(x)]
 
-  br <- newBreaks(
+  br <- newValueBreaks(
     name = "5-Year Age Groups",
-    breaks = x
+    breaks = x |> as.list()
   )
 
   br$labels <- c(lab, paste0(dplyr::last(x), "+"))
@@ -32,9 +80,9 @@ age10yrGrp <- function() {
   a <- dplyr::lead(x) - 1
   lab <- glue::glue("{x}-{a}")[-length(x)]
 
-  br <- newBreaks(
+  br <- newValueBreaks(
     name = "10-Year Age Groups",
-    breaks = x
+    breaks = x |> as.list()
   )
 
   br$labels <- c(lab, paste0(dplyr::last(x), "+"))

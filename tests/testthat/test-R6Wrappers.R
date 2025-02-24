@@ -151,12 +151,12 @@ test_that("femaleGender makes a DemographicConcept Class", {
 
 test_that("ageChar makes a DemographicAge Class", {
 
-  ageChar1 <- ageChar()
+  ageChar1 <- ageCharCts()
   expect_equal(ageChar1$getStatisticType(), "continuousDistribution")
   expect_equal(ageChar1$getDemoLabel(), "Age")
   expect_equal(ageChar1$getAggregationType(), "continuous")
 
-  ageChar2 <- ageChar(
+  ageChar2 <- ageCharBreaks(
     breaks = newBreaks(name = "Child to Adult", breaks = c(0, 18, 65))
   )
 

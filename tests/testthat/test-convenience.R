@@ -60,6 +60,6 @@ test_that("quanCharlsonComorbidityScore returns concept list of concept set line
   expect_equal(class(tst[[1]])[[1]], "ConceptSetLineItem")
   expect_equal(tst[[2]]$lineItemLabel, "Any Malignancy")
   expect_equal(class(tst[[1]]$getStatistic())[[1]], "Score")
-  expect_equal(tst[[2]]$getStatistic()$weight, 4)
+  expect_equal(tst[[2]]$getStatistic()$weight, 2)
 
 })

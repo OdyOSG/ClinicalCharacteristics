@@ -1,18 +1,18 @@
 INSERT INTO @patient_level_data
 SELECT
-  a.cohort_definition_id AS target_cohort_id,
-  a.subject_id,
+  b.cohort_definition_id AS target_cohort_id,
+  b.subject_id,
   'Static at Index' AS time_label,
-  'person' AS domain_table,
-  'age' AS patient_line,
-  'year_of_birth' AS value_type,
+  'cohort' AS domain_table,
+  'year' AS patient_line,
+  'cohort_start_date' AS value_type,
   -999 AS  value_id,
-  a.value
+  b.value
 FROM (
     SELECT
       t.cohort_definition_id,
       t.subject_id,
-      YEAR(t.cohort_start_date) - d.year_of_birth AS value
+      YEAR(t.cohort_start_date) AS value
     FROM (
       SELECT a.cohort_definition_id, a.subject_id, a.cohort_start_date, a.cohort_end_date
         FROM(
@@ -20,8 +20,8 @@ FROM (
           FROM @target_table
           ) a
         WHERE a.rn = 1
-    ) t
+        ) t
     JOIN @cdm_database_schema.person d
     ON t.subject_id = d.person_id
-) a
+) b
 ;

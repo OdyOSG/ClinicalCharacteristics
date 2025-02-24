@@ -1059,29 +1059,132 @@ DemographicAge <- R6::R6Class(
   )
 )
 
+### Demographic Index Year ---------------------
+DemographicIndexYear <- R6::R6Class(
+  classname = "DemographicIndexYear",
+  inherit = Statistic,
+  public = list(
+    initialize = function(breaks) {
+      super$initialize(
+        personLine = "year",
+        statType = "breaks",
+        aggType = "categorical")
+      .setString(private = private, key = "demoCategory", value = "Year")
+      .setClass(private = private, key = "breaks", value = breaks,
+                class = "BreaksStrategy", nullable = FALSE)
+    },
+
+    getDemoLabel = function() {
+      rr <- glue::glue("{private$demoCategory}")
+      return(rr)
+    },
 
 
+    modifyBreaksLabels = function(newLabels) {
+      br <- private$breaks
+      br$labels <- newLabels
+    }
+
+  ),
+  private = list(
+    demoCategory = NA_character_,
+    breaks = NULL
+  )
+)
 
 
-### Demographic Year -----------------
-# DemographicYear <- R6::R6Class("DemographicYear",
-#                            inherit = Statistic,
-#                            public = list(
-#                              initialize = function(breaks = NULL) {
-#                                super$initialize(type = "Year")
-#                                if (!is.null(breaks)) {
-#                                  .setClass(private = private,
-#                                            key = "breaks",
-#                                            value = breaks,
-#                                            class = "Breaks")
-#                                }
-#                                invisible(private)
-#                              }
-#                            ),
-#                            private = list(
-#                              breaks = NULL
-#                            )
-# )
+### Demographic Cohort Follow up ---------------------
+DemographicCohortTime <- R6::R6Class(
+  classname = "DemographicCohortTime",
+  inherit = Statistic,
+  public = list(
+    initialize = function() {
+      super$initialize(
+        personLine = "cohort_follow_up",
+        statType = "continuousDistribution",
+        aggType = "continuous")
+      .setString(private = private, key = "demoCategory", value = "Cohort Follow up")
+    },
+
+    getDemoLabel = function() {
+      rr <- glue::glue("{private$demoCategory}")
+      return(rr)
+    }
+
+  ),
+  private = list(
+    demoCategory = NA_character_
+  )
+)
+
+
+### Demographic Location ---------------------
+DemographicLocation <- R6::R6Class(
+  classname = "DemographicLocation",
+  inherit = Statistic,
+  public = list(
+    initialize = function(breaks) {
+      super$initialize(
+        personLine = "location",
+        statType = "breaks",
+        aggType = "categorical")
+      .setString(private = private, key = "demoCategory", value = "Location")
+      .setClass(private = private, key = "breaks", value = breaks,
+                class = "BreaksStrategy", nullable = FALSE)
+    },
+
+    getDemoLabel = function() {
+      rr <- glue::glue("{private$demoCategory}")
+      return(rr)
+    },
+
+
+    modifyBreaksLabels = function(newLabels) {
+      br <- private$breaks
+      br$labels <- newLabels
+    }
+
+  ),
+  private = list(
+    demoCategory = NA_character_,
+    breaks = NULL
+  )
+)
+
+
+### Demographic Payer Type ---------------------
+DemographicPayerType <- R6::R6Class(
+  classname = "DemographicPayerType",
+  inherit = Statistic,
+  public = list(
+    initialize = function(breaks) {
+      super$initialize(
+        personLine = "payer_type",
+        statType = "breaks",
+        aggType = "categorical")
+      .setString(private = private, key = "demoCategory", value = "Payer Type")
+      .setClass(private = private, key = "breaks", value = breaks,
+                class = "BreaksStrategy", nullable = FALSE)
+    },
+
+    getDemoLabel = function() {
+      rr <- glue::glue("{private$demoCategory}")
+      return(rr)
+    },
+
+
+    modifyBreaksLabels = function(newLabels) {
+      br <- private$breaks
+      br$labels <- newLabels
+    }
+
+  ),
+  private = list(
+    demoCategory = NA_character_,
+    breaks = NULL
+  )
+)
+
 
 ## CS, CSG, Cohort Stats -----------------------------
 
@@ -1545,28 +1648,51 @@ BreaksStrategy <- R6::R6Class(
   classname = "BreaksStrategy",
   public = list(
 
-    initialize = function(name, labels, breaks) {
+    initialize = function(name, labels, breaks, type) {
+
       .setString(private = private, key = ".name", value = name)
       .setCharacter(private = private, key = ".labels", value = labels)
-      .setNumber(private = private, key = ".breaks", value = breaks)
+      .setListofClasses(private = private, key = ".breaks", classes = character(0), value = breaks)
+      .setString(private = private, key = ".type", value =  type)
+
     },
 
     makeCaseWhenSql = function(ordinalId) {
-      sql_when <- tibble::tibble(
-        lhs = self$breaks,
-        rhs = dplyr::lead(self$breaks) - 0.01,
-        label = self$labels
-      ) |>
-        dplyr::mutate(
-          #ord = dplyr::row_number(),
-          expr_left = glue::glue("{lhs} <= a.value"),
-          expr_right = dplyr::if_else(!is.na(rhs), glue::glue("a.value <= {rhs}"), ""),
-          expr_both = glue::glue("WHEN ({expr_left} AND {expr_right}) THEN '{label}'"),
-          expr_both = dplyr::if_else(is.na(rhs), gsub(" AND ", "", expr_both), expr_both)
-        ) |>
-        dplyr::pull(expr_both) |>
-        glue::glue_collapse(sep = "\n")
 
+      # if the breaks are values do it this way
+      if (self$type == "value") {
+        sql_when <- tibble::tibble(
+          lhs = self$breaks |> as.numeric(),
+          rhs = dplyr::lead(self$breaks |> as.numeric()) - 0.01,
+          label = self$labels
+        ) |>
+          dplyr::mutate(
+            #ord = dplyr::row_number(),
+            expr_left = glue::glue("{lhs} <= a.value"),
+            expr_right = dplyr::if_else(!is.na(rhs), glue::glue("a.value <= {rhs}"), ""),
+            expr_both = glue::glue("WHEN ({expr_left} AND {expr_right}) THEN '{label}'"),
+            expr_both = dplyr::if_else(is.na(rhs), gsub(" AND ", "", expr_both), expr_both)
+          ) |>
+          dplyr::pull(expr_both) |>
+          glue::glue_collapse(sep = "\n")
+      }
+
+      # if breaks are concepts do it this way
+      if (self$type == "concept") {
+
+        sql_when <- tibble::tibble(
+          lhs = purrr::map(self$breaks, ~glue::glue_collapse(.x, sep = ", ")),
+          label = self$labels
+        ) |>
+          dplyr::mutate(
+            expr_both = glue::glue("WHEN a.value IN ({lhs}) THEN '{label}'")
+          ) |>
+          dplyr::pull(expr_both) |>
+          glue::glue_collapse(sep = "\n")
+
+      }
+
+      # make final case when sql
       case_when_sql <- c(
         "SELECT *,",
         "\nCASE ",
@@ -1584,19 +1710,23 @@ BreaksStrategy <- R6::R6Class(
   ),
   private = list(
     .name = NA_character_,
+    .type = NA_character_,
     .labels = NA_character_,
-    .breaks = NA_real_
+    .breaks = NULL
   ),
 
   active = list(
     name = function(name) {
       .setActiveString(private = private, key = ".name", value = name)
     },
+    type = function(type) {
+      .setActiveString(private = private, key = ".type", value = type)
+    },
     labels = function(labels) {
       .setActiveCharacter(private = private, key = ".labels", value = labels)
     },
     breaks = function(breaks) {
-      .setActiveNumber(private = private, key = ".breaks", value = breaks)
+      .setActiveList(private = private, key = ".breaks", value = breaks, classes = character(0))
     }
   )
 )

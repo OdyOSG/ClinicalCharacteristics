@@ -357,7 +357,7 @@ createConceptSetLineItemBatch <- function(
   # deal with different statistic input
   # typical only add a single statistic class
   # but if there is a list of statistics for a score handle it
-  if (class(statistic) == "list") {
+  if (class(statistic)[[1]] == "list") {
     if (length(statistic) != length(permDf[[1]])) {
       stop("If the statistic is a list, it must be the same length as all combinations of conceptSets and timeIntervals")
     }
@@ -503,8 +503,96 @@ createDemographicLineItem <- function(statistic) {
     dcli$valueDescription <- statistic$getConceptColumn()
   }
 
+  if (statLabel == "DemographicIndexYear") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "cohort_start_date"
+  }
+
+  if (statLabel == "DemographicCohortTime") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "cohort_follow_up"
+  }
+
+  if (statLabel == "DemographicPayerType") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "payer_concept_id"
+  }
+
+  if (statLabel == "DemographicLocation") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "location_id"
+  }
+
+
   return(dcli)
 }
+
+
+#' @title
+#' Create an index year char
+#'
+#' @param breaks a breaksStrategy object dictating how to classify years into categories. by default this will do each year from 2000 to current day.
+#'
+#' @return A DemographicIndexYear Statistic class object
+#'
+#' @export
+indexYear <- function(breaks = NULL) {
+
+  if (is.null(breaks)) {
+    breaks <- defaultYearGrp()
+  }
+
+  indexYearChar <- DemographicIndexYear$new(breaks)
+  return(indexYearChar)
+}
+
+
+#' @title
+#' Create a cohort follow up time char
+#'
+#' @return A DemographicCohortTime Statistic class object
+#'
+#' @export
+cohortFollowupTime <- function() {
+
+  cohortFollowupChar <- DemographicCohortTime$new()
+  return(cohortFollowupChar)
+}
+
+
+#' @title
+#' Create a location char
+#'
+#' @param breaks a breaksStrategy object dictating how to classify locations into categories.
+#'
+#' @return A DemographicLocation Statistic class object
+#'
+#' @export
+personLocation <- function(breaks) {
+
+  personLocationChar <- DemographicLocation$new(breaks)
+  return(personLocationChar)
+}
+
+
+#' @title
+#' Create an payer type char
+#'
+#' @param breaks a breaksStrategy object dictating how to classify payer types into categories. by default this will use the SOPT vocabulary
+#'
+#' @return A DemographicIndexYear Statistic class object
+#'
+#' @export
+payerType <- function(breaks = NULL) {
+
+  if (is.null(breaks)) {
+    breaks <- soptPayers()
+  }
+
+  payerTypeChar <- DemographicPayerType$new(breaks)
+  return(payerTypeChar)
+}
+
 
 #' @title
 #' Create a age statistic with breaks
@@ -579,7 +667,7 @@ femaleGender <- function() {
 #' @return A BreaksStreategy object
 #'
 #' @export
-newBreaks <- function(name, breaks, labels = NULL) {
+newValueBreaks <- function(name, breaks, labels = NULL) {
   if (is.null(labels)) {
     a <- dplyr::lead(breaks)
     lab <- glue::glue("[{breaks}-{a})")[-length(breaks)]
@@ -589,11 +677,25 @@ newBreaks <- function(name, breaks, labels = NULL) {
   br <- BreaksStrategy$new(
     name = name,
     breaks = breaks,
-    labels = labels
+    labels = labels,
+    type = "value"
   )
 
   return(br)
 }
+
+newConceptBreaks <- function(name, breaks, labels) {
+
+  br <- BreaksStrategy$new(
+    name = name,
+    breaks = breaks,
+    labels = labels,
+    type = "concept"
+  )
+
+  return(br)
+}
+
 
 #' @title
 #' Create a cohort line item and set its attributes
@@ -713,11 +815,17 @@ lineItems <- function(...) {
     listOfLineItems[[i]]$ordinalId <- i
   }
 
-  # add value ids for the concept sets
-  listOfLineItems <- .setCsValueId(listOfLineItems)
+  lineItemClassType <- purrr::map_chr(listOfLineItems, ~.x$lineItemClass)
 
+  if (any(lineItemClassType == "ConceptSet")) {
+    # add value ids for the concept sets
+    listOfLineItems <- .setCsValueId(listOfLineItems)
+  }
+
+  if (any(lineItemClassType == "SourceConceptSet")) {
   # add value ids for the source concept sets
   listOfLineItems <-  .setSourceValueId(listOfLineItems)
+  }
 
   return(listOfLineItems)
 }
