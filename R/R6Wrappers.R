@@ -773,7 +773,19 @@ createCohortLineItemBatch <- function(
   return(chLiBatch)
 }
 
-
+#' @title
+#' Create a concept set group item and set its attributes
+#'
+#' @param sectionLabel (OPTIONAL) The name of the line item (if not provided, the name will be the same as the group label)
+#' @param groupLabel the label of the group
+#' @param conceptSets A list of Capr concept set object
+#' @param domainTables a vector of domains corresponding to the concept set
+#' @param timeInterval The TimeInterval object used for the line item
+#' @param statistic The Statistic object to be used to evaluate the line item
+#'
+#' @return A CohortLineItem object
+#'
+#' @export
 createConceptSetGroupLineItem <- function(sectionLabel = NA_character_,
                                           groupLabel,
                                           conceptSets,
