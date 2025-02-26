@@ -297,12 +297,12 @@ TableShell <- R6::R6Class("TableShell",
       checkmate::assert_class(executionSettings, classes = "ExecutionSettings", null.ok = FALSE)
 
       # get concept set line items
-      csLineItems <- self$getTableShellMeta() |>
-        dplyr::filter(grepl("ConceptSet", lineItemClass))
+      twLineItems <- self$getTableShellMeta() |>
+        dplyr::filter(!grepl("Static at Index", timeLabel))
 
       # make the time windows table
       time_tbl <- tibble::tibble(
-        time_label = csLineItems$timeLabel
+        time_label = twLineItems$timeLabel
         ) |>
         dplyr::distinct() |>
         tidyr::separate_wider_delim(

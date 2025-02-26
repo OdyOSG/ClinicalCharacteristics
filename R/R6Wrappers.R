@@ -658,13 +658,13 @@ femaleGender <- function() {
 }
 
 #' @title
-#' Create a breaks Strategy object for categorizing
+#' Create a breaks Strategy object for categorizing value
 #'
 #' @param name the name of the breaks
 #' @param breaks a vector with cut points to user
 #' @param labels a character vector indicating how to label the cut-point. Can stay NULL where a default label is given
 #'
-#' @return A BreaksStreategy object
+#' @return A BreaksStreategy object of type value
 #'
 #' @export
 newValueBreaks <- function(name, breaks, labels = NULL) {
@@ -684,6 +684,16 @@ newValueBreaks <- function(name, breaks, labels = NULL) {
   return(br)
 }
 
+#' @title
+#' Create a breaks Strategy object for categorizing concepts
+#'
+#' @param name the name of the breaks
+#' @param breaks a vector with cut points to user
+#' @param labels a character vector indicating how to label the cut-point. Can stay NULL where a default label is given
+#'
+#' @return A BreaksStreategy object of type concept
+#'
+#' @export
 newConceptBreaks <- function(name, breaks, labels) {
 
   br <- BreaksStrategy$new(
