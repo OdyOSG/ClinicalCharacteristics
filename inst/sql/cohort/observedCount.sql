@@ -4,7 +4,7 @@ SELECT
         d.time_label,
         d.domain_table,
         d.raw_occurrence_id,
-        d.ordinal_id
+        d.ordinal_id,
         d.statistic_type,
         d.line_item_class,
         COUNT(DISTINCT d.event_date) AS value
