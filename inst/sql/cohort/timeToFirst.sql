@@ -15,3 +15,4 @@ FROM (
       ) a
       WHERE ordinal = 1
 ) d
+;

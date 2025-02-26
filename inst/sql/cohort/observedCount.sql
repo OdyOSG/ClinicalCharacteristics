@@ -18,3 +18,4 @@ FROM (
   WHERE d.cohort_end_date >= d.event_date
 ) d
 GROUP BY d.target_cohort_id, d.subject_id, d.time_label, d.domain_table, d.raw_occurrence_id
+;
