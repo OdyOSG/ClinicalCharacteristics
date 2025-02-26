@@ -18,7 +18,7 @@ createSourceConceptSetLineItem(
 
 \item{domain}{The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')}
 
-\item{sourceConceptSet}{A SourceConcept R6 object created using the \code{sourceConceptSet} function}
+\item{sourceConceptSet}{(OPTIONAL) A Capr concept set of source concept IDs to use to limit the concept set}
 
 \item{timeInterval}{The Time Interval object used for the line item}
 

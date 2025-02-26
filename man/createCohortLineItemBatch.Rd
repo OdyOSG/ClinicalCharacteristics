@@ -13,13 +13,15 @@ createCohortLineItemBatch(
 )
 }
 \arguments{
-\item{sectionLabel}{The name of the cohort batch}
+\item{sectionLabel}{(OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)}
 
-\item{statistic}{The Statistic object to be used to evaluate the line items}
+\item{covariateCohorts}{A list of CohortInfo objects}
+
+\item{cohortTable}{The name of the table where the cohorts are stored}
+
+\item{statistic}{The Statistic object to be used to evaluate the line item}
 
 \item{timeIntervals}{A list of TimeInterval class objects}
-
-\item{cohorts}{A list of CohortInfo objects}
 }
 \value{
 A list of CohortLineItem objects

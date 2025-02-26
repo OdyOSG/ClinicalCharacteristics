@@ -3,9 +3,16 @@
 #' @description
 #' An R6 class to define a TableShell object
 #'
+#'
 #' @export
 TableShell <- R6::R6Class("TableShell",
   public = list(
+
+    #' @description
+    #' creates a new instance, using the provided data param if provided.
+    #' @param name the name of the TableShell
+    #' @template TargetCohorts
+    #' @template LineItems
     initialize = function(name,
                           targetCohorts,
                           lineItems) {
@@ -14,11 +21,16 @@ TableShell <- R6::R6Class("TableShell",
       #.setClass(private = private, key = "executionSettings", value = executionSettings, class = "ExecutionSettings")
       .setListofClasses(private = private, key = "lineItems", value = lineItems, classes = c("LineItem"))
     },
+
+    #' @description
+    #' handles the name
     getName = function() {
       tsName <- private$name
       return(tsName)
     },
 
+    #' @description
+    #' handles the tableShell metadata
     getTableShellMeta = function() {
       tsLi <- self$getLineItems()
       tsMeta <- purrr::map_dfr(
@@ -27,15 +39,22 @@ TableShell <- R6::R6Class("TableShell",
       return(tsMeta)
     },
 
+    #' @description
+    #' handles the targetCohorts
     getTargetCohorts = function() {
       tsTargetCohorts <- private$targetCohorts
       return(tsTargetCohorts)
     },
+
+    #' @description
+    #' handles the lineItems
     getLineItems = function() {
       tsLineItems <- private$lineItems
       return(tsLineItems)
     },
 
+    #' @description
+    #' prints the job details
     printJobDetails = function() {
 
       tcs <- self$getTargetCohorts()
@@ -65,7 +84,10 @@ TableShell <- R6::R6Class("TableShell",
 
     },
 
-    # function to instantiate tables for queries
+    #' @description
+    #' function to instantiate tables for queries
+    #' @template ExecutionSettings
+    #' @template BuildOptions
     instantiateTables = function(executionSettings, buildOptions) {
 
       # ensure R6 object used
@@ -114,7 +136,10 @@ TableShell <- R6::R6Class("TableShell",
 
     },
 
-    #key function to generate the table shell
+    #' @description
+    #' key function to generate the table shell
+    #' @template ExecutionSettings
+    #' @template BuildOptions
     buildTableShellSql = function(executionSettings, buildOptions) {
 
       # ensure R6 object used
@@ -180,6 +205,10 @@ TableShell <- R6::R6Class("TableShell",
 
     },
 
+    #' @description
+    #' outputs all results
+    #' @template ExecutionSettings
+    #' @template BuildOptions
     outputResults = function(executionSettings, buildOptions) {
 
       tsm <- self$getTableShellMeta()
@@ -204,7 +233,10 @@ TableShell <- R6::R6Class("TableShell",
       return(res)
     },
 
-    # function to drop all cs Tables
+    #' @description
+    #' function to drop all cs Tables
+    #' @template ExecutionSettings
+    #' @template BuildOptions
     dropTempTables = function(executionSettings, buildOptions) {
 
       # get temp table slot names
@@ -631,6 +663,10 @@ TableShell <- R6::R6Class("TableShell",
 BuildOptions <- R6::R6Class(
   classname = "BuildOptions",
   public = list(
+
+    #' @description
+    #' initializes the BuildOptions
+    #' @template DefaultTableShellBuildOptions
     initialize = function(codesetTempTable = NULL,
                           sourceCodesetTempTable = NULL,
                           timeWindowTempTable = NULL,

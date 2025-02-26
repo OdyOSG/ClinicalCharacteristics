@@ -7,7 +7,8 @@
 payerType(breaks = NULL)
 }
 \arguments{
-\item{breaks}{a breaksStrategy object dictating how to classify payer types into categories. by default this will use the SOPT vocabulary}
+\item{breaks}{A Breaks object dictating how to classify counts into categories.
+If null then this defaults to a continuous distribution}
 }
 \value{
 A DemographicIndexYear Statistic class object

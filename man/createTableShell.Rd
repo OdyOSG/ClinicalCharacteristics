@@ -9,7 +9,8 @@ createTableShell(title, targetCohorts, lineItems)
 \arguments{
 \item{title}{The title of the TableShell}
 
-\item{targetCohorts}{A list of TargetCohort objects}
+\item{targetCohorts}{A list of TargetCohort objects. Use \code{\link[ClinicalCharacteristics]{createCohortInfo}}
+function to create the TargetCohort object.}
 
 \item{lineItems}{A list of lineItem objects}
 }

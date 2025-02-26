@@ -3,9 +3,9 @@
 #' @title
 #' Function to generate results for the table shell object
 #'
-#' @param tableShell The TableShell object to used for generation
-#' @param executionSettings The ExecutionSettings object used to generate table shell
-#' @param buildOptions The BuildOptions object used to generate table shell
+#' @template TableShell
+#' @template ExecutionSettings
+#' @template BuildOptions
 #'
 #' @return A list containing a tibble for categorical and continuous results
 #'
@@ -67,9 +67,9 @@ generateTableShell <- function(tableShell, executionSettings, buildOptions = NUL
 #' @title
 #' Function that previews sql script used to generate results for table shell
 #'
-#' @param tableShell The TableShell object to used for generation
-#' @param executionSettings The ExecutionSettings object used to generate table shell
-#' @param buildOptions The BuildOptions object used to generate table shell
+#' @template TableShell
+#' @template ExecutionSettings
+#' @template BuildOptions
 #' @param saveName The name of the table shell sql file
 #' @param savePath the folder location to save the file
 #'

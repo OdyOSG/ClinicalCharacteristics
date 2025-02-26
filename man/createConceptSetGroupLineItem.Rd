@@ -14,15 +14,15 @@ createConceptSetGroupLineItem(
 )
 }
 \arguments{
-\item{sectionLabel}{(OPTIONAL) The name of the line item (if not provided, the name will be the same as the group label)}
+\item{sectionLabel}{(OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)}
 
 \item{groupLabel}{the label of the group}
 
-\item{conceptSets}{A list of Capr concept set object}
+\item{conceptSets}{A list of concept set Capr objects}
 
 \item{domainTables}{a vector of domains corresponding to the concept set}
 
-\item{timeInterval}{The TimeInterval object used for the line item}
+\item{timeInterval}{The Time Interval object used for the line item}
 
 \item{statistic}{The Statistic object to be used to evaluate the line item}
 }

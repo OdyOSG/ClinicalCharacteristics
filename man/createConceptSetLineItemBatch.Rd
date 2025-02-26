@@ -15,15 +15,13 @@ createConceptSetLineItemBatch(
 )
 }
 \arguments{
-\item{sectionLabel}{The name of the concept set batch}
-
-\item{domain}{The domain of the concept sets (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')}
+\item{sectionLabel}{(OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)}
 
 \item{conceptSets}{A list of concept set Capr objects}
 
 \item{timeIntervals}{A list of TimeInterval class objects}
 
-\item{statistic}{The Statistic object to be used to evaluate the line items}
+\item{statistic}{The Statistic object to be used to evaluate the line item}
 
 \item{typeConceptIds}{(OPTIONAL) A list of type concept IDs to use to limit the concept set}
 

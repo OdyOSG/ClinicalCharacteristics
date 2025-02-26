@@ -15,15 +15,28 @@ createExecutionSettings(
 )
 }
 \arguments{
-\item{connectionDetails}{A DatabaseConnector connectionDetails object (optional if connection is specified)}
+\item{connectionDetails}{An object of type \code{connectionDetails} as created using the
+\code{\link[DatabaseConnector]{createConnectionDetails}} function in the
+DatabaseConnector package. Can be left NULL if \code{connection} is
+provided.}
 
-\item{connection}{A DatabaseConnector connection object (optional if connectionDetails is specified)}
+\item{connection}{An object of type \code{connection} as created using the
+\code{\link[DatabaseConnector]{connect}} function in the
+DatabaseConnector package. Can be left NULL if \code{connectionDetails}
+is provided, in which case a new connection will be opened at the start
+of the function, and closed when the function finishes.}
 
-\item{cdmDatabaseSchema}{The schema of the OMOP CDM database}
+\item{cdmDatabaseSchema}{Schema name where your patient-level data in OMOP CDM format resides.
+Note that for SQL Server, this should include both the database and
+schema name, for example 'cdm_data.dbo'.}
 
-\item{workDatabaseSchema}{The schema to which results will be written}
+\item{workDatabaseSchema}{Schema name where your result tables reside. Note that for SQL Server,
+this should include both the database and schema name, for example
+'scratch.dbo'.}
 
-\item{tempEmulationSchema}{Some database platforms like Oracle and Snowflake do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.}
+\item{tempEmulationSchema}{Some database platforms like Oracle and Impala do not truly support
+temp tables. To emulate temp tables, provide a schema with write
+privileges where temp tables can be created.}
 
 \item{targetCohortTable}{The name of the table where the target cohort(s) are stored}
 

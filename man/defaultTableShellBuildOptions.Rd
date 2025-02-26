@@ -39,7 +39,16 @@ defaultTableShellBuildOptions(
 
 \item{continuousSummaryTempTable}{the name of the continuous summary table used in execution. Defaults as a temp table #continuous_table}
 
-\item{connectionDetails}{A DatabaseConnector connectionDetails object (optional if connection is specified)}
+\item{connectionDetails}{An object of type \code{connectionDetails} as created using the
+\code{\link[DatabaseConnector]{createConnectionDetails}} function in the
+DatabaseConnector package. Can be left NULL if \code{connection} is
+provided.}
+
+\item{connection}{An object of type \code{connection} as created using the
+\code{\link[DatabaseConnector]{connect}} function in the
+DatabaseConnector package. Can be left NULL if \code{connectionDetails}
+is provided, in which case a new connection will be opened at the start
+of the function, and closed when the function finishes.}
 }
 \value{
 A BuildOptions object

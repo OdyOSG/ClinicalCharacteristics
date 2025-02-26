@@ -7,7 +7,8 @@
 indexYear(breaks = NULL)
 }
 \arguments{
-\item{breaks}{a breaksStrategy object dictating how to classify years into categories. by default this will do each year from 2000 to current day.}
+\item{breaks}{A Breaks object dictating how to classify counts into categories.
+If null then this defaults to a continuous distribution}
 }
 \value{
 A DemographicIndexYear Statistic class object

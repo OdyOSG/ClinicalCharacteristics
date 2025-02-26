@@ -9,7 +9,8 @@ newValueBreaks(name, breaks, labels = NULL)
 \arguments{
 \item{name}{the name of the breaks}
 
-\item{breaks}{a vector with cut points to user}
+\item{breaks}{A Breaks object dictating how to classify counts into categories.
+If null then this defaults to a continuous distribution}
 
 \item{labels}{a character vector indicating how to label the cut-point. Can stay NULL where a default label is given}
 }

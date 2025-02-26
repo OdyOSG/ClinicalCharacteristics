@@ -18,13 +18,13 @@ createSourceConceptSetLineItemBatch(
 
 \item{domain}{The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')}
 
+\item{sourceConceptSets}{A list of SourceConcept R6 object created using the \code{sourceConceptSet} function}
+
 \item{timeIntervals}{A list of TimeInterval class objects}
 
 \item{statistic}{The Statistic object to be used to evaluate the line item}
 
 \item{typeConceptIds}{(OPTIONAL) A list of type concept IDs to use to limit the concept set}
-
-\item{sourceConceptSet}{A list of SourceConcept R6 object created using the \code{sourceConceptSet} function}
 }
 \value{
 A list of SourceConceptSetLineItem objects
