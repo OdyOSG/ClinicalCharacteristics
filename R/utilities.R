@@ -6,6 +6,30 @@
   return(tcl)
 }
 
+
+.insertTableSql <- function(executionSettings, tableName, data) {
+  data <- data |>
+    dplyr::rename_with(snakecase::to_snake_case) |>
+    as.data.frame()
+
+  sqlDataTypes <- sapply(data, DatabaseConnector:::getSqlDataTypes)
+  sqlTableDefinition <- paste(DatabaseConnector:::.sql.qescape(names(data), TRUE), sqlDataTypes, collapse = ", ")
+  sqlTableName <- DatabaseConnector:::.sql.qescape(tableName, TRUE, quote = "")
+  sqlFieldNames <- paste(DatabaseConnector:::.sql.qescape(names(data), TRUE), collapse = ",")
+
+  insertSql <- paste0(
+    "INSERT INTO ",
+    sqlTableName,
+    " (",
+    sqlFieldNames,
+    ") VALUES(",
+    paste(rep("?", length(sqlDataTypes)), collapse = ","),
+    ")"
+  )
+
+
+}
+
 .opConverter <- function(op) {
   op <- switch(op,
                'at_least' = '>=',
