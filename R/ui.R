@@ -23,6 +23,10 @@ generateTableShell <- function(tableShell, executionSettings, buildOptions = NUL
     buildOptions = buildOptions
   )
 
+  if (is.null(executionSettings$getConnection())) {
+    executionSettings$connect()
+  }
+
   # Step 2: instantiate Tables
   tableShell$instantiateTables(
     executionSettings = executionSettings,

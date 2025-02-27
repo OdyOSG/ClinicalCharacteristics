@@ -8,25 +8,34 @@
 
 
 .insertTableSql <- function(executionSettings, tableName, data) {
+
+  #prep data for insert
   data <- data |>
     dplyr::rename_with(snakecase::to_snake_case) |>
     as.data.frame()
 
-  sqlDataTypes <- sapply(data, DatabaseConnector:::getSqlDataTypes)
-  sqlTableDefinition <- paste(DatabaseConnector:::.sql.qescape(names(data), TRUE), sqlDataTypes, collapse = ", ")
-  sqlTableName <- DatabaseConnector:::.sql.qescape(tableName, TRUE, quote = "")
-  sqlFieldNames <- paste(DatabaseConnector:::.sql.qescape(names(data), TRUE), collapse = ",")
+  sqlDataTypes <- sapply(data, getSqlDataTypes)
+  sqlTableDefinition <- paste(.sql.qescape(names(data), TRUE), sqlDataTypes, collapse = ", ")
+  sqlTableName <- .sql.qescape(tableName, TRUE, quote = "")
+  sqlFieldNames <- paste(.sql.qescape(names(data), TRUE), collapse = ",")
 
-  insertSql <- paste0(
-    "INSERT INTO ",
-    sqlTableName,
-    " (",
-    sqlFieldNames,
-    ") VALUES(",
-    paste(rep("?", length(sqlDataTypes)), collapse = ","),
-    ")"
-  )
 
+  dataTxt <- toStrings(data, sqlDataTypes)
+  valuesString <- paste("(", paste(apply(dataTxt, MARGIN = 1, FUN = paste, collapse = ","), collapse = "),\n("), ")")
+
+  insertSql <- "DROP TABLE IF EXISTS @table;
+  CREATE TABLE @table (@definition);
+  INSERT INTO @table (@fields) \nVALUES @values;" |>
+    SqlRender::render(table = sqlTableName,
+                      definition = sqlTableDefinition,
+                      fields = sqlFieldNames,
+                      values = valuesString) |>
+    SqlRender::translate(
+      targetDialect = executionSettings$getDbms(),
+      tempEmulationSchema = executionSettings$tempEmulationSchema
+    )
+
+  return(insertSql)
 
 }
 

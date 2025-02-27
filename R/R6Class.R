@@ -72,17 +72,7 @@ TableShell <- R6::R6Class("TableShell",
       checkmate::assert_class(executionSettings, classes = "ExecutionSettings", null.ok = FALSE)
       checkmate::assert_class(buildOptions, classes = "BuildOptions", null.ok = FALSE)
 
-      # insert Ts Meta
-      private$.insertTsMeta(
-        executionSettings = executionSettings,
-        buildOptions = buildOptions
-      )
 
-      # insert time windows
-      private$.insertTimeWindows(
-        executionSettings = executionSettings,
-        buildOptions = buildOptions
-      )
 
       # create concept set occurrence table
       createOccurrenceTableSql <- fs::path_package(
@@ -131,43 +121,56 @@ TableShell <- R6::R6Class("TableShell",
       # collect all the sql
       fullSql <- c(
 
-        # step 1: Make target Cohort table
+        # Step 1: Insert ts meta
+        .insertTableSql(
+          executionSettings = executionSettings,
+          tableName = buildOptions$tsMetaTempTable,
+          data = self$getTableShellMeta()
+        ),
+
+        # Step 1: Insert time windows
+        private$.insertTimeWindows(
+          executionSettings = executionSettings,
+          buildOptions = buildOptions
+        ),
+
+        # step 3: Make target Cohort table
         private$.makeTargetCohortTable(
           executionSettings = executionSettings,
           buildOptions = buildOptions
         ),
 
-        # step 2: create targe cohort table
+        # step 4: create targe cohort table
         private$.buildCodesetQueries(
           executionSettings = executionSettings,
           buildOptions = buildOptions
         ),
 
-        # Step 3a: create concept set query
+        # Step 5a: create concept set query
         private$.buildConceptSetOccurrenceQuery(
           executionSettings = executionSettings,
           buildOptions = buildOptions
         ),
 
-        # Step 3a: create concept set query
+        # Step 5b: create source concept set query
         private$.buildSourceConceptOccurrenceQuery(
           executionSettings = executionSettings,
           buildOptions = buildOptions
         ),
 
-        # Step 3b: create cohort occ query
+        # Step 5c: create cohort occ query
         private$.buildCohortOccurrenceQuery(
           executionSettings = executionSettings,
           buildOptions = buildOptions
         ),
 
-        # Step 4: transform to patient line data
+        # Step 6: transform to patient line data
         private$.transformToPatientLineData(
           executionSettings = executionSettings,
           buildOptions = buildOptions
         ),
 
-        # Step 5: Aggregate results
+        # Step 7: Aggregate results
         private$.aggregateResults(
           executionSettings = executionSettings,
           buildOptions = buildOptions
@@ -258,39 +261,43 @@ TableShell <- R6::R6Class("TableShell",
 
 
     ### private methods ---------------
-    # function to insert tsMeta
-    .insertTsMeta = function(executionSettings, buildOptions) {
-      # ensure that executionSettings R6 object used
-      checkmate::assert_class(executionSettings, classes = "ExecutionSettings", null.ok = FALSE)
-
-      # get tsMeta
-      tsMeta <- self$getTableShellMeta() |>
-        dplyr::rename_with(snakecase::to_snake_case)
-
-      cli::cat_bullet(
-        glue::glue_col("Insert tsMeta table ---> {cyan {buildOptions$tsMetaTempTable}}"),
-        bullet = "info",
-        bullet_col = "blue"
-      )
-
-      # establish connection to database
-      connection <- executionSettings$getConnection()
-
-      if (is.null(connection)) {
-        connection <- executionSettings$connect()
-      }
-
-      # insert the time windows into the database
-      DatabaseConnector::insertTable(
-        connection = connection,
-        tableName = buildOptions$tsMetaTempTable,
-        tempEmulationSchema = executionSettings$tempEmulationSchema,
-        data = tsMeta,
-        tempTable = TRUE
-      )
-
-      invisible(tsMeta)
-    },
+    # function to insert tsMeta deprecated
+    # .insertTsMeta = function(executionSettings, buildOptions) {
+    #   # ensure that executionSettings R6 object used
+    #   checkmate::assert_class(executionSettings, classes = "ExecutionSettings", null.ok = FALSE)
+    #
+    #   # get tsMeta
+    #   tsMeta <- self$getTableShellMeta() |>
+    #     dplyr::rename_with(snakecase::to_snake_case)
+    #
+    #
+    #
+    #
+    #   # old version
+    #   # cli::cat_bullet(
+    #   #   glue::glue_col("Insert tsMeta table ---> {cyan {buildOptions$tsMetaTempTable}}"),
+    #   #   bullet = "info",
+    #   #   bullet_col = "blue"
+    #   # )
+    #   #
+    #   # # establish connection to database
+    #   # connection <- executionSettings$getConnection()
+    #   #
+    #   # if (is.null(connection)) {
+    #   #   connection <- executionSettings$connect()
+    #   # }
+    #   #
+    #   # # insert the time windows into the database
+    #   # DatabaseConnector::insertTable(
+    #   #   connection = connection,
+    #   #   tableName = buildOptions$tsMetaTempTable,
+    #   #   tempEmulationSchema = executionSettings$tempEmulationSchema,
+    #   #   data = tsMeta,
+    #   #   tempTable = TRUE
+    #   # )
+    #   #
+    #   # invisible(tsMeta)
+    # },
 
     .insertTimeWindows = function(executionSettings, buildOptions) {
       # ensure that executionSettings R6 object used
@@ -319,29 +326,39 @@ TableShell <- R6::R6Class("TableShell",
           time_label, time_a, time_b
         )
 
-      cli::cat_bullet(
-        glue::glue_col("Insert timeWindows table ---> {cyan {buildOptions$timeWindowTempTable}}"),
-        bullet = "info",
-        bullet_col = "blue"
-      )
-
-      # establish connection to database
-      connection <- executionSettings$getConnection()
-
-      if (is.null(connection)) {
-        connection <- executionSettings$connect()
-      }
-
-      # insert the time windows into the database
-      DatabaseConnector::insertTable(
-        connection = connection,
+      # Insert time windows sql
+      time_sql <- .insertTableSql(
+        executionSettings = executionSettings,
         tableName = buildOptions$timeWindowTempTable,
-        tempEmulationSchema = executionSettings$tempEmulationSchema,
-        data = time_tbl,
-        tempTable = TRUE
+        data = time_tbl
       )
 
-      invisible(time_tbl)
+      return(time_sql)
+
+      # old version
+      # cli::cat_bullet(
+      #   glue::glue_col("Insert timeWindows table ---> {cyan {buildOptions$timeWindowTempTable}}"),
+      #   bullet = "info",
+      #   bullet_col = "blue"
+      # )
+      #
+      # # establish connection to database
+      # connection <- executionSettings$getConnection()
+      #
+      # if (is.null(connection)) {
+      #   connection <- executionSettings$connect()
+      # }
+      #
+      # # insert the time windows into the database
+      # DatabaseConnector::insertTable(
+      #   connection = connection,
+      #   tableName = buildOptions$timeWindowTempTable,
+      #   tempEmulationSchema = executionSettings$tempEmulationSchema,
+      #   data = time_tbl,
+      #   tempTable = TRUE
+      # )
+      #
+      # invisible(time_tbl)
     },
 
     # function to get target cohort sql
