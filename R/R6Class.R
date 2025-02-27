@@ -307,24 +307,34 @@ TableShell <- R6::R6Class("TableShell",
       twLineItems <- self$getTableShellMeta() |>
         dplyr::filter(!grepl("Static at Index", timeLabel))
 
-      # make the time windows table
-      time_tbl <- tibble::tibble(
-        time_label = twLineItems$timeLabel
+      if (nrow(twLineItems) > 0) {
+        # make the time windows table
+        time_tbl <- tibble::tibble(
+          time_label = twLineItems$timeLabel
         ) |>
-        dplyr::distinct() |>
-        tidyr::separate_wider_delim(
-          time_label,
-          delim = " to ",
-          names = c("time_a", "time_b"),
-          cols_remove = FALSE
-        ) |>
-        dplyr::mutate(
-          time_a = as.integer(gsub("d", "", time_a)),
-          time_b = as.integer(gsub("d", "", time_b))
-        ) |>
-        dplyr::select(
-          time_label, time_a, time_b
+          dplyr::distinct() |>
+          tidyr::separate_wider_delim(
+            time_label,
+            delim = " to ",
+            names = c("time_a", "time_b"),
+            cols_remove = FALSE
+          ) |>
+          dplyr::mutate(
+            time_a = as.integer(gsub("d", "", time_a)),
+            time_b = as.integer(gsub("d", "", time_b))
+          ) |>
+          dplyr::select(
+            time_label, time_a, time_b
+          )
+      } else{
+
+        time_tbl <- tibble::tibble(
+          time_label = NA_character_,
+          time_a = NA_integer_,
+          time_b = NA_integer_
         )
+
+      }
 
       # Insert time windows sql
       time_sql <- .insertTableSql(
