@@ -27,7 +27,7 @@ defaultYearGrp <- function(startYear = NULL) {
   return(br)
 }
 
-soptPayers <- function() {
+.soptPayers <- function() {
   soptPayersTypes <- fs::path_package(
     package = "ClinicalCharacteristics",
     fs::path("csv", "soptPayerTypes.csv")
@@ -45,6 +45,32 @@ soptPayers <- function() {
 
 }
 
+
+.raceBreaks <- function() {
+
+  br <- newConceptBreaks(
+    name = glue::glue("Race Categories"),
+    breaks = list(
+      c(8657, 38003572, 38003573), # American Indian or alaska native
+      c(8515, 38003574, 38003575, 38003576, 38003577, 38003578,
+        38003579, 38003580, 38003581, 38003582, 38003583,
+        38003584, 38003585, 38003586, 38003587, 38003588,
+        38003589, 38003590, 38003591, 38003592, 38003593,
+        38003594, 38003595, 38003596, 38003597), # asian
+      c(8516, 38003598, 38003599, 38003600, 38003601,
+        38003602, 38003603, 38003604, 38003605, 38003606,
+        38003607, 38003608, 38003609), # black
+      c(8557, 38003610, 38003611, 38003612, 38003613), # Native Hawaiian or pacific islander
+      c(8527, 38003614, 38003615, 38003616), #white
+      c(8522, 8552, 0) # unknown
+    ),
+    labels = c("American Indian or Alaska native", "Asian",
+               "Black or African American", "Native Hawaiian or Other Pacific Islander",
+               "White", "Unknown or Other")
+  )
+  return(br)
+
+}
 
 #' @title
 #' Create a breaks Strategy object for age into 5 year groups
@@ -104,13 +130,7 @@ addDefaultGenderLineItems <- function() {
   return(li)
 }
 
-
-#' @title
-#' Convenience function to add default race line items
-#'
-#' @return a list of line items for default race categories (white, black, asian, not reported)
-#'
-#' @export
+# deprecated
 addDefaultRaceLineItems <- function() {
 
   white <- DemographicConcept$new(

@@ -404,6 +404,12 @@
         glue::glue_collapse("\n\n")
     }
 
+    if (demoLines$personLineTransformation[i] == "race") {
+      demoSql[[i]] <- readr::read_file(file = fs::path(sqlDemographicsPath, "demoRace.sql")) |>
+        glue::glue_collapse("\n\n")
+    }
+
+
   }
 
   demoSql2 <- do.call('c', demoSql) |>

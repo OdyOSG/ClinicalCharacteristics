@@ -10,7 +10,7 @@ payerType(breaks = NULL)
 \item{breaks}{a breaksStrategy object dictating how to classify payer types into categories. by default this will use the SOPT vocabulary}
 }
 \value{
-A DemographicIndexYear Statistic class object
+A DemographicPayerType Statistic class object
 }
 \description{
 Create an payer type char
