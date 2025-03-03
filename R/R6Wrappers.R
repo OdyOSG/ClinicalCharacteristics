@@ -523,6 +523,11 @@ createDemographicLineItem <- function(statistic) {
     dcli$valueDescription <- "location_id"
   }
 
+  if (statLabel == "DemographicRace") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "race_concept_id"
+  }
+
 
   return(dcli)
 }
@@ -580,17 +585,36 @@ personLocation <- function(breaks) {
 #'
 #' @param breaks a breaksStrategy object dictating how to classify payer types into categories. by default this will use the SOPT vocabulary
 #'
-#' @return A DemographicIndexYear Statistic class object
+#' @return A DemographicPayerType Statistic class object
 #'
 #' @export
 payerType <- function(breaks = NULL) {
 
   if (is.null(breaks)) {
-    breaks <- soptPayers()
+    breaks <- .soptPayers()
   }
 
   payerTypeChar <- DemographicPayerType$new(breaks)
   return(payerTypeChar)
+}
+
+
+#' @title
+#' Create a race char
+#'
+#' @param breaks a breaksStrategy object dictating how to classify race into categories. by default this will use custom race categories
+#'
+#' @return A DemographicRace Statistic class object
+#'
+#' @export
+raceCategory <- function(breaks = NULL) {
+
+  if (is.null(breaks)) {
+    breaks <- .raceBreaks()
+  }
+
+  raceChar <- DemographicRace$new(breaks)
+  return(raceChar)
 }
 
 
