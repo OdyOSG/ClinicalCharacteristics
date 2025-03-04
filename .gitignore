@@ -7,3 +7,4 @@ hidden/
 .vscode/
 test_table_shell.sql
 inst/doc
+.RData
