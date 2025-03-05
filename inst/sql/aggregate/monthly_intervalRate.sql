@@ -47,7 +47,7 @@ FROM (
           SELECT
             t.cohort_definition_id,
             t.subject_id,
-            (DATEDIFF(day, DATEADD(day, t.time_a, t.cohort_start_date),  LEAST(t.cohort_end_date, DATEADD(day, t.time_b, t.cohort_start_date)))*1.0 + 1) / @interval AS interval_time
+            (DATEDIFF(day, DATEADD(day, t.time_a, t.cohort_start_date), LEAST(t.cohort_end_date, DATEADD(day, t.time_b, t.cohort_start_date)))*1.0 + 1) / 30 AS interval_time
           FROM (
             SELECT cohort_definition_id,
                    subject_id,
@@ -61,7 +61,7 @@ FROM (
           ) t
       ) r
       ON d.target_cohort_id = r.cohort_definition_id AND d.subject_id = r.subject_id
-      WHERE d.statistic_type = 'intervalRate'
+      WHERE d.statistic_type = 'monthly_intervalRate'
 ) m
   GROUP BY target_cohort_id, ordinal_id, time_label, line_item_label, patient_line
 ) t

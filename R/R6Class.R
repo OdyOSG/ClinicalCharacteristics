@@ -1339,7 +1339,24 @@ Score <- R6::R6Class(
   )
 )
 
+### Interval Rate --------------------
+IntervalRate <- R6::R6Class(
+  classname = "IntervalRate",
+  inherit = Statistic,
+  public = list(
 
+    initialize = function(interval) {
+      super$initialize (
+        personLine = "observedCount",
+        statType = glue::glue("{interval}_intervalRate"),
+        aggType = "continuous"
+      )
+    }
+
+  ),
+
+  private = list()
+)
 
 # LineItem Classes -----
 
