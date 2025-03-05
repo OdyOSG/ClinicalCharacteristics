@@ -170,7 +170,13 @@ TableShell <- R6::R6Class("TableShell",
           buildOptions = buildOptions
         ),
 
-        # Step 7: Aggregate results
+        # Step 7: add denom to patient data
+        private$.prepDenominator(
+          executionSettings = executionSettings,
+          buildOptions = buildOptions
+        ),
+
+        # Step 8: Aggregate results
         private$.aggregateResults(
           executionSettings = executionSettings,
           buildOptions = buildOptions
@@ -626,13 +632,21 @@ TableShell <- R6::R6Class("TableShell",
       return(ptFullSql)
     },
 
+    .prepDenominator = function(executionSettings, buildOptions){
+      # Create temp table joining patient date with ts meta
+      patTsSql <- .tempPsDatTable(executionSettings, buildOptions) |>
+        glue::glue_collapse(sep = "\n\n") |>
+        SqlRender::translate(
+          targetDialect = executionSettings$getDbms(),
+          tempEmulationSchema = executionSettings$tempEmulationSchema
+        )
+      return(patTsSql)
+    },
+
     .aggregateResults = function(executionSettings, buildOptions) {
 
       # tsm <- self$getTableShellMeta()
       ts <- self
-
-      # Create temp table joining patient date with ts meta
-      patTsSql <- .tempPsDatTable(executionSettings, buildOptions)
 
       # make temp continuous + categorical table
       initSummaryTableSql <- .initAggregationTables(executionSettings, buildOptions)
@@ -640,7 +654,7 @@ TableShell <- R6::R6Class("TableShell",
       # make all the aggregate sql queries
       aggregateSqlQuery <- .aggregateSql(ts, executionSettings, buildOptions)
 
-      allSql <- c(patTsSql, initSummaryTableSql, aggregateSqlQuery) |>
+      allSql <- c(initSummaryTableSql, aggregateSqlQuery) |>
         glue::glue_collapse(sep = "\n\n")
 
       return(allSql)
