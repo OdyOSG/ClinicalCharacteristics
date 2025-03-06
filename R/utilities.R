@@ -629,6 +629,14 @@
 
 }
 
+
+.getInterval <- function(ts, ordinalId) {
+
+  intervalRateItem <- ts$getLineItems()[ordinalId]
+  kk <- intervalRateItem[[1]]$getStatistic()$interval
+  return(kk)
+}
+
 .prepBreaksTable <- function(ts, tsm, executionSettings) {
 
   breakLines <- tsm |>
@@ -708,8 +716,8 @@
 
   # Step 1: Make a table with all the aggregation types
   aggSqlTb <- tibble::tibble(
-    aggName = c("presence", "continuousDistribution", "breaks", "scoreTransformation"),
-    aggType = c("categorical", "continuous", "categorical", "both"),
+    aggName = c("presence", "continuousDistribution", "breaks", "scoreTransformation", "monthly_intervalRate", "yearly_intervalRate"),
+    aggType = c("categorical", "continuous", "categorical", "both", "continuous", "continuous"),
     aggSqlPath = fs::path(aggregateSqlPaths, aggName, ext = "sql")
   ) |>
     dplyr::rowwise() |>
@@ -773,15 +781,34 @@
     }
     # if continuous render with table
     if (aggSqlTb2$aggType[i] == "continuous") {
-      aggSqlBind[[i]] <- SqlRender::render(
-        sql = aggSqlTb2$aggSql[i],
-        continuous_table = aggSqlTb2$aggTable[i],
-        pat_ts_tab  = buildOptions$patientLevelTableShellTempTable
-      ) |>
-        SqlRender::translate(
-          targetDialect = executionSettings$getDbms(),
-          tempEmulationSchema = executionSettings$tempEmulationSchema
-        )
+
+
+      if (any(aggSqlTb2$aggName[i] %in% c("monthly_intervalRate", "yearly_intervalRate"))) {
+
+
+        aggSqlBind[[i]] <- SqlRender::render(
+          sql = aggSqlTb2$aggSql[i],
+          continuous_table = aggSqlTb2$aggTable[i],
+          pat_ts_tab  = buildOptions$patientLevelTableShellTempTable,
+          target_cohort_table = buildOptions$targetCohortTempTable,
+          time_window = buildOptions$timeWindowTempTable
+        ) |>
+          SqlRender::translate(
+            targetDialect = executionSettings$getDbms(),
+            tempEmulationSchema = executionSettings$tempEmulationSchema
+          )
+
+      } else {
+        aggSqlBind[[i]] <- SqlRender::render(
+          sql = aggSqlTb2$aggSql[i],
+          continuous_table = aggSqlTb2$aggTable[i],
+          pat_ts_tab  = buildOptions$patientLevelTableShellTempTable
+        ) |>
+          SqlRender::translate(
+            targetDialect = executionSettings$getDbms(),
+            tempEmulationSchema = executionSettings$tempEmulationSchema
+          )
+      }
     }
 
     # if both render to both tables
