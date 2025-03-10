@@ -25,5 +25,4 @@ INNER JOIN (
 ) tw
 ON DATEADD(day, tw.time_a, t.cohort_start_date) <= ch.cohort_end_date
   AND DATEADD(day, tw.time_b, t.cohort_start_date) >= ch.cohort_start_date
-  AND ch.cohort_start_date <= t.cohort_end_date
 ;
