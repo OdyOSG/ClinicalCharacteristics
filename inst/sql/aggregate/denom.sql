@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS @pat_ts_tab;
 CREATE TABLE @pat_ts_tab AS
 SELECT ta.*,
-  CASE WHEN ta.patient_line = 'observedCount' AND observed_subjects IS NULL THEN -5
+  CASE WHEN ta.patient_line = 'adherentCount' AND observed_subjects IS NULL THEN -5
     ELSE COALESCE(observed_subjects, all_subjects) END AS tot_subjects
 FROM (
   SELECT

@@ -166,7 +166,16 @@ observedPresenceStat <- function() {
   return(pres)
 }
 
-
+#' @title
+#' Create a presence stat where only occurrence during the observation period are valid
+#'
+#' @return A presence stat object
+#'
+#' @export
+adherentPresenceStat <- function() {
+  pres <- Presence$new(personLine = "adherentCount")
+  return(pres)
+}
 
 #' @title
 #' Create a count stat where any occurrence is valid.
