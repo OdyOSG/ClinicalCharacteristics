@@ -47,6 +47,7 @@ FROM (
           SELECT
             t.cohort_definition_id,
             t.subject_id,
+            time_label,
             (DATEDIFF(day, DATEADD(day, t.time_a, t.cohort_start_date), LEAST(t.cohort_end_date, DATEADD(day, t.time_b, t.cohort_start_date)))*1.0 + 1) / 365 AS interval_time
           FROM (
             SELECT cohort_definition_id,
@@ -60,8 +61,8 @@ FROM (
             CROSS JOIN @time_window tw
           ) t
       ) r
-      ON d.target_cohort_id = r.cohort_definition_id AND d.subject_id = r.subject_id
-      WHERE d.statistic_type = 'yearly_intervalRate'
+      ON d.target_cohort_id = r.cohort_definition_id AND d.subject_id = r.subject_id AND d.time_label = r.time_label
+      WHERE d.statistic_type = 'yearly_intervalRate' AND d.patient_line = 'observedCount'
 ) m
   GROUP BY target_cohort_id, ordinal_id, time_label, line_item_label, patient_line
 ) t
