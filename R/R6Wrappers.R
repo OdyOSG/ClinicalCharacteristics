@@ -167,7 +167,11 @@ observedPresenceStat <- function() {
 }
 
 #' @title
-#' Create a presence stat where only occurrence during the observation period are valid
+#'
+#' @description
+#'
+#' Create a presence stat where only occurrence during the observation period are valid and the denominator are those
+#' who only adhere to the observation period
 #'
 #' @return A presence stat object
 #'
