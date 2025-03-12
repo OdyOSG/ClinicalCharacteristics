@@ -17,7 +17,7 @@ FROM (
             /* Get Cohort Counts within observed time for observed denominator */
             SELECT
                 b.cohort_definition_id AS target_cohort_id,
-                'observedCount' AS denom_type,
+                'adherentCount' AS denom_type,
                 b.time_label,
                 COUNT (DISTINCT b.subject_id) AS tot_subjects
             FROM (

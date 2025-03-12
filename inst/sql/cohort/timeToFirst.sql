@@ -16,7 +16,7 @@ FROM (
             PARTITION BY l.target_cohort_id, l.subject_id, l.time_label, l.raw_occurrence_description, l.raw_occurrence_id
             ORDER BY l.event_start_date {@first} ? {ASC} : {DESC}
           ) as ordinal
-        FROM @concept_set_occurrence_table l
+        FROM @cohort_occurrence_table l
         JOIN (
           SELECT * FROM #ts_meta WHERE person_line_transformation = 'timeTo'
         ) m
