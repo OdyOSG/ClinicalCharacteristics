@@ -39,6 +39,23 @@
 
 }
 
+.instantiateCsOccurrenceTable <- function(executionSettings, buildOptions) {
+  sql <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql", "createOccurrenceTable.sql")
+  ) |>
+    readr::read_file() |>
+    SqlRender::render(
+      concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable
+    ) |>
+    SqlRender::translate(
+      targetDialect = executionSettings$getDbms(),
+      tempEmulationSchema = executionSettings$tempEmulationSchema
+    )
+  return(sql)
+}
+
+
 .opConverter <- function(op) {
   op <- switch(op,
                'at_least' = '>=',
@@ -475,12 +492,13 @@
   }
 
   # concept set timeTo
-  if (any(statType == "timeTo")) {
+  if (any(statType == "timeToFirst")) {
     timeToSql <- fs::path(sqlConceptSetPath, "timeTo.sql") |>
       readr::read_file() |>
       SqlRender::render(
         patient_level_data = buildOptions$patientLevelDataTempTable,
         concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable,
+        ts_meta_table = buildOptions$tsMetaTempTable,
         first = TRUE
       )
   } else{
@@ -544,11 +562,12 @@
 
   # concept set timeTo
   if (any(statType == "timeToFirst")) {
-    timeToFirstSql <- fs::path(sqlConceptSetPath, "timeToFirst.sql") |>
+    timeToFirstSql <- fs::path(sqlConceptSetPath, "timeTo.sql") |>
       readr::read_file() |>
       SqlRender::render(
         patient_level_data = buildOptions$patientLevelDataTempTable,
         cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable,
+        ts_meta_table = buildOptions$tsMetaTempTable,
         first = TRUE
       )
   } else{

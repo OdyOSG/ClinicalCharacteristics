@@ -18,7 +18,7 @@ FROM (
           ) as ordinal
         FROM @concept_set_occurrence_table l
         JOIN (
-          SELECT * FROM #ts_meta WHERE person_line_transformation = 'timeTo'
+          SELECT * FROM @ts_meta_table WHERE person_line_transformation = 'timeTo'
         ) m
         ON l.raw_occurrence_id = m.value_id AND l.raw_occurrence_description = m.value_description AND l.time_label = m.time_label
       ) a
