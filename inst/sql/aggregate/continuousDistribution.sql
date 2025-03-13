@@ -5,6 +5,7 @@ SELECT
     t.time_label,
     t.line_item_label,
     t.patient_line,
+    t.statistic_type,
     t.subject_count,
     t.mean,
     CASE WHEN t.sd IS NULL THEN -5 ELSE t.sd END AS sd,
@@ -22,6 +23,7 @@ FROM (
     m.time_label,
     m.line_item_label,
     m.patient_line,
+    m.statistic_type,
     COUNT(DISTINCT subject_id) AS subject_count,
     AVG(m.value) As mean,
     STDDEV(m.value) AS sd,
@@ -37,6 +39,6 @@ FROM (
       FROM @pat_ts_tab d
       WHERE d.statistic_type = 'continuousDistribution'
   ) m
-  GROUP BY target_cohort_id, ordinal_id, time_label, line_item_label, patient_line
+  GROUP BY target_cohort_id, ordinal_id, time_label, line_item_label, patient_line, statistic_type
 ) t
 ;

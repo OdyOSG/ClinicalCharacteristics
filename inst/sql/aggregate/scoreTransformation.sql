@@ -5,6 +5,7 @@ SELECT
   t2.time_label,
   t2.line_item_label,
   t2.patient_line,
+  'scoreTransformation' AS statistic_type,
   t2.subject_count,
   t2.subject_count / t2.tot_subjects AS pct
 FROM (
@@ -33,6 +34,7 @@ SELECT
     t.time_label,
     t.line_item_label,
     t.patient_line,
+    t.statistic_type,
     t.subject_count,
     t.mean,
     CASE WHEN t.sd IS NULL THEN -5 ELSE t.sd END AS sd,
@@ -50,6 +52,7 @@ FROM (
     m.time_label,
     m.section_label AS line_item_label,
     m.patient_line,
+    m.statistic_type,
     COUNT(DISTINCT subject_id) AS subject_count,
     AVG(m.charlson_score) As mean,
     STDDEV(m.charlson_score) AS sd,
@@ -63,7 +66,7 @@ FROM (
   FROM (
       SELECT * FROM #pat_ts_score
   ) m
-  GROUP BY target_cohort_id, time_label, patient_line, section_label
+  GROUP BY target_cohort_id, time_label, patient_line, section_label, statistic_type
 ) t
 ;
 

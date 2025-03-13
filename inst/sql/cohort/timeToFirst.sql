@@ -4,7 +4,7 @@ SELECT
         d.subject_id,
         d.time_label,
         d.domain_table,
-        'timeTo' AS patient_line,
+        'timeToFirst' AS patient_line,
         d.raw_occurrence_description as value_type,
         d.raw_occurrence_id as value_id,
         DATEDIFF(day, d.cohort_start_date, d.event_start_date) AS value
@@ -14,7 +14,7 @@ FROM (
         SELECT l.*,
           ROW_NUMBER() OVER (
             PARTITION BY l.target_cohort_id, l.subject_id, l.time_label, l.raw_occurrence_description, l.raw_occurrence_id
-            ORDER BY l.event_start_date {@first} ? {ASC} : {DESC}
+            ORDER BY l.event_start_date ASC
           ) as ordinal
         FROM (
           SELECT target_cohort_id, subject_id, cohort_start_date, cohort_end_date, domain_table, time_label, raw_occurrence_id,

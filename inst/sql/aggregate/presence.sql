@@ -5,6 +5,7 @@ SELECT
   t2.time_label,
   t2.line_item_label,
   t2.patient_line,
+  'presence' AS statisticType,
   t2.subject_count,
   t2.subject_count / t2.tot_subjects AS pct
 FROM (

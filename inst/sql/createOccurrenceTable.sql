@@ -1,4 +1,5 @@
 /* Instantiate Concept set occurrence table */
+DROP TABLE IF EXISTS @concept_set_occurrence_table;
 CREATE TABLE @concept_set_occurrence_table (
   target_cohort_id INT NOT NULL,
   subject_id BIGINT NOT NULL,
