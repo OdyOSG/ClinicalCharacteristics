@@ -5,6 +5,7 @@ SELECT
     t.time_label,
     t.line_item_label,
     t.patient_line,
+    t.statistic_type,
     t.subject_count,
     t.mean,
     CASE WHEN t.sd IS NULL THEN -5 ELSE t.sd END AS sd,
@@ -22,6 +23,7 @@ FROM (
     m.time_label,
     m.line_item_label,
     m.patient_line,
+    m.statistic_type,
     COUNT(DISTINCT subject_id) AS subject_count,
     AVG(m.event_per_interval) As mean,
     STDDEV(m.event_per_interval) AS sd,
@@ -40,6 +42,7 @@ FROM (
         d.time_label,
         d.line_item_label,
         d.patient_line,
+        d.statistic_type,
         r.interval_time,
         (d.value * 1.0) / r.interval_time AS event_per_interval
       FROM @pat_ts_tab d
@@ -47,6 +50,7 @@ FROM (
           SELECT
             t.cohort_definition_id,
             t.subject_id,
+            time_label,
             (DATEDIFF(day, DATEADD(day, t.time_a, t.cohort_start_date), LEAST(t.cohort_end_date, DATEADD(day, t.time_b, t.cohort_start_date)))*1.0 + 1) / 30 AS interval_time
           FROM (
             SELECT cohort_definition_id,
@@ -60,11 +64,9 @@ FROM (
             CROSS JOIN @time_window tw
           ) t
       ) r
-      ON d.target_cohort_id = r.cohort_definition_id AND d.subject_id = r.subject_id
-      WHERE d.statistic_type = 'monthly_intervalRate'
+      ON d.target_cohort_id = r.cohort_definition_id AND d.subject_id = r.subject_id AND d.time_label = r.time_label
+      WHERE d.statistic_type = 'monthly_intervalRate' AND d.patient_line = 'observedCount'
 ) m
-  GROUP BY target_cohort_id, ordinal_id, time_label, line_item_label, patient_line
+  GROUP BY target_cohort_id, ordinal_id, time_label, line_item_label, patient_line, statistic_type
 ) t
 ;
-
-

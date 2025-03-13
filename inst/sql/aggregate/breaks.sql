@@ -5,6 +5,7 @@ SELECT
   t2.time_label,
   CONCAT(t2.line_item_label, ': ', t2.break_id) AS line_item_label,
   t2.patient_line,
+  'breaks' AS statistict_type,
   t2.subject_count,
   t2.subject_count / t2.tot_subjects AS pct
 FROM (

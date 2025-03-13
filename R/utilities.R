@@ -39,6 +39,23 @@
 
 }
 
+.instantiateCsOccurrenceTable <- function(executionSettings, buildOptions) {
+  sql <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql", "createOccurrenceTable.sql")
+  ) |>
+    readr::read_file() |>
+    SqlRender::render(
+      concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable
+    ) |>
+    SqlRender::translate(
+      targetDialect = executionSettings$getDbms(),
+      tempEmulationSchema = executionSettings$tempEmulationSchema
+    )
+  return(sql)
+}
+
+
 .opConverter <- function(op) {
   op <- switch(op,
                'at_least' = '>=',
@@ -475,13 +492,13 @@
   }
 
   # concept set timeTo
-  if (any(statType == "timeTo")) {
-    timeToSql <- fs::path(sqlConceptSetPath, "timeTo.sql") |>
+  if (any(statType == "timeToFirst")) {
+    timeToSql <- fs::path(sqlConceptSetPath, "timeToFirst.sql") |>
       readr::read_file() |>
       SqlRender::render(
         patient_level_data = buildOptions$patientLevelDataTempTable,
         concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable,
-        first = TRUE
+        ts_meta_table = buildOptions$tsMetaTempTable
       )
   } else{
     timeToFirstSql <- ""
@@ -549,7 +566,7 @@
       SqlRender::render(
         patient_level_data = buildOptions$patientLevelDataTempTable,
         cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable,
-        first = TRUE
+        ts_meta_table = buildOptions$tsMetaTempTable
       )
   } else{
     timeToFirstSql <- ""
@@ -865,16 +882,16 @@
 
   categoricalResults <- jj |>
     dplyr::inner_join(
-      tsm |> dplyr::select(ordinalId, personLineTransformation, sectionLabel),
-      by = c("ordinalId", "patientLine" = "personLineTransformation"),
-      relationship = "many-to-many"
+      tsm |> dplyr::select(ordinalId, personLineTransformation, sectionLabel, statisticType),
+      by = c("ordinalId", "patientLine" = "personLineTransformation", "statisticType")
     ) |>
     dplyr::left_join(
       tc,
       by = c("targetCohortId")
     ) |>
     dplyr::select(
-      targetCohortId, targetCohortName, ordinalId, sectionLabel, lineItemLabel, patientLine, timeLabel, subjectCount, pct
+      targetCohortId, targetCohortName, ordinalId, sectionLabel, lineItemLabel,
+      patientLine, statisticType, timeLabel, subjectCount, pct
     ) |>
     dplyr::arrange(
       targetCohortId, ordinalId, lineItemLabel
@@ -906,31 +923,32 @@
   if (any(grepl("scoreTransformation", tsm$statisticType))) {
     tsm_score <- tsm |>
       dplyr::filter(statisticType == "scoreTransformation") |>
-      dplyr::select(sectionLabel) |>
+      dplyr::select(sectionLabel, personLineTransformation, statisticType) |>
       dplyr::distinct() |>
       dplyr::mutate(
         ordinalId = 9999, .before = 1
       )
     tsm_select <- dplyr::bind_rows(
-      tsm |> dplyr::select(ordinalId, sectionLabel),
+      tsm |> dplyr::select(ordinalId, sectionLabel, personLineTransformation, statisticType),
       tsm_score
     )
   } else {
-    tsm_select <- tsm |> dplyr::select(ordinalId, sectionLabel)
+    tsm_select <- tsm |> dplyr::select(ordinalId, sectionLabel, personLineTransformation, statisticType)
   }
 
 
   continuousResults <- jj |>
     dplyr::inner_join(
       tsm_select,
-      by = c("ordinalId")
+      by = c("ordinalId", "patientLine" = "personLineTransformation", "statisticType")
     ) |>
     dplyr::left_join(
       tc,
       by = c("targetCohortId")
     ) |>
     dplyr::select(
-      targetCohortId, targetCohortName, ordinalId, sectionLabel, lineItemLabel, timeLabel, subjectCount:maximumValue
+      targetCohortId, targetCohortName, ordinalId, sectionLabel, lineItemLabel,
+      patientLine, statisticType, timeLabel, subjectCount:maximumValue
     ) |>
     dplyr::arrange(
       targetCohortId, ordinalId, lineItemLabel

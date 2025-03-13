@@ -5,6 +5,7 @@ CREATE TABLE #pat_ts_score AS
     '{timeLabel}' AS time_label,
     '{patientLine}' AS patient_line,
     '{sectionLabel}' AS section_label,
+    'scoreTransformation' AS statistic_type,
     CASE WHEN d.charlson_score IS NULL THEN 0 ELSE d.charlson_score END AS charlson_score
     FROM (
       SELECT tt.target_cohort_id, tt.subject_id,

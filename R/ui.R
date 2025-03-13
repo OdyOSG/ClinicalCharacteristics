@@ -27,13 +27,7 @@ generateTableShell <- function(tableShell, executionSettings, buildOptions = NUL
     executionSettings$connect()
   }
 
-  # Step 2: instantiate Tables
-  tableShell$instantiateTables(
-    executionSettings = executionSettings,
-    buildOptions = buildOptions
-  )
-
-  # Step 3: Execute them on dbms
+  # Step 2: Execute them on dbms
   cli::cat_bullet(
     glue::glue_col("{yellow Executing Table Shell Sql}"),
     bullet = "pointer",
@@ -45,7 +39,7 @@ generateTableShell <- function(tableShell, executionSettings, buildOptions = NUL
     sql = tsSql
   )
 
-  # Step 4: Extract Summaries
+  # Step 3: Extract Summaries
   cli::cat_bullet(
     glue::glue_col("{yellow Summarizing Table Shell}"),
     bullet = "pointer",
@@ -54,7 +48,7 @@ generateTableShell <- function(tableShell, executionSettings, buildOptions = NUL
   res <- tableShell$outputResults(executionSettings, buildOptions)
 
 
-  # Step 5: Drop Temp Tables
+  # Step 4: Drop Temp Tables
   cli::cat_bullet(
     glue::glue_col("{yellow Drop Temp Tables from Process}"),
     bullet = "pointer",

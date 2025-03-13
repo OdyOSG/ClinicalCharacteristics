@@ -240,31 +240,12 @@ observedCountBreaksStat <- function(breaks) {
 #' @return A stat object continuousDistribution
 #'
 #' @export
-anyTimeToFirstCtsStat <- function() {
-  stat <- ContinuousDistribution$new(personLine = "anyTimeToFirst")
+timeToFirst <- function() {
+  stat <- ContinuousDistribution$new(personLine = "timeToFirst")
   return(stat)
 }
 
-# anyTimeToFirstBreaksStat <- function(breaks) {
-#   stat <- Breaks$new(personLine = "anyTimeToFirst", breaks = breaks)
-#   return(stat)
-# }
 
-#' @title
-#' Create a continuous time to stat where only occurrence during the observation period are valid
-#'
-#' @return A stat object continuousDistribution
-#'
-#' @export
-observedTimeToFirst <- function() {
-  stat <- ContinuousDistribution$new(personLine = "observedTimeToFirst")
-  return(stat)
-}
-
-# observedTimeToFirstBreaksStat <- function(breaks) {
-#   stat <- Breaks$new(personLine = "observedTimeToFirst", breaks = breaks)
-#   return(stat)
-# }
 
 anyScore <- function(weight) {
   stat <- Score$new(
