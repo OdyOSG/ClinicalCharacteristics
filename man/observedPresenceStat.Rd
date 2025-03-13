@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{observedPresenceStat}
 \alias{observedPresenceStat}
-\title{Create a presence stat where only occurrence during the observation period are valid}
+\title{Observed Presence Stat}
 \usage{
 observedPresenceStat()
 }

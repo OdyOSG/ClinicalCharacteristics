@@ -1,24 +1,33 @@
 # TableShell -----
 
+#' @title Table Shell
 #' @description
 #' An R6 class to define a TableShell object
 #'
 #' @export
 TableShell <- R6::R6Class("TableShell",
   public = list(
-    initialize = function(name,
+    #' @param title the title of the table shell
+    #' @param targetCohorts a list of CohortInfo class objects that describe the index cohorts
+    #' @param lineItems a list of line item class objects
+    initialize = function(title,
                           targetCohorts,
                           lineItems) {
-      .setString(private = private, key = "name", value = name)
+      .setString(private = private, key = "title", value = title)
       .setListofClasses(private = private, key = "targetCohorts", value = targetCohorts, classes = c("CohortInfo"))
       #.setClass(private = private, key = "executionSettings", value = executionSettings, class = "ExecutionSettings")
       .setListofClasses(private = private, key = "lineItems", value = lineItems, classes = c("LineItem"))
     },
-    getName = function() {
-      tsName <- private$name
+
+    #' getName
+    #' @description get the title of the table shell
+    getTitle = function() {
+      tsName <- private$title
       return(tsName)
     },
 
+    #' getTableShellMeta
+    #' @description get the meta information for the table shell build
     getTableShellMeta = function() {
       tsLi <- self$getLineItems()
       tsMeta <- purrr::map_dfr(
@@ -27,15 +36,22 @@ TableShell <- R6::R6Class("TableShell",
       return(tsMeta)
     },
 
+    #' getTargetCohorts
+    #' @description get the target cohorts from the table shell
     getTargetCohorts = function() {
       tsTargetCohorts <- private$targetCohorts
       return(tsTargetCohorts)
     },
+
+    #' getLineItems
+    #' @description get the lineItems from the table shell
     getLineItems = function() {
       tsLineItems <- private$lineItems
       return(tsLineItems)
     },
 
+    #' printJobDetails
+    #' @description print the job details of the table shell
     printJobDetails = function() {
 
       tcs <- self$getTargetCohorts()
@@ -45,10 +61,10 @@ TableShell <- R6::R6Class("TableShell",
       # get line item info
       tsm <- self$getTableShellMeta()
       tsmInfo <- tsm |>
-        dplyr::select(ordinalId, sectionLabel, lineItemLabel, timeLabel, statisticType) |>
+        dplyr::select(ordinalId, sectionLabel, lineItemLabel, timeLabel, statisticType, personLineTransformation) |>
         dplyr::distinct() |>
         glue::glue_data_col(
-          "\t{ordinalId}) {green {sectionLabel}}: {yellow {lineItemLabel}} ({magenta {timeLabel}}) || Stat Type {blue {statisticType}}"
+          "{ordinalId}) {green {sectionLabel}}: {yellow {lineItemLabel}} ({magenta {timeLabel}}) || Stat Type: {blue {statisticType}} || Patient Line: {blue {personLineTransformation}}"
         )|>
         glue::glue_collapse("\n")
 
@@ -65,7 +81,10 @@ TableShell <- R6::R6Class("TableShell",
 
     },
 
-    #key function to generate the table shell
+    #' buildTableShellSql
+    #' @description function creates the table shell sql needed for the execution
+    #' @param executionSettings an executionSettings class obj
+    #' @param buildOptions a buildOptions class obj
     buildTableShellSql = function(executionSettings, buildOptions) {
 
       # ensure R6 object used
@@ -156,6 +175,10 @@ TableShell <- R6::R6Class("TableShell",
 
     },
 
+    #' outputResults
+    #' @description retrieves results from dbms and formats for review
+    #' @param executionSettings an executionSettings class obj
+    #' @param buildOptions a buildOptions class obj
     outputResults = function(executionSettings, buildOptions) {
 
       tsm <- self$getTableShellMeta()
@@ -180,7 +203,10 @@ TableShell <- R6::R6Class("TableShell",
       return(res)
     },
 
-    # function to drop all cs Tables
+    #' dropTempTables
+    #' @description drop all temp tables from the tableShell build
+    #' @param executionSettings an executionSettings class obj
+    #' @param buildOptions a buildOptions class obj
     dropTempTables = function(executionSettings, buildOptions) {
 
       # get temp table slot names
@@ -227,8 +253,9 @@ TableShell <- R6::R6Class("TableShell",
     }
 
   ),
+
   private = list(
-    name = NULL,
+    title = NULL,
     targetCohorts = NULL,
     lineItems = NULL,
 
@@ -301,7 +328,7 @@ TableShell <- R6::R6Class("TableShell",
         SqlRender::render(
           target_table = buildOptions$targetCohortTempTable,
           work_database_schema = executionSettings$workDatabaseSchema,
-          cohort_table = executionSettings$targetCohortTable
+          cohort_table = executionSettings$cohortTable
         ) |>
         SqlRender::translate(
           targetDialect = executionSettings$getDbms(),
@@ -570,6 +597,7 @@ TableShell <- R6::R6Class("TableShell",
 
 # BuildOptions ----
 
+#' @title BuildOptions
 #' @description
 #' An R6 class to define build options for the tableShell
 #'
@@ -577,6 +605,17 @@ TableShell <- R6::R6Class("TableShell",
 BuildOptions <- R6::R6Class(
   classname = "BuildOptions",
   public = list(
+    #' @param codesetTempTable the name of the codeset table used in execution. Defaults as a temp table #codeset
+    #' @param sourceCodesetTempTable he name of the source codeset table used in execution
+    #' @param timeWindowTempTable the name of the time Window table used in execution. Defaults as a temp table #time_windows
+    #' @param targetCohortTempTable the name of the target cohort table used in execution. Defaults as a temp table #target_cohorts
+    #' @param tsMetaTempTable the name of the table shell meta table used in execution. Defaults as a temp table #ts_meta
+    #' @param conceptSetOccurrenceTempTable the name of the concept set occurrence table used in execution. Defaults as a temp table #concept_set_occ
+    #' @param cohortOccurrenceTempTable the name of the cohort occurrence  table used in execution. Defaults as a temp table #cohort_occ
+    #' @param patientLevelDataTempTable the name of the patient level data table used in execution. Note this does not contain info of the table shell. Defaults as a temp table #patient_data
+    #' @param patientLevelTableShellTempTable the name of the patient level data table with additional meta info used in execution. Defaults as a temp table #pat_ts_tab
+    #' @param categoricalSummaryTempTable the name of the categorical summary table used in execution. Defaults as a temp table #categorical_table
+    #' @param continuousSummaryTempTable the name of the continuous summary table used in execution. Defaults as a temp table #continuous_table
     initialize = function(codesetTempTable = NULL,
                           sourceCodesetTempTable = NULL,
                           timeWindowTempTable = NULL,
@@ -618,58 +657,66 @@ BuildOptions <- R6::R6Class(
 
   active = list(
 
-
+    #' @field codesetTempTable table name for codeset table
     codesetTempTable = function(value) {
       .setActiveString(private = private, key = ".codesetTempTable", value = value)
     },
 
+    #' @field sourceCodesetTempTable table name for source codeset table
     sourceCodesetTempTable = function(value) {
       .setActiveString(private = private, key = ".sourceCodesetTempTable", value = value)
     },
 
-
+    #' @field timeWindowTempTable table name for time windows
     timeWindowTempTable = function(value) {
       .setActiveString(private = private, key = ".timeWindowTempTable", value = value)
     },
 
+    #' @field targetCohortTempTable table name for target cohorts
     targetCohortTempTable = function(value) {
       .setActiveString(private = private, key = ".targetCohortTempTable", value = value)
     },
 
+    #' @field tsMetaTempTable table name for table shell meta
     tsMetaTempTable = function(value) {
       .setActiveString(private = private, key = ".tsMetaTempTable", value = value)
     },
 
+    #' @field conceptSetOccurrenceTempTable table name for concept set occurrence table
     conceptSetOccurrenceTempTable = function(value) {
       .setActiveString(private = private, key = ".conceptSetOccurrenceTempTable", value = value)
     },
 
+    #' @field cohortOccurrenceTempTable table name for cohort occurrence table
     cohortOccurrenceTempTable = function(value) {
       .setActiveString(private = private, key = ".cohortOccurrenceTempTable", value = value)
     },
 
+    #' @field patientLevelDataTempTable table name for patient level data
     patientLevelDataTempTable = function(value) {
       .setActiveString(private = private, key = ".patientLevelDataTempTable", value = value)
     },
 
+    #' @field patientLevelTableShellTempTable table name for patient level data table merged with ts meta
     patientLevelTableShellTempTable = function(value) {
       .setActiveString(private = private, key = ".patientLevelTableShellTempTable", value = value)
     },
 
+    #' @field categoricalSummaryTempTable table name for categorical summary table
     categoricalSummaryTempTable = function(value) {
       .setActiveString(private = private, key = ".categoricalSummaryTempTable", value = value)
     },
 
+    #' @field continuousSummaryTempTable table name for continuous summary table
     continuousSummaryTempTable = function(value) {
       .setActiveString(private = private, key = ".continuousSummaryTempTable", value = value)
     }
-
-
   )
 )
 
 # ExecutionSettings ----
 
+#' @title ExecutionSettings
 #' @description
 #' An R6 class to define an ExecutionSettings object
 #'
@@ -682,7 +729,7 @@ ExecutionSettings <- R6::R6Class(
                           cdmDatabaseSchema = NULL,
                           workDatabaseSchema = NULL,
                           tempEmulationSchema = NULL,
-                          targetCohortTable = NULL,
+                          cohortTable = NULL,
                           cdmSourceName = NULL) {
       stopifnot(is.null(connectionDetails) || is.null(connection))
       .setClass(private = private, key = "connectionDetails", value = connectionDetails, class = "ConnectionDetails")
@@ -691,7 +738,7 @@ ExecutionSettings <- R6::R6Class(
       .setString(private = private, key = ".cdmDatabaseSchema", value = cdmDatabaseSchema)
       .setString(private = private, key = ".workDatabaseSchema", value = workDatabaseSchema)
       .setString(private = private, key = ".tempEmulationSchema", value = tempEmulationSchema)
-      .setString(private = private, key = ".targetCohortTable", value = targetCohortTable)
+      .setString(private = private, key = ".cohortTable", value = cohortTable)
       .setString(private = private, key = ".cdmSourceName", value = cdmSourceName)
     },
 
@@ -750,7 +797,7 @@ ExecutionSettings <- R6::R6Class(
     .cdmDatabaseSchema = NULL,
     .workDatabaseSchema = NULL,
     .tempEmulationSchema = NULL,
-    .targetCohortTable = NULL,
+    .cohortTable = NULL,
     .cdmSourceName = NULL
   ),
 
@@ -802,16 +849,16 @@ ExecutionSettings <- R6::R6Class(
       )
     },
 
-    targetCohortTable = function(value) {
+    cohortTable = function(value) {
       # return the value if nothing added
       if(missing(value)) {
-        tct <- private$.targetCohortTable
+        tct <- private$.cohortTable
         return(tct)
       }
-      # replace the targetCohortTable
-      .setString(private = private, key = ".targetCohortTable", value = value)
+      # replace the cohortTable
+      .setString(private = private, key = ".cohortTable", value = value)
       cli::cat_bullet(
-        glue::glue("Replaced {crayon::cyan('targetCohortTable')} with {crayon::green(value)}"),
+        glue::glue("Replaced {crayon::cyan('cohortTable')} with {crayon::green(value)}"),
         bullet = "info",
         bullet_col = "blue"
       )

@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{anyCountBreaksStat}
 \alias{anyCountBreaksStat}
-\title{Create a count stat with breaks where any occurrence is valid.}
+\title{Any Count with Breaks}
 \usage{
 anyCountBreaksStat(breaks)
 }

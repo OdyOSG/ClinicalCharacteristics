@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{anyPresenceStat}
 \alias{anyPresenceStat}
-\title{Create a presence stat where any occurrence is valid}
+\title{Any Presence Stat}
 \usage{
 anyPresenceStat()
 }

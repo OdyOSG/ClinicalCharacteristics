@@ -1,4 +1,7 @@
 #' @title
+#' Create Table Shell
+#'
+#' @description
 #' Create an empty TableShell object and set its title
 #'
 #' @param title The title of the TableShell
@@ -11,7 +14,7 @@
 createTableShell <- function(title,
                              targetCohorts,
                              lineItems) {
-    tableShell <- TableShell$new(name = title,
+    tableShell <- TableShell$new(title = title,
                                  targetCohorts = targetCohorts,
                                  lineItems = lineItems)
     return(tableShell)
@@ -55,7 +58,7 @@ createCohortInfo <- function(id, name) {
 #' @param cdmDatabaseSchema The schema of the OMOP CDM database
 #' @param workDatabaseSchema The schema to which results will be written
 #' @param tempEmulationSchema Some database platforms like Oracle and Snowflake do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.
-#' @param targetCohortTable The name of the table where the target cohort(s) are stored
+#' @param cohortTable The name of the table where the cohort(s) are stored
 #' @param cdmSourceName A human-readable name for the OMOP CDM source
 #'
 #' @return An ExecutionSettings object
@@ -65,14 +68,14 @@ createExecutionSettings <- function(connectionDetails,
                                     cdmDatabaseSchema,
                                     workDatabaseSchema,
                                     tempEmulationSchema,
-                                    targetCohortTable,
+                                    cohortTable,
                                     cdmSourceName) {
   executionSettings <- ExecutionSettings$new(connectionDetails = connectionDetails,
                                              connection = connection,
                                              cdmDatabaseSchema = cdmDatabaseSchema,
                                              workDatabaseSchema = workDatabaseSchema,
                                              tempEmulationSchema = tempEmulationSchema,
-                                             targetCohortTable = targetCohortTable,
+                                             cohortTable = cohortTable,
                                              cdmSourceName = cdmSourceName)
   return(executionSettings)
 }
@@ -139,12 +142,11 @@ timeInterval <- function(lb, rb) {
 }
 
 
-# createPresence <- function(operator = "at_least", occurrences = 1) {
-#   pres <- Presence$new(operator = operator, occurrences = occurrences)
-#   return(pres)
-# }
-
 #' @title
+#' Any Presence Stat
+#'
+#' @description
+#'
 #' Create a presence stat where any occurrence is valid
 #'
 #' @return A presence stat object
@@ -156,6 +158,9 @@ anyPresenceStat <- function() {
 }
 
 #' @title
+#' Observed Presence Stat
+#'
+#' @description
 #' Create a presence stat where only occurrence during the observation period are valid
 #'
 #' @return A presence stat object
@@ -167,9 +172,9 @@ observedPresenceStat <- function() {
 }
 
 #' @title
+#' Adherent Presence Stat
 #'
 #' @description
-#'
 #' Create a presence stat where only occurrence during the observation period are valid and the denominator are those
 #' who only adhere to the observation period
 #'
@@ -182,8 +187,10 @@ adherentPresenceStat <- function() {
 }
 
 #' @title
-#' Create a count stat where any occurrence is valid.
+#' Any Count Continuous
 #'
+#' @description
+#' Create a count stat where any occurrence is valid.
 #'
 #' @return A stat object continuousDistribution
 #'
@@ -194,6 +201,9 @@ anyCountCtsStat <- function() {
 }
 
 #' @title
+#' Any Count with Breaks
+#'
+#' @description
 #' Create a count stat with breaks where any occurrence is valid.
 #'
 #' @param breaks a breaksStrategy object dictating how to classify counts into categories.
@@ -208,6 +218,9 @@ anyCountBreaksStat <- function(breaks) {
 }
 
 #' @title
+#' Observed Count Continuous
+#'
+#' @description
 #' Create a count stat where only occurrence during the observation period are valid
 #'
 #'
@@ -220,6 +233,10 @@ observedCountCtsStat <- function() {
 }
 
 #' @title
+#' Observed Count with Breaks
+#'
+#' @description
+#'
 #' Create a count stat with breaks where only occurrence during the observation period are valid
 #'
 #' @param breaks a breaksStrategy object dictating how to classify counts into categories.
@@ -235,6 +252,10 @@ observedCountBreaksStat <- function(breaks) {
 
 
 #' @title
+#' Time To First
+#'
+#' @description
+#'
 #' Create a time to stat where any occurrence is valid
 #'
 #' @return A stat object continuousDistribution
@@ -246,7 +267,16 @@ timeToFirst <- function() {
 }
 
 
-
+#' @title
+#' Any Score
+#'
+#' @description
+#'
+#' Create score statistic
+#'
+#' @return A stat object for a scoreTransformation
+#'
+#' @export
 anyScore <- function(weight) {
   stat <- Score$new(
     personLine = "anyCount",

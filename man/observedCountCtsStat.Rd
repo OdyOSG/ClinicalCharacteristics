@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{observedCountCtsStat}
 \alias{observedCountCtsStat}
-\title{Create a count stat where only occurrence during the observation period are valid}
+\title{Observed Count Continuous}
 \usage{
 observedCountCtsStat()
 }
