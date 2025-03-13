@@ -12,7 +12,7 @@ FROM (
     cda.tot_subjects AS all_subjects
   FROM @patient_data a
   JOIN @ts_meta b
-    ON a.value_id = b.value_id AND a.value_type = b.value_description AND a.time_label = b.time_label
+    ON a.value_id = b.value_id AND a.value_type = b.value_description AND a.time_label = b.time_label AND a.patient_line = b.person_line_transformation
   LEFT JOIN (
             /* Get Cohort Counts within observed time for observed denominator */
             SELECT

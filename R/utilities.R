@@ -491,6 +491,20 @@
     observedCountSql <- ""
   }
 
+  # concept set observedCount
+  if (any(statType == "adherentCount")) { # this label will change
+    adherentCountSql <- fs::path(sqlConceptSetPath, "adherentCount.sql") |>
+      readr::read_file() |>
+      SqlRender::render(
+        patient_level_data = buildOptions$patientLevelDataTempTable,
+        concept_set_occurrence_table = buildOptions$conceptSetOccurrenceTempTable,
+        cdm_database_schema = executionSettings$cdmDatabaseSchema,
+        ts_meta_table = buildOptions$tsMetaTempTable
+      )
+  } else{
+    adherentCountSql <- ""
+  }
+
   # concept set timeTo
   if (any(statType == "timeToFirst")) {
     timeToSql <- fs::path(sqlConceptSetPath, "timeToFirst.sql") |>
@@ -504,7 +518,7 @@
     timeToFirstSql <- ""
   }
 
-  sql <- c(anyCountSql, observedCountSql, timeToFirstSql) |>
+  sql <- c(anyCountSql, observedCountSql, adherentCountSql, timeToFirstSql) |>
     glue::glue_collapse(sep = "\n\n")
 
   return(sql)
@@ -559,6 +573,20 @@
     observedCountSql <- ""
   }
 
+  # concept set observedCount
+  if (any(statType == "adherentCount")) { # this label will change
+    adherentCountSql <- fs::path(sqlConceptSetPath, "adherentCount.sql") |>
+      readr::read_file() |>
+      SqlRender::render(
+        patient_level_data = buildOptions$patientLevelDataTempTable,
+        cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable,
+        cdm_database_schema = executionSettings$cdmDatabaseSchema,
+        ts_meta_table = buildOptions$tsMetaTempTable
+      )
+  } else{
+    adherentCountSql <- ""
+  }
+
   # concept set timeTo
   if (any(statType == "timeToFirst")) {
     timeToFirstSql <- fs::path(sqlConceptSetPath, "timeToFirst.sql") |>
@@ -572,7 +600,7 @@
     timeToFirstSql <- ""
   }
 
-  sql <- c(anyCountSql, observedCountSql, timeToFirstSql) |>
+  sql <- c(anyCountSql, observedCountSql, adherentCountSql, timeToFirstSql) |>
     glue::glue_collapse(sep = "\n\n")
 
   return(sql)
