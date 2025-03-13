@@ -4,11 +4,13 @@ author:
   - Martin Lavallee
   - Katy Sadowski
   - Ajit Londhe
+  - Ron Herrera
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{How to use ClinicalCharacteristics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+callout-appearance: simple
 ---
 
 ```{r, include = FALSE}
@@ -222,7 +224,7 @@ tw2 <- timeInterval(lb = 0, rb = 90)
 
 # define table shell
 ts <- createTableShell(
-  name = "Demo 1",
+  title = "Demo 1",
   targetCohorts = list(
     createCohortInfo(id = 1, name = "Type 2 Diabetes")
   ),
@@ -303,13 +305,13 @@ tw2 <- list(
 
 # define table shell
 ts2 <- createTableShell(
-  name = "Demo 1",
+  title = "Demo 1",
   targetCohorts = list(
     createCohortInfo(id = 1, name = "Type 2 Diabetes")
   ),
   lineItems = lineItems(
     addDefaultGenderLineItems(),
-    addDefaultRaceLineItems(),
+    addDefaultEthnicityLineItems(),
     createDemographicLineItem(ageChar()),
     createDemographicLineItem(ageChar(breaks = age5yrGrp())),
     createConceptSetLineItemBatch(
@@ -338,6 +340,9 @@ res$continuous
 In this version of the table shell we have grouped drugs and conditions as a batch to deploy all combinations of the concept set and time interval combinations. As for the demographics we add a convenience function to include all basic gender items (male and female) and race items (white, black, asian and not reported). Finally we apply our first instance of a breaks strategy, turning age into 5 year age groups. A convenience function is used that automatically sets the breaks for the user. 
 
 Note when a user generates the table shell a log of the shell is printed out for review. Users may also review the table shell meta information to understand the aspects of each line item using the following method of the table shell class which returns a tibble of information.
+
+
+When using **multiple concepts and/or multiple time windows**, the Batch functions must be used otherwise an error will display.
 
 ```{r tsMeta, eval=FALSE}
 ts2$getTableShellMeta()
@@ -389,7 +394,7 @@ tw2 <- list(
 
 # define table shell
 ts3 <- createTableShell(
-  name = "Demo 1",
+  title = "Demo 1",
   targetCohorts = list(
     createCohortInfo(id = 1, name = "Type 2 Diabetes")
   ),
@@ -510,7 +515,6 @@ drugBreaks <- createConceptSetLineItemBatch(
 
 
 ```
-
 ## Review the Sql
 
 The way `ClinicalCharacteristics` works is it serializes the input of the TableShell object into a Sql script that is run against the database connection. Sometimes users may want to review the sql to either check its quality or modify it slightly. A function is provided to save the script designed by the program as a `.sql` that can be opened in any code or text editor. 
@@ -519,3 +523,57 @@ The way `ClinicalCharacteristics` works is it serializes the input of the TableS
 reviewTableShellSql(ts, executionSettings, saveName = "my_ts", savePath = here::here("output"))
 ```
 
+## Using source concepts
+
+In certain circumstances, researchers might need to use source concept instead of standardized codes, however, the recommendation is always to use standardized codes. 
+
+## Searching the codes
+
+In occasions, using function, we can find the OHDSI concept id. For instance we would like to use the ICD10CM codes: 'I45.81', 'I47', 'I49', 'I49.40 to build a _Cardiac Arrhythmia_ as follows:
+
+```{r sourceCA, eval=FALSE}
+ca_source <- lookupSourceConcepts(
+  codes = c('I45.81', 'I47', 'I49', 'I49.40'),
+  vocabulary = "ICD10CM",
+  executionSettings
+) |>
+  sourceConceptSet(name = "Cardiac Arrhythmia")
+```
+
+Then the table shell will look like 
+
+```{r demosc, eval=FALSE}
+tw1 <- timeInterval(lb = -365, rb = -1)
+
+tssc <- createTableShell(
+  title = "Demo 1",
+  targetCohorts = list(
+    createCohortInfo(id = 1, name = "Type 2 Diabetes")
+  ),
+  lineItems = lineItems(
+    addDefaultGenderLineItems(),
+    addDefaultRaceLineItems(),
+    createDemographicLineItem(ageChar()),
+    createDemographicLineItem(ageChar(breaks = age5yrGrp())),
+    createSourceConceptSetLineItem(
+      sectionLabel = "Source Concept Conditions Cardiac Arrhythmia",
+      domain = "condition_occurrence",
+      sourceConceptSets = ca_source,
+      timeIntervals = tw1,
+      statistic = anyPresenceStat()
+    )
+  )
+)
+```
+
+## Reading source concept from Json files
+
+Sometimes, we can have the source concept built in ATLAS in a Json format. Then, we can read the file using Capr's functions as follows:   
+
+```{r demosc2, eval=FALSE}
+ca_source <- Capr::readConceptSet(path = paste0(inputFolder, "Cardiac Arrhythmia_in_icd.json"), name = "Cardiac Arrhythmia")
+
+ca_source <- Capr::as.data.frame(ca_source) |>
+  dplyr::select(conceptId, conceptName, conceptCode, vocabularyId) |>
+  sourceConceptSet(name = "Cardiac Arrhythmia")
+```
