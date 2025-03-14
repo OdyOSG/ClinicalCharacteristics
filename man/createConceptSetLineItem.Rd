@@ -18,7 +18,7 @@ createConceptSetLineItem(
 \arguments{
 \item{sectionLabel}{(OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)}
 
-\item{domain}{The domain of the concept set (must be one of 'condition_occurrence', 'drug_exposure', 'procedure_occurrence', 'observation', 'measurement', 'device_exposure')}
+\item{domain}{The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')}
 
 \item{conceptSet}{The Capr concept set object}
 

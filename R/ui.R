@@ -85,7 +85,7 @@ reviewTableShellSql <- function(tableShell,
   }
 
   if (is.null(saveName)) {
-    saveName <- glue::glue("{tableShell$getName()}_table_shell") |>
+    saveName <- glue::glue("{tableShell$getTitle()}_table_shell") |>
       tolower() |>
       snakecase::to_snake_case() |>
       fs::path(ext = "sql")

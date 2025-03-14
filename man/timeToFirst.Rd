@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{timeToFirst}
 \alias{timeToFirst}
-\title{Create a time to stat where any occurrence is valid}
+\title{Time To First}
 \usage{
 timeToFirst()
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{anyCountCtsStat}
 \alias{anyCountCtsStat}
-\title{Create a count stat where any occurrence is valid.}
+\title{Any Count Continuous}
 \usage{
 anyCountCtsStat()
 }

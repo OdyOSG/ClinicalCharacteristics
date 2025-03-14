@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{observedCountBreaksStat}
 \alias{observedCountBreaksStat}
-\title{Create a count stat with breaks where only occurrence during the observation period are valid}
+\title{Observed Count with Breaks}
 \usage{
 observedCountBreaksStat(breaks)
 }

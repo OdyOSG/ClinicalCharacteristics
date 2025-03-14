@@ -27,11 +27,25 @@ Specific types of statistics are defined in derived classes
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$new(statType, personLine, aggType)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{statType}}{the type of statistic}
+
+\item{\code{personLine}}{the means of converting occurrences to a single event per patient}
+
+\item{\code{aggType}}{the way the metric is reported either categorical or continuous
+getStatisticType}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Statistic-getStatisticType"></a>}}
 \if{latex}{\out{\hypertarget{method-Statistic-getStatisticType}{}}}
 \subsection{Method \code{getStatisticType()}}{
+retrieve the statistic type
+getAggregationType
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$getStatisticType()}\if{html}{\out{</div>}}
 }
@@ -41,6 +55,8 @@ Specific types of statistics are defined in derived classes
 \if{html}{\out{<a id="method-Statistic-getAggregationType"></a>}}
 \if{latex}{\out{\hypertarget{method-Statistic-getAggregationType}{}}}
 \subsection{Method \code{getAggregationType()}}{
+retrieve the aggregation type
+getPersonLineTransformation
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$getAggregationType()}\if{html}{\out{</div>}}
 }
@@ -50,6 +66,8 @@ Specific types of statistics are defined in derived classes
 \if{html}{\out{<a id="method-Statistic-getPersonLineTransformation"></a>}}
 \if{latex}{\out{\hypertarget{method-Statistic-getPersonLineTransformation}{}}}
 \subsection{Method \code{getPersonLineTransformation()}}{
+retrieve the person line transformation
+getBreaksIfAny
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$getPersonLineTransformation()}\if{html}{\out{</div>}}
 }
@@ -59,6 +77,8 @@ Specific types of statistics are defined in derived classes
 \if{html}{\out{<a id="method-Statistic-getBreaksIfAny"></a>}}
 \if{latex}{\out{\hypertarget{method-Statistic-getBreaksIfAny}{}}}
 \subsection{Method \code{getBreaksIfAny()}}{
+retrieve the breaks object from the statistic object
+getWeightsIfAny
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$getBreaksIfAny()}\if{html}{\out{</div>}}
 }
@@ -68,6 +88,7 @@ Specific types of statistics are defined in derived classes
 \if{html}{\out{<a id="method-Statistic-getWeightsIfAny"></a>}}
 \if{latex}{\out{\hypertarget{method-Statistic-getWeightsIfAny}{}}}
 \subsection{Method \code{getWeightsIfAny()}}{
+retrieve the weights object from the statistic object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$getWeightsIfAny()}\if{html}{\out{</div>}}
 }
