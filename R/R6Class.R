@@ -962,8 +962,8 @@ Statistic <- R6::R6Class(
   classname = "Statistic",
   public = list(
     #' @param statType the type of statistic
-    #' @param personLineTransformation the means of converting occurrences to a single event per patient
-    #' @param aggregationType the way the metric is reported either categorical or continuous
+    #' @param personLine the means of converting occurrences to a single event per patient
+    #' @param aggType the way the metric is reported either categorical or continuous
     initialize = function(statType, personLine, aggType) {
       .setString(private = private , key = "statisticType", value = statType)
       .setString(private = private , key = "personLineTransformation", value = personLine)
@@ -1073,10 +1073,21 @@ DemographicConcept <- R6::R6Class(
 )
 
 ### Demographic Age ---------------------
+#' @title
+#' Demographic Age Statistic
+#'
+#' @description
+#' A Demographic Statistic that calculates age from the person table
+#'
+#' @export
 DemographicAge <- R6::R6Class(
   classname = "DemographicAge",
   inherit = Statistic,
   public = list(
+    #' @param statType the type of statistic
+    #' @param aggType the way the metric is reported either categorical or continuous
+    #' @param demoCategory the name of the demographic category
+    #' @param breaks a breaks strategy object to categorize results
     initialize = function(statType, aggType, demoCategory, breaks = NULL) {
       super$initialize(
         personLine = "age",
@@ -1086,13 +1097,16 @@ DemographicAge <- R6::R6Class(
       .setClass(private = private, key = "breaks", value = breaks,
                 class = "BreaksStrategy", nullable = TRUE)
     },
-
+    #' getDemoLabel
+    #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
     },
 
-
+    #' modifyBreaksLabels
+    #' @description update the breaks labels within the statistics class
+    #' @param newLabels a character string of new labels for the breaks
     modifyBreaksLabels = function(newLabels) {
       br <- private$breaks
       br$labels <- newLabels
@@ -1106,10 +1120,18 @@ DemographicAge <- R6::R6Class(
 )
 
 ### Demographic Index Year ---------------------
+#' @title
+#' Demographic Index Year Statistic
+#'
+#' @description
+#' A Demographic Statistic that retrieves the index year for each patient
+#'
+#' @export
 DemographicIndexYear <- R6::R6Class(
   classname = "DemographicIndexYear",
   inherit = Statistic,
   public = list(
+    #' @param breaks a breaks strategy object to categorize results
     initialize = function(breaks) {
       super$initialize(
         personLine = "year",
@@ -1119,13 +1141,16 @@ DemographicIndexYear <- R6::R6Class(
       .setClass(private = private, key = "breaks", value = breaks,
                 class = "BreaksStrategy", nullable = FALSE)
     },
-
+    #' getDemoLabel
+    #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
     },
 
-
+    #' modifyBreaksLabels
+    #' @description update the breaks labels within the statistics class
+    #' @param newLabels a character string of new labels for the breaks
     modifyBreaksLabels = function(newLabels) {
       br <- private$breaks
       br$labels <- newLabels
@@ -1140,10 +1165,18 @@ DemographicIndexYear <- R6::R6Class(
 
 
 ### Demographic Cohort Follow up ---------------------
+#' @title
+#' Demographic Cohort Time Statistic
+#'
+#' @description
+#' A Demographic Statistic that calculates the time (in days) in the target cohort
+#'
+#' @export
 DemographicCohortTime <- R6::R6Class(
   classname = "DemographicCohortTime",
   inherit = Statistic,
   public = list(
+    #' @description initialize cohort time stat
     initialize = function() {
       super$initialize(
         personLine = "cohort_follow_up",
@@ -1151,7 +1184,8 @@ DemographicCohortTime <- R6::R6Class(
         aggType = "continuous")
       .setString(private = private, key = "demoCategory", value = "Cohort Follow up")
     },
-
+    #' getDemoLabel
+    #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
@@ -1165,10 +1199,18 @@ DemographicCohortTime <- R6::R6Class(
 
 
 ### Demographic Location ---------------------
+#' @title
+#' Demographic Location Statistic
+#'
+#' @description
+#' A Demographic Statistic that retrieves and categorizes the location of the persons in the target cohort
+#'
+#' @export
 DemographicLocation <- R6::R6Class(
   classname = "DemographicLocation",
   inherit = Statistic,
   public = list(
+    #' @param breaks a breaks strategy object to categorize results
     initialize = function(breaks) {
       super$initialize(
         personLine = "location",
@@ -1178,13 +1220,16 @@ DemographicLocation <- R6::R6Class(
       .setClass(private = private, key = "breaks", value = breaks,
                 class = "BreaksStrategy", nullable = FALSE)
     },
-
+    #' getDemoLabel
+    #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
     },
 
-
+    #' modifyBreaksLabels
+    #' @description update the breaks labels within the statistics class
+    #' @param newLabels a character string of new labels for the breaks
     modifyBreaksLabels = function(newLabels) {
       br <- private$breaks
       br$labels <- newLabels
@@ -1199,10 +1244,18 @@ DemographicLocation <- R6::R6Class(
 
 
 ### Demographic Payer Type ---------------------
+#' @title
+#' Demographic Payer Statistic
+#'
+#' @description
+#' A Demographic Statistic that retrieves and categorizes the payer type from the payer plan period table
+#'
+#' @export
 DemographicPayerType <- R6::R6Class(
   classname = "DemographicPayerType",
   inherit = Statistic,
   public = list(
+    #' @param breaks a breaks strategy object to categorize results
     initialize = function(breaks) {
       super$initialize(
         personLine = "payer_type",
@@ -1212,13 +1265,16 @@ DemographicPayerType <- R6::R6Class(
       .setClass(private = private, key = "breaks", value = breaks,
                 class = "BreaksStrategy", nullable = FALSE)
     },
-
+    #' getDemoLabel
+    #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
     },
 
-
+    #' modifyBreaksLabels
+    #' @description update the breaks labels within the statistics class
+    #' @param newLabels a character string of new labels for the breaks
     modifyBreaksLabels = function(newLabels) {
       br <- private$breaks
       br$labels <- newLabels
@@ -1232,10 +1288,18 @@ DemographicPayerType <- R6::R6Class(
 )
 
 ### Demographic Race ---------------------
+#' @title
+#' Demographic Race Statistic
+#'
+#' @description
+#' A Demographic Statistic that retrieves and categorizes the patient race from the person table
+#'
+#' @export
 DemographicRace <- R6::R6Class(
   classname = "DemographicRace",
   inherit = Statistic,
   public = list(
+    #' @param breaks a breaks strategy object to categorize results
     initialize = function(breaks) {
       super$initialize(
         personLine = "race",
@@ -1245,13 +1309,16 @@ DemographicRace <- R6::R6Class(
       .setClass(private = private, key = "breaks", value = breaks,
                 class = "BreaksStrategy", nullable = FALSE)
     },
-
+    #' getDemoLabel
+    #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
     },
 
-
+    #' modifyBreaksLabels
+    #' @description update the breaks labels within the statistics class
+    #' @param newLabels a character string of new labels for the breaks
     modifyBreaksLabels = function(newLabels) {
       br <- private$breaks
       br$labels <- newLabels
@@ -1268,11 +1335,20 @@ DemographicRace <- R6::R6Class(
 ## CS, CSG, Cohort Stats -----------------------------
 
 ### Presence -----------------------
-
+#' @title
+#' Presence Statistic
+#'
+#' @description
+#' A statistic that determines whether at least 1 clinical event was present during the specified time interval. It
+#' is summarized as a categorical value.
+#'
+#' @export
 Presence <- R6::R6Class(
   classname = "Presence",
   inherit = Statistic,
   public = list(
+    #' @param personLine the means of converting occurrences to a single event per patient.
+    #' For presence this could be any, observed or adherent
     initialize = function(personLine) {
       super$initialize(
         personLine = personLine,
@@ -1285,10 +1361,21 @@ Presence <- R6::R6Class(
 )
 
 ### Breaks ------------------------
+#' @title
+#' Breaks Statistic
+#'
+#' @description
+#' A statistic that converts a continuous value to a categorical value by grouping
+#' the number of events into discrete buckets.
+#'
+#' @export
 Breaks <- R6::R6Class(
   classname = "Breaks",
   inherit = Statistic,
   public = list(
+    #' @param personLine the means of converting occurrences to a single event per patient.
+    #' For presence this could be any, observed or adherent
+    #' @param breaks a breaks strategy object to categorize results
     initialize = function(personLine, breaks) {
       super$initialize(
         personLine = personLine,
@@ -1304,10 +1391,19 @@ Breaks <- R6::R6Class(
 )
 
 ### Distribution ------------------------
+#' @title
+#' Continuous Distribution Statistic
+#'
+#' @description
+#' A statistic that summarizes the number of occurrences as continuous value using mean, standard deviation and order statistics
+#'
+#' @export
 ContinuousDistribution <- R6::R6Class(
   classname = "ContinuousDistribution",
   inherit = Statistic,
   public = list(
+    #' @param personLine the means of converting occurrences to a single event per patient.
+    #' For presence this could be any, observed or adherent
     initialize = function(personLine) {
       super$initialize(
         personLine = personLine,
@@ -1321,10 +1417,21 @@ ContinuousDistribution <- R6::R6Class(
 )
 
 ### Score ------------------------
+#' @title
+#' Score Statistic
+#'
+#' @description
+#' A statistic that converts a categorical value to a continuous value by modifying the occurrence of
+#' an event by a weight and summing across patients..
+#'
+#' @export
 Score <- R6::R6Class(
   classname = "Score",
   inherit = Statistic,
   public = list(
+    #' @param personLine the means of converting occurrences to a single event per patient.
+    #' For a score currently only enabled for any occurrence
+    #' @param weight a numeric value to modify the value of an occurrence
     initialize = function(personLine, weight) {
       super$initialize(
         personLine = personLine,
@@ -1338,6 +1445,7 @@ Score <- R6::R6Class(
     .weight = NULL
   ),
   active =list(
+    #' @field weight a numeric value to modify the value of an occurrence
     weight = function(weight) {
       .setActiveNumber(private = private, key = ".weight", value = weight)
     }
@@ -1345,11 +1453,20 @@ Score <- R6::R6Class(
 )
 
 ### Interval Rate --------------------
+#' @title
+#' Interval Rate Statistic
+#'
+#' @description
+#' A statistic that calculates the rate of occurrence by taking the number of events per person
+#' in the desired interval and dividing by the observed time during the interval. An interval rate
+#' can either be monthly or yearly.
+#'
+#' @export
 IntervalRate <- R6::R6Class(
   classname = "IntervalRate",
   inherit = Statistic,
   public = list(
-
+    #' @param interval the type of interval to use for the rate. can be either monthly or yearly.
     initialize = function(interval) {
       super$initialize (
         personLine = "observedCount",
@@ -1494,15 +1611,17 @@ ConceptSetLineItem <- R6::R6Class(
   classname = "ConceptSetLineItem",
   inherit = LineItem,
   public = list(
+    #' @param sectionLabel a label for the table shell section
+    #' @param domainTable the domain table in the cdm
+    #' @param conceptSet a concept set class from Capr
+    #' @param timeInterval a time interval class object to determine the time frame to consider the analytic
+    #' @param statistic a Statistic Class object used to determine what type of analytic should be done for the line item
     initialize = function(
       sectionLabel,
       domainTable,
       conceptSet,
       timeInterval,
-      statistic,
-      sourceConceptSet = NULL,
-      typeConceptIds = c(),
-      visitOccurrenceConceptIds = c()
+      statistic
     ) {
       super$initialize(
         sectionLabel = sectionLabel,
@@ -1517,25 +1636,22 @@ ConceptSetLineItem <- R6::R6Class(
       .setClass(private = private, key = "conceptSet", value = conceptSet, class = "ConceptSet")
       #.setClass(private = private, key = "timeInterval", value = timeInterval, class = "TimeInterval", nullable = TRUE)
       # TODO change this to enforce domain from choice list
-      .setClass(private = private, key = "sourceConceptSet", value = sourceConceptSet, class = "ConceptSet", nullable = TRUE)
-      .setNumber(private = private, key = "typeConceptIds", value = typeConceptIds, nullable = TRUE)
-      .setNumber(private = private, key = "visitOccurrenceConceptIds", value = visitOccurrenceConceptIds, nullable = TRUE)
+      # .setClass(private = private, key = "sourceConceptSet", value = sourceConceptSet, class = "ConceptSet", nullable = TRUE)
+      # .setNumber(private = private, key = "typeConceptIds", value = typeConceptIds, nullable = TRUE)
+      # .setNumber(private = private, key = "visitOccurrenceConceptIds", value = visitOccurrenceConceptIds, nullable = TRUE)
 
     },
 
-        # helper to pull concept Capr class items
+     #' grabConceptSet
+     #' @description helper to pull concept Capr class items
      grabConceptSet = function() {
         cs <- private$conceptSet
         return(cs)
      }
   ),
   private = list(
-    conceptSet = NULL,
-    sourceConceptSet = NULL,
-    typeConceptIds = c(),
-    visitOccurrenceConceptIds = c()
-  ),
-  active = list()
+    conceptSet = NULL
+  )
 )
 
 SourceConcepSet <- R6::R6Class(
@@ -1586,13 +1702,17 @@ SourceConceptSetLineItem <- R6::R6Class(
   classname = "SourceConceptSetLineItem",
   inherit = LineItem,
   public = list(
+    #' @param sectionLabel a label for the table shell section
+    #' @param domainTable the domain table in the cdm
+    #' @param sourceConceptSet a source concept Set
+    #' @param timeInterval a time interval class object to determine the time frame to consider the analytic
+    #' @param statistic a Statistic Class object used to determine what type of analytic should be done for the line item
     initialize = function(
     sectionLabel,
     domainTable,
     sourceConceptSet,
     timeInterval,
-    statistic,
-    typeConceptIds = c()
+    statistic
     ) {
       super$initialize(
         sectionLabel = sectionLabel,
@@ -1605,10 +1725,11 @@ SourceConceptSetLineItem <- R6::R6Class(
       )
 
       .setClass(private = private, key = "sourceConceptSet", value = sourceConceptSet, class = "SourceConceptSet")
-      .setNumber(private = private, key = "typeConceptIds", value = typeConceptIds, nullable = TRUE)
+      #.setNumber(private = private, key = "typeConceptIds", value = typeConceptIds, nullable = TRUE)
 
     },
-
+    #' grabSourceConceptSet
+    #' @description retrieve the source concept set
     grabSourceConceptSet = function() {
       scs <- private$sourceConceptSet
       return(scs)
@@ -1634,6 +1755,7 @@ DemographicLineItem <- R6::R6Class(
   classname = "DemographicLineItem",
   inherit = LineItem,
   public = list(
+    #' @param statistic a Statistic Class object used to determine what type of analytic should be done for the line item
     initialize = function(statistic = statistic) {
       super$initialize(
         sectionLabel = "Demographics",
@@ -1658,6 +1780,11 @@ CohortLineItem <- R6::R6Class(
   classname = "CohortLineItem",
   inherit = LineItem,
   public = list(
+    #' @param sectionLabel a label for the table shell section
+    #' @param domainTable the domain table in the cdm
+    #' @param covariateCohort a CohortInfo class with cohorts for covariates
+    #' @param timeInterval a time interval class object to determine the time frame to consider the analytic
+    #' @param statistic a Statistic Class object used to determine what type of analytic should be done for the line item
     initialize = function(
     sectionLabel,
     domainTable,
@@ -1681,8 +1808,7 @@ CohortLineItem <- R6::R6Class(
   ),
   private = list(
     covariateCohort = NULL
-  ),
-  active = list()
+  )
 )
 
 ## Concept Set Group -----------------

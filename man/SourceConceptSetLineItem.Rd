@@ -35,16 +35,32 @@ An R6 class to define a SourceConceptSetLineItem
   domainTable,
   sourceConceptSet,
   timeInterval,
-  statistic,
-  typeConceptIds = c()
+  statistic
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{sectionLabel}}{a label for the table shell section}
+
+\item{\code{domainTable}}{the domain table in the cdm}
+
+\item{\code{sourceConceptSet}}{a source concept Set}
+
+\item{\code{timeInterval}}{a time interval class object to determine the time frame to consider the analytic}
+
+\item{\code{statistic}}{a Statistic Class object used to determine what type of analytic should be done for the line item
+grabSourceConceptSet}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-SourceConceptSetLineItem-grabSourceConceptSet"></a>}}
 \if{latex}{\out{\hypertarget{method-SourceConceptSetLineItem-grabSourceConceptSet}{}}}
 \subsection{Method \code{grabSourceConceptSet()}}{
+retrieve the source concept set
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SourceConceptSetLineItem$grabSourceConceptSet()}\if{html}{\out{</div>}}
 }

@@ -35,18 +35,32 @@ An R6 class to define a ConceptSetLineItem
   domainTable,
   conceptSet,
   timeInterval,
-  statistic,
-  sourceConceptSet = NULL,
-  typeConceptIds = c(),
-  visitOccurrenceConceptIds = c()
+  statistic
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{sectionLabel}}{a label for the table shell section}
+
+\item{\code{domainTable}}{the domain table in the cdm}
+
+\item{\code{conceptSet}}{a concept set class from Capr}
+
+\item{\code{timeInterval}}{a time interval class object to determine the time frame to consider the analytic}
+
+\item{\code{statistic}}{a Statistic Class object used to determine what type of analytic should be done for the line item
+grabConceptSet}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ConceptSetLineItem-grabConceptSet"></a>}}
 \if{latex}{\out{\hypertarget{method-ConceptSetLineItem-grabConceptSet}{}}}
 \subsection{Method \code{grabConceptSet()}}{
+helper to pull concept Capr class items
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ConceptSetLineItem$grabConceptSet()}\if{html}{\out{</div>}}
 }

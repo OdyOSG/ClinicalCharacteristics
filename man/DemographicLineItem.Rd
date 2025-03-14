@@ -32,6 +32,13 @@ An R6 class to handle the ...
 \if{html}{\out{<div class="r">}}\preformatted{DemographicLineItem$new(statistic = statistic)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{statistic}}{a Statistic Class object used to determine what type of analytic should be done for the line item}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DemographicLineItem-clone"></a>}}

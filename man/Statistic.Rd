@@ -32,9 +32,9 @@ Specific types of statistics are defined in derived classes
 \describe{
 \item{\code{statType}}{the type of statistic}
 
-\item{\code{personLineTransformation}}{the means of converting occurrences to a single event per patient}
+\item{\code{personLine}}{the means of converting occurrences to a single event per patient}
 
-\item{\code{aggregationType}}{the way the metric is reported either categorical or continuous
+\item{\code{aggType}}{the way the metric is reported either categorical or continuous
 getStatisticType}
 }
 \if{html}{\out{</div>}}
