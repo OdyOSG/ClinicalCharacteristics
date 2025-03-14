@@ -27,7 +27,6 @@ Imports:
     tidyr,
     here,
     lubridate,
-    monaco,
     reactable,
     methods
 Additional_repositories: https://OHDSI.github.io/drat

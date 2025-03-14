@@ -287,23 +287,37 @@ anyScore <- function(weight) {
 
 
 #' @title
-#' Create a interval rate statistic
+#' Create a yearly interval rate statistic
 #'
 #' @description This statistic sums the number of occurrences of an event in a timeInterval and
-#' divides it by the time (modified by month or year) to construct a rate per patient. This
+#' divides it by the time (modified by  year) to construct a rate per patient. This
 #' can then be summariezed as a continuous variable
-#' @param interval a string either yearly or monthly that defines the time modifcation for the interval rate
 #' @return A stat object f class intervalRate
 #'
 #' @export
-intervalRate <- function(interval = c("yearly", "monthly")) {
-
-  interval <- match.arg(interval)
+yearlyRate <- function() {
   stat <- IntervalRate$new(
-    interval = interval
+    interval = "yearly"
   )
   return(stat)
 }
+
+#' @title
+#' Create a monthly interval rate statistic
+#'
+#' @description This statistic sums the number of occurrences of an event in a timeInterval and
+#' divides it by the time (modified by  month) to construct a rate per patient. This
+#' can then be summariezed as a continuous variable
+#' @return A stat object f class intervalRate
+#'
+#' @export
+monthlyRate <- function() {
+  stat <- IntervalRate$new(
+    interval = "monthly"
+  )
+  return(stat)
+}
+
 
 #' @title
 #' Create a concept set line item and set its attributes
