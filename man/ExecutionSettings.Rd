@@ -6,6 +6,21 @@
 \description{
 An R6 class to define an ExecutionSettings object
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{cdmDatabaseSchema}}{the schema containing the OMOP CDM}
+
+\item{\code{workDatabaseSchema}}{the schema containing the cohort table}
+
+\item{\code{tempEmulationSchema}}{the schema needed for temp tables}
+
+\item{\code{cohortTable}}{the table containing the cohorts}
+
+\item{\code{cdmSourceName}}{the name of the source data of the cdm}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -33,11 +48,33 @@ An R6 class to define an ExecutionSettings object
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{connectionDetails}}{a connectionDetails object}
+
+\item{\code{connection}}{a connection to a dbms}
+
+\item{\code{cdmDatabaseSchema}}{The schema of the OMOP CDM database}
+
+\item{\code{workDatabaseSchema}}{The schema to which results will be written}
+
+\item{\code{tempEmulationSchema}}{Some database platforms like Oracle and Snowflake do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.}
+
+\item{\code{cohortTable}}{The name of the table where the cohort(s) are stored}
+
+\item{\code{cdmSourceName}}{A human-readable name for the OMOP CDM source
+getDbms}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ExecutionSettings-getDbms"></a>}}
 \if{latex}{\out{\hypertarget{method-ExecutionSettings-getDbms}{}}}
 \subsection{Method \code{getDbms()}}{
+extract the dbms dialect
+connect
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ExecutionSettings$getDbms()}\if{html}{\out{</div>}}
 }
@@ -47,6 +84,8 @@ An R6 class to define an ExecutionSettings object
 \if{html}{\out{<a id="method-ExecutionSettings-connect"></a>}}
 \if{latex}{\out{\hypertarget{method-ExecutionSettings-connect}{}}}
 \subsection{Method \code{connect()}}{
+connect to dbms
+disconnect
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ExecutionSettings$connect()}\if{html}{\out{</div>}}
 }
@@ -56,6 +95,8 @@ An R6 class to define an ExecutionSettings object
 \if{html}{\out{<a id="method-ExecutionSettings-disconnect"></a>}}
 \if{latex}{\out{\hypertarget{method-ExecutionSettings-disconnect}{}}}
 \subsection{Method \code{disconnect()}}{
+disconnect from dbms
+getConnection
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ExecutionSettings$disconnect()}\if{html}{\out{</div>}}
 }
@@ -65,6 +106,7 @@ An R6 class to define an ExecutionSettings object
 \if{html}{\out{<a id="method-ExecutionSettings-getConnection"></a>}}
 \if{latex}{\out{\hypertarget{method-ExecutionSettings-getConnection}{}}}
 \subsection{Method \code{getConnection()}}{
+retrieve the connection object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ExecutionSettings$getConnection()}\if{html}{\out{</div>}}
 }

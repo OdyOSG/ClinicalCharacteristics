@@ -724,6 +724,13 @@ BuildOptions <- R6::R6Class(
 ExecutionSettings <- R6::R6Class(
   classname = "ExecutionSettings",
   public = list(
+    #' @param connectionDetails a connectionDetails object
+    #' @param connection a connection to a dbms
+    #' @param cdmDatabaseSchema The schema of the OMOP CDM database
+    #' @param workDatabaseSchema The schema to which results will be written
+    #' @param tempEmulationSchema Some database platforms like Oracle and Snowflake do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.
+    #' @param cohortTable The name of the table where the cohort(s) are stored
+    #' @param cdmSourceName A human-readable name for the OMOP CDM source
     initialize = function(connectionDetails = NULL,
                           connection = NULL,
                           cdmDatabaseSchema = NULL,
@@ -742,12 +749,15 @@ ExecutionSettings <- R6::R6Class(
       .setString(private = private, key = ".cdmSourceName", value = cdmSourceName)
     },
 
+    #' getDbms
+    #' @description extract the dbms dialect
     getDbms = function() {
       dbms <- private$connectionDetails$dbms
       return(dbms)
     },
 
-    # connect to database
+    #' connect
+    #' @description connect to dbms
     connect = function() {
 
       # check if private$connection is NULL
@@ -763,7 +773,8 @@ ExecutionSettings <- R6::R6Class(
       }
     },
 
-    # disconnect to database
+    #' disconnect
+    #' @description disconnect from dbms
     disconnect = function() {
 
       # check if private$connection is NULL
@@ -784,6 +795,8 @@ ExecutionSettings <- R6::R6Class(
 
     #TODO make this more rigorous
     # add warning if no connection available
+    #' getConnection
+    #' @description retrieve the connection object
     getConnection = function() {
       conObj <- private$.connection
       return(conObj)
@@ -802,7 +815,7 @@ ExecutionSettings <- R6::R6Class(
   ),
 
   active = list(
-
+    #' @field cdmDatabaseSchema the schema containing the OMOP CDM
     cdmDatabaseSchema = function(value) {
       # return the value if nothing added
       if(missing(value)) {
@@ -818,6 +831,7 @@ ExecutionSettings <- R6::R6Class(
       )
     },
 
+    #' @field workDatabaseSchema the schema containing the cohort table
     workDatabaseSchema = function(value) {
       # return the value if nothing added
       if(missing(value)) {
@@ -833,7 +847,7 @@ ExecutionSettings <- R6::R6Class(
       )
     },
 
-
+    #' @field tempEmulationSchema the schema needed for temp tables
     tempEmulationSchema = function(value) {
       # return the value if nothing added
       if(missing(value)) {
@@ -848,7 +862,7 @@ ExecutionSettings <- R6::R6Class(
         bullet_col = "blue"
       )
     },
-
+    #' @field cohortTable the table containing the cohorts
     cohortTable = function(value) {
       # return the value if nothing added
       if(missing(value)) {
@@ -863,7 +877,7 @@ ExecutionSettings <- R6::R6Class(
         bullet_col = "blue"
       )
     },
-
+    #' @field cdmSourceName the name of the source data of the cdm
     cdmSourceName = function(value) {
       # return the value if nothing added
       if(missing(value)) {
@@ -885,6 +899,7 @@ ExecutionSettings <- R6::R6Class(
 
 # Cohort Info -----
 
+#' @title CohortInfoe
 #' @description
 #' An R6 class to define a Cohort Info object
 #' CohortInfo objects do not maintain any execution settings, just the id and name
@@ -892,18 +907,26 @@ ExecutionSettings <- R6::R6Class(
 #' @export
 CohortInfo <- R6::R6Class("CohortInfo",
   public = list(
+    #' @param id the cohort definition id
+    #' @param name the name of the cohort definition
     initialize = function(id, name) {
       .setNumber(private = private, key = "id", value = id)
       .setString(private = private, key = "name", value = name)
     },
+    #' getId
+    #' @description get the cohort id
     getId = function() {
       cId <- private$id
       return(cId)
     },
-    getName = function(name) {
+    #' getName
+    #' @description get the cohort Name
+    getName = function() {
       cName <- private$name
       return(cName)
     },
+    #' cohortDetails
+    #' @description print the cohort details
     cohortDetails = function(){
       id <- self$getId()
       name <- self$getName()
@@ -938,24 +961,35 @@ CohortInfo <- R6::R6Class("CohortInfo",
 Statistic <- R6::R6Class(
   classname = "Statistic",
   public = list(
+    #' @param statType the type of statistic
+    #' @param personLineTransformation the means of converting occurrences to a single event per patient
+    #' @param aggregationType the way the metric is reported either categorical or continuous
     initialize = function(statType, personLine, aggType) {
       .setString(private = private , key = "statisticType", value = statType)
       .setString(private = private , key = "personLineTransformation", value = personLine)
       .setString(private = private , key = "aggregationType", value = aggType)
 
     },
+    #' getStatisticType
+    #' @description retrieve the statistic type
     getStatisticType = function() {
       statType <- private$statisticType
       return(statType)
     },
+    #' getAggregationType
+    #' @description retrieve the aggregation type
     getAggregationType = function() {
       aggType <- private$aggregationType
       return(aggType)
     },
+    #' getPersonLineTransformation
+    #' @description retrieve the person line transformation
     getPersonLineTransformation = function() {
       plt <- private$personLineTransformation
       return(plt)
     },
+    #' getBreaksIfAny
+    #' @description retrieve the breaks object from the statistic object
     getBreaksIfAny = function() {
       if (self$getStatisticType() == "breaks") {
         br <- private$breaks
@@ -964,6 +998,8 @@ Statistic <- R6::R6Class(
       }
       return(br)
     },
+    #' getWeightsIfAny
+    #' @description retrieve the weights object from the statistic object
     getWeightsIfAny = function() {
       if (self$getStatisticType() == "scoreTransformation") {
         ww <- self$weight
@@ -984,10 +1020,21 @@ Statistic <- R6::R6Class(
 
 
 ### Demographic Concept -----------------
+#' @title
+#' Demographic Concept Statistic
+#'
+#' @description
+#' A Demographic Statistic that considers concepts in person table
+#'
+#' @export
 DemographicConcept <- R6::R6Class(
   classname = "DemographicConcept",
   inherit = Statistic,
   public = list(
+    #' @param demoCategory the cateogry name of the demographic
+    #' @param demoLine the line item name of the demographic concept
+    #' @param conceptColumn the name of column in the person table to extract demographic concept
+    #' @param conceptId the concept to search for in the concept column
     initialize = function(demoCategory, demoLine, conceptColumn, conceptId) {
       super$initialize(
         personLine = "binary",
@@ -998,14 +1045,20 @@ DemographicConcept <- R6::R6Class(
       .setString(private = private, key = "conceptColumn", value = conceptColumn)
       .setNumber(private = private, key = "conceptId", value = conceptId)
     },
+    #' getConceptColumn
+    #' @description retrieve the concept column
     getConceptColumn = function() {
       rr <- private$conceptColumn
       return(rr)
     },
+    #' getDemoLabel
+    #' @description create a label for the demographic concept
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}: {private$demoLine}")
       return(rr)
     },
+    #' getConceptId
+    #' @description retrieve the concept id
     getConceptId = function() {
       rr <- private$conceptId
       return(rr)
@@ -1314,6 +1367,7 @@ IntervalRate <- R6::R6Class(
 
 ## Line Item Super----------
 
+#' @title LineItem
 #' @description
 #' An R6 class to define a LineItem object
 #' A LineItem is a single, explicitly defined characterization to appear in a Section
@@ -1323,15 +1377,23 @@ IntervalRate <- R6::R6Class(
 LineItem <- R6::R6Class(
   classname = "LineItem",
   public = list(
+    #' @param sectionLabel a label for the table shell section
+    #' @param lineItemLabel a label for the line item
+    #' @param domainTable the domain table in the cdm
+    #' @param lineItemClass the type of line item (ie Demographic, ConceptSet, SourceConceptSet, ConceptSetGroup, Cohort)
+    #' @param valueId the id for the line item; either a codeset id, a concept id or a -999 to indicate no true id
+    #' @param valueDescription the describer for the value id
+    #' @param statistic a Statistic Class object used to determine what type of analytic should be done for the line item
+    #' @param timeInterval a time interval class object to determine the time frame to consider the analytic
     initialize = function(
-    sectionLabel,
-    lineItemLabel = NA_character_,
-    domainTable,
-    lineItemClass,
-    valueId = NA_integer_,
-    valueDescription  = NA_integer_,
-    statistic,
-    timeInterval = NULL
+      sectionLabel,
+      lineItemLabel = NA_character_,
+      domainTable,
+      lineItemClass,
+      valueId = NA_integer_,
+      valueDescription  = NA_integer_,
+      statistic,
+      timeInterval = NULL
     ) {
       .setString(private = private, key = ".sectionLabel", value = sectionLabel)
       .setString(private = private, key = ".lineItemLabel", value = lineItemLabel, naOk = TRUE)
@@ -1342,7 +1404,8 @@ LineItem <- R6::R6Class(
       .setClass(private = private, key = "statistic", value = statistic, class = "Statistic")
       .setClass(private = private, key = "timeInterval", value = timeInterval, class = "TimeInterval", nullable = TRUE)
     },
-
+    #' getLineItemMeta
+    #' @description retrieve the line item meta information
     getLineItemMeta = function() {
 
       tw <- private$timeInterval
@@ -1368,7 +1431,8 @@ LineItem <- R6::R6Class(
 
       return(tb)
     },
-
+    #' getStatistic
+    #' @description retrieve the statistic class object
     getStatistic = function() {
       st <- private$statistic
       return(st)
@@ -1387,24 +1451,31 @@ LineItem <- R6::R6Class(
     .lineItemClass = NA_character_
   ),
   active = list(
+    #' @field ordinalId the order identifier of the line item in the table shell
     ordinalId = function(ordinalId) {
       .setActiveNumber(private = private, key = ".ordinalId", value = ordinalId)
     },
+    #' @field sectionLabel a label for the table shell section
     sectionLabel = function(sectionLabel) {
       .setActiveString(private = private, key = ".sectionLabel", value = sectionLabel)
     },
+    #' @field lineItemLabel a label for the line item
     lineItemLabel = function(lineItemLabel) {
       .setActiveString(private = private, key = ".lineItemLabel", value = lineItemLabel)
     },
+    #' @field valueId the id for the line item; either a codeset id, a concept id or a -999 to indicate no true id
     valueId = function(valueId) {
       .setActiveNumber(private = private, key = ".valueId", value = valueId)
     },
+    #' @field valueDescription the describer for the value id
     valueDescription = function(valueDescription) {
       .setActiveString(private = private, key = ".valueDescription", value = valueDescription)
     },
+    #' @field domainTable the domain table in the cdm
     domainTable = function(domainTable) {
       .setActiveString(private = private, key = ".domainTable", value = domainTable)
     },
+    #' @field lineItemClass the type of line item (ie Demographic, ConceptSet, SourceConceptSet, ConceptSetGroup, Cohort)
     lineItemClass = function(lineItemClass) {
       .setActiveString(private = private, key = ".lineItemClass", value = lineItemClass)
     }
@@ -1414,6 +1485,7 @@ LineItem <- R6::R6Class(
 
 ## ConceptSetLineItem ----
 
+#' @title ConceptSetLineItem
 #' @description
 #' An R6 class to define a ConceptSetLineItem
 #'
@@ -1505,6 +1577,7 @@ SourceConcepSet <- R6::R6Class(
 
 ## SourceConceptSetLineItem ----
 
+#' @title SourceConceptSetLineItem
 #' @description
 #' An R6 class to define a SourceConceptSetLineItem
 #'
@@ -1552,6 +1625,7 @@ SourceConceptSetLineItem <- R6::R6Class(
 
 # DemographicLineItem -----
 
+#' @title DemographicLineItem
 #' @description
 #' An R6 class to handle the ...
 #'
@@ -1575,6 +1649,7 @@ DemographicLineItem <- R6::R6Class(
 
 ## CohortLineItem ----
 
+#' @title CohortLineItem
 #' @description
 #' An R6 class to define a CohortLineItem
 #'
