@@ -338,10 +338,7 @@ createConceptSetLineItem <- function(sectionLabel = NA_character_,
                                      domain,
                                      conceptSet,
                                      timeInterval,
-                                     statistic,
-                                     sourceConceptSet = NULL,
-                                     typeConceptIds = c(),
-                                     visitOccurrenceConceptIds = c()) {
+                                     statistic) {
 
   if(is.na(sectionLabel)) {
     sectionLabel <- conceptSet@Name
@@ -351,10 +348,7 @@ createConceptSetLineItem <- function(sectionLabel = NA_character_,
                                          domainTable = domain,
                                          conceptSet = conceptSet,
                                          timeInterval = timeInterval,
-                                         statistic = statistic,
-                                         sourceConceptSet = sourceConceptSet,
-                                         typeConceptIds = typeConceptIds,
-                                         visitOccurrenceConceptIds = visitOccurrenceConceptIds)
+                                         statistic = statistic)
   return(csDefinition)
 }
 
@@ -381,9 +375,7 @@ createConceptSetLineItemBatch <- function(
     domain,
     conceptSets,
     timeIntervals,
-    statistic,
-    typeConceptIds = c(),
-    visitOccurrenceConceptIds = c()) {
+    statistic) {
 
   checkmate::assert_list(x = conceptSets, types = c("ConceptSet"), null.ok = FALSE, min.len = 1)
   checkmate::assert_list(x = timeIntervals, types = c("TimeInterval"), null.ok = FALSE, min.len = 1)
@@ -420,10 +412,7 @@ createConceptSetLineItemBatch <- function(
       statistic = ..3,
       domain = domain,
       conceptSet = ..1,
-      timeInterval = ..2,
-      sourceConceptSet = NULL,
-      typeConceptIds = typeConceptIds,
-      visitOccurrenceConceptIds = visitOccurrenceConceptIds
+      timeInterval = ..2
     )
   ) |>
     unname()
