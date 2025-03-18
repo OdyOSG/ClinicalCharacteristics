@@ -150,7 +150,7 @@ saveTableShellResults <- function(result, saveName, savePath = here::here()) {
     continuousFileName <- fs::path(savePath, glue::glue("{saveName}_continuous.csv"))
 
     cli::cat_line(
-      glue::glue_col("\tContinuous Results: {cyan {categoricalFileName}}")
+      glue::glue_col("\tContinuous Results: {cyan {continuousFileName}}")
     )
     readr::write_csv(
       x = continuousResult,
