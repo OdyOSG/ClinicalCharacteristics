@@ -9,10 +9,7 @@ createConceptSetLineItem(
   domain,
   conceptSet,
   timeInterval,
-  statistic,
-  sourceConceptSet = NULL,
-  typeConceptIds = c(),
-  visitOccurrenceConceptIds = c()
+  statistic
 )
 }
 \arguments{

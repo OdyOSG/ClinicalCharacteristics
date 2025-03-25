@@ -10,12 +10,12 @@ test_that("TableShell object is initialized correctly", {
     statistic = stat,
     domainTable = "test"
   )
-  tableShell <- TableShell$new(name = "Table 1",
+  tableShell <- TableShell$new(title = "Table 1",
                                targetCohorts = list(targetCohort),
-                               lineItems = list(lineItem))
+                               lineItems = lineItems(lineItem))
 
   expect_true(inherits(tableShell, "TableShell"))
-  expect_equal(tableShell$getName(), "Table 1")
+  expect_equal(tableShell$getTitle(), "Table 1")
   expect_equal(length(tableShell$getTargetCohorts()), 1)
 })
 

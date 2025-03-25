@@ -9,9 +9,7 @@ createConceptSetLineItemBatch(
   domain,
   conceptSets,
   timeIntervals,
-  statistic,
-  typeConceptIds = c(),
-  visitOccurrenceConceptIds = c()
+  statistic
 )
 }
 \arguments{
