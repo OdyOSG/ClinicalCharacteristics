@@ -80,11 +80,11 @@ DatabaseConnector::disconnect(con)
 
 Something we are introducing within the `ClinicalCharacteristics` package is a class called `ExecutionSettings`. This object maintains all the settings needed to execute a query on your dbms. Key parameters include:
 
--   **cdmDatabaseSchema**: a read only schema where the OMOP cdm is located
+-   **cdmDatabaseSchema**: a read only schema where the OMOP CDM is located
 -   **workDatabaseSchema**: a read/write schema where you will conduct work; effectively the location of the cohort table
 -   **tempEmulationSchema**: a read/write schema to store temp tables. Note this is only necessary for dbms' like snowflake and oracle that handle temp tables differently than other dialects
 -   **targetCohortTable**: the name of the cohort table where your target cohorts exist
--   **cdmSourceName**: a label for the cdm in use
+-   **cdmSourceName**: a label for the CDM in use
 
 In `ClinicalCharacteristics` we can set up our execution settings object as follows:
 
@@ -172,7 +172,7 @@ createConceptSetLineItem(
 )
 ```
 
-The section label specifies how we want to identify the line item within the table as a section. The domain must specify which domain table in the cdm we should check for events. Because CKD is a condition, we want to check the *condition_occurrence* table. If we were characterizing drugs we would check the *drug_exposure* table. Review the [OMOP CDM](https://ohdsi.github.io/CommonDataModel/cdm54.html#Current_Support_for_CDM_v54) to become familiar with the different types of domains. The statistic determines how to summarize the event; here are examples:
+The section label specifies how we want to identify the line item within the table as a section. The domain must specify which domain table in the CDM we should check for events. Because CKD is a condition, we want to check the *condition_occurrence* table. If we were characterizing drugs we would check the *drug_exposure* table. Review the [OMOP CDM](https://ohdsi.github.io/CommonDataModel/cdm54.html#Current_Support_for_CDM_v54) to become familiar with the different types of domains. The statistic determines how to summarize the event; here are examples:
 
 -   `PresenceStat`: determine who had an occurrence of an event during an interval
 -   `CountCtsStat`: determine the continuous distribution of an event during an interval
@@ -508,7 +508,7 @@ drugBreaks <- createConceptSetLineItemBatch(
 
 ## Review the Sql
 
-The way `ClinicalCharacteristics` works is it serializes the input of the TableShell object into a Sql script that is run against the database connection. Sometimes users may want to review the sql to either check its quality or modify it slightly. A function is provided to save the script designed by the program as a `.sql` that can be opened in any code or text editor.
+The way `ClinicalCharacteristics` works is it serializes the input of the TableShell object into a Sql script that is run against the database connection. Sometimes users may want to review the sql to either check its quality or modify it slightly. We provide a function to save the script designed by the program as a `.sql` that can be opened in any code or text editor.
 
 ```{r reviewSql, eval=FALSE}
 reviewTableShellSql(ts, executionSettings, saveName = "my_ts", savePath = here::here("output"))
