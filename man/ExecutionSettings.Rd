@@ -74,7 +74,6 @@ getDbms}
 \if{latex}{\out{\hypertarget{method-ExecutionSettings-getDbms}{}}}
 \subsection{Method \code{getDbms()}}{
 extract the dbms dialect
-connect
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ExecutionSettings$getDbms()}\if{html}{\out{</div>}}
 }
@@ -85,7 +84,6 @@ connect
 \if{latex}{\out{\hypertarget{method-ExecutionSettings-connect}{}}}
 \subsection{Method \code{connect()}}{
 connect to dbms
-disconnect
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ExecutionSettings$connect()}\if{html}{\out{</div>}}
 }

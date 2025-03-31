@@ -755,8 +755,6 @@ ExecutionSettings <- R6::R6Class(
       dbms <- private$connectionDetails$dbms
       return(dbms)
     },
-
-    #' connect
     #' @description connect to dbms
     connect = function() {
 
@@ -773,7 +771,6 @@ ExecutionSettings <- R6::R6Class(
       }
     },
 
-    #' disconnect
     #' @description disconnect from dbms
     disconnect = function() {
 
@@ -1309,14 +1306,11 @@ DemographicRace <- R6::R6Class(
       .setClass(private = private, key = "breaks", value = breaks,
                 class = "BreaksStrategy", nullable = FALSE)
     },
-    #' getDemoLabel
     #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
     },
-
-    #' modifyBreaksLabels
     #' @description update the breaks labels within the statistics class
     #' @param newLabels a character string of new labels for the breaks
     modifyBreaksLabels = function(newLabels) {
