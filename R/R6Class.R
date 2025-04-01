@@ -514,7 +514,8 @@ TableShell <- R6::R6Class("TableShell",
             target_cohort_table = buildOptions$targetCohortTempTable,
             cohort_occurrence_table = buildOptions$cohortOccurrenceTempTable,
             time_window_table = buildOptions$timeWindowTempTable,
-            work_database_schema = executionSettings$workDatabaseSchema
+            work_database_schema = executionSettings$workDatabaseSchema,
+            use_era = buildOptions$useCohortEra
           ) |>
           SqlRender::translate(
             targetDialect = executionSettings$getDbms(),
@@ -616,6 +617,7 @@ BuildOptions <- R6::R6Class(
     #' @param patientLevelTableShellTempTable the name of the patient level data table with additional meta info used in execution. Defaults as a temp table #pat_ts_tab
     #' @param categoricalSummaryTempTable the name of the categorical summary table used in execution. Defaults as a temp table #categorical_table
     #' @param continuousSummaryTempTable the name of the continuous summary table used in execution. Defaults as a temp table #continuous_table
+    #' @param useCohortEra a true false toggle specifying if in a cohort Char whether to use the cohort era (TRUE) or just the start date (FALSE)
     initialize = function(codesetTempTable = NULL,
                           sourceCodesetTempTable = NULL,
                           timeWindowTempTable = NULL,
@@ -626,7 +628,8 @@ BuildOptions <- R6::R6Class(
                           patientLevelDataTempTable = NULL,
                           patientLevelTableShellTempTable = NULL,
                           categoricalSummaryTempTable = NULL,
-                          continuousSummaryTempTable = NULL
+                          continuousSummaryTempTable = NULL,
+                          useCohortEra = NULL
                           ) {
       .setString(private = private, key = ".codesetTempTable", value = codesetTempTable)
       .setString(private = private, key = ".sourceCodesetTempTable", value = sourceCodesetTempTable)
@@ -639,6 +642,7 @@ BuildOptions <- R6::R6Class(
       .setString(private = private, key = ".patientLevelTableShellTempTable", value = patientLevelTableShellTempTable)
       .setString(private = private, key = ".categoricalSummaryTempTable", value = categoricalSummaryTempTable)
       .setString(private = private, key = ".continuousSummaryTempTable", value = continuousSummaryTempTable)
+      .setLogical(private = private, key = ".useCohortEra", value = useCohortEra)
     }
   ),
   private = list(
@@ -652,7 +656,8 @@ BuildOptions <- R6::R6Class(
     .patientLevelDataTempTable = NULL,
     .patientLevelTableShellTempTable = NULL,
     .categoricalSummaryTempTable = NULL,
-    .continuousSummaryTempTable = NULL
+    .continuousSummaryTempTable = NULL,
+    .useCohortEra = NULL
   ),
 
   active = list(
@@ -710,6 +715,11 @@ BuildOptions <- R6::R6Class(
     #' @field continuousSummaryTempTable table name for continuous summary table
     continuousSummaryTempTable = function(value) {
       .setActiveString(private = private, key = ".continuousSummaryTempTable", value = value)
+    },
+
+    #' @field useCohortEra toggle to choose if using cohort era or start date
+    useCohortEra = function(value) {
+      .setActiveLogical(private = private, key = ".useCohortEra", value = value)
     }
   )
 )
@@ -1785,12 +1795,12 @@ CohortLineItem <- R6::R6Class(
     #' @param covariateCohort a CohortInfo class with cohorts for covariates
     #' @param timeInterval a time interval class object to determine the time frame to consider the analytic
     #' @param statistic a Statistic Class object used to determine what type of analytic should be done for the line item
-    initialize = function(
-    sectionLabel,
-    domainTable,
-    covariateCohort,
-    timeInterval,
-    statistic
+   initialize = function(
+      sectionLabel,
+      domainTable,
+      covariateCohort,
+      timeInterval,
+      statistic
     ) {
       super$initialize(
         sectionLabel = sectionLabel,
@@ -1803,7 +1813,6 @@ CohortLineItem <- R6::R6Class(
       )
       # add cohortInfo class object
       .setClass(private = private, key = "covariateCohort", value = covariateCohort, class = "CohortInfo")
-
     }
   ),
   private = list(
