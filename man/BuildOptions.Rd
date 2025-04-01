@@ -30,6 +30,8 @@ An R6 class to define build options for the tableShell
 \item{\code{categoricalSummaryTempTable}}{table name for categorical summary table}
 
 \item{\code{continuousSummaryTempTable}}{table name for continuous summary table}
+
+\item{\code{useCohortEra}}{toggle to choose if using cohort era or start date}
 }
 \if{html}{\out{</div>}}
 }
@@ -56,7 +58,8 @@ An R6 class to define build options for the tableShell
   patientLevelDataTempTable = NULL,
   patientLevelTableShellTempTable = NULL,
   categoricalSummaryTempTable = NULL,
-  continuousSummaryTempTable = NULL
+  continuousSummaryTempTable = NULL,
+  useCohortEra = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -84,6 +87,8 @@ An R6 class to define build options for the tableShell
 \item{\code{categoricalSummaryTempTable}}{the name of the categorical summary table used in execution. Defaults as a temp table #categorical_table}
 
 \item{\code{continuousSummaryTempTable}}{the name of the continuous summary table used in execution. Defaults as a temp table #continuous_table}
+
+\item{\code{useCohortEra}}{a true false toggle specifying if in a cohort Char whether to use the cohort era (TRUE) or just the start date (FALSE)}
 }
 \if{html}{\out{</div>}}
 }

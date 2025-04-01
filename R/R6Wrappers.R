@@ -94,7 +94,7 @@ createExecutionSettings <- function(connectionDetails,
 #' @param patientLevelTableShellTempTable the name of the patient level data table with additional meta info used in execution. Defaults as a temp table #pat_ts_tab
 #' @param categoricalSummaryTempTable the name of the categorical summary table used in execution. Defaults as a temp table #categorical_table
 #' @param continuousSummaryTempTable the name of the continuous summary table used in execution. Defaults as a temp table #continuous_table
-#'
+#' @param useCohortEra a true false toggle specifying if in a cohort Char whether to use the cohort era (TRUE) or just the start date (FALSE)
 #' @return A BuildOptions object
 #' @export
 defaultTableShellBuildOptions <- function(codesetTempTable = "#codeset",
@@ -107,7 +107,8 @@ defaultTableShellBuildOptions <- function(codesetTempTable = "#codeset",
                                           patientLevelDataTempTable = "#patient_data",
                                           patientLevelTableShellTempTable = "#pat_ts_tab",
                                           categoricalSummaryTempTable = "#categorical_table",
-                                          continuousSummaryTempTable = "#continuous_table"
+                                          continuousSummaryTempTable = "#continuous_table",
+                                          useCohortEra = TRUE
                                           ) {
 
   buildOpts <- BuildOptions$new(
@@ -121,7 +122,8 @@ defaultTableShellBuildOptions <- function(codesetTempTable = "#codeset",
     patientLevelDataTempTable = patientLevelDataTempTable,
     patientLevelTableShellTempTable = patientLevelTableShellTempTable,
     categoricalSummaryTempTable = categoricalSummaryTempTable,
-    continuousSummaryTempTable = continuousSummaryTempTable
+    continuousSummaryTempTable = continuousSummaryTempTable,
+    useCohortEra = useCohortEra
   )
   return(buildOpts)
 
@@ -764,7 +766,6 @@ newConceptBreaks <- function(name, breaks, labels) {
 #' @param statistic The Statistic object to be used to evaluate the line item
 #' @param cohort A CohortInfo object
 #' @param timeInterval The TimeInterval object used for the line item
-#'
 #' @return A CohortLineItem object
 #'
 #' @export
