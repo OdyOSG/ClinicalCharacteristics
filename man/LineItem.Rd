@@ -4,8 +4,8 @@
 \alias{LineItem}
 \title{LineItem}
 \description{
-An R6 class to define a LineItem object
-A LineItem is a single, explicitly defined characterization to appear in a Section
+An R6 class to define a LineItem object.
+A LineItem is a single, explicitly defined characterization to appear in a Section.
 Derived classes exist off of LineItems
 }
 \section{Active bindings}{
@@ -70,8 +70,7 @@ Derived classes exist off of LineItems
 
 \item{\code{statistic}}{a Statistic Class object used to determine what type of analytic should be done for the line item}
 
-\item{\code{timeInterval}}{a time interval class object to determine the time frame to consider the analytic
-getLineItemMeta}
+\item{\code{timeInterval}}{a time interval class object to determine the time frame to consider the analytic}
 }
 \if{html}{\out{</div>}}
 }
@@ -81,7 +80,6 @@ getLineItemMeta}
 \if{latex}{\out{\hypertarget{method-LineItem-getLineItemMeta}{}}}
 \subsection{Method \code{getLineItemMeta()}}{
 retrieve the line item meta information
-getStatistic
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LineItem$getLineItemMeta()}\if{html}{\out{</div>}}
 }

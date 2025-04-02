@@ -63,8 +63,7 @@ An R6 class to define an ExecutionSettings object
 
 \item{\code{cohortTable}}{The name of the table where the cohort(s) are stored}
 
-\item{\code{cdmSourceName}}{A human-readable name for the OMOP CDM source
-getDbms}
+\item{\code{cdmSourceName}}{A human-readable name for the OMOP CDM source}
 }
 \if{html}{\out{</div>}}
 }
@@ -94,7 +93,6 @@ connect to dbms
 \if{latex}{\out{\hypertarget{method-ExecutionSettings-disconnect}{}}}
 \subsection{Method \code{disconnect()}}{
 disconnect from dbms
-getConnection
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ExecutionSettings$disconnect()}\if{html}{\out{</div>}}
 }

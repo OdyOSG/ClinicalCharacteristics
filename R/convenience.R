@@ -3,7 +3,7 @@
 #'
 #' @param startYear the year to start the year group sequence. By default this is the year 2000
 #'
-#' @return A BreaksStreategy object with defaults assumptions for 5 year age groups
+#' @return A BreaksStrategy object with defaults assumptions for 5 year age groups
 #'
 #' @export
 defaultYearGrp <- function(startYear = NULL) {

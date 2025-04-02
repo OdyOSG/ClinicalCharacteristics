@@ -564,7 +564,7 @@ createDemographicLineItem <- function(statistic) {
 #' @title
 #' Create an index year char
 #'
-#' @param breaks a breaksStrategy object dictating how to classify years into categories. by default this will do each year from 2000 to current day.
+#' @param breaks a breaksStrategy object dictating how to classify years into categories. By default this will do each year from 2000 to current day.
 #'
 #' @return A DemographicIndexYear Statistic class object
 #'

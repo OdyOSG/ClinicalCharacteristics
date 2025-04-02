@@ -4,7 +4,7 @@
 \alias{CohortInfo}
 \title{CohortInfoe}
 \description{
-An R6 class to define a Cohort Info object
+An R6 class to define a Cohort Info object.
 CohortInfo objects do not maintain any execution settings, just the id and name
 }
 \section{Methods}{
@@ -30,8 +30,7 @@ CohortInfo objects do not maintain any execution settings, just the id and name
 \describe{
 \item{\code{id}}{the cohort definition id}
 
-\item{\code{name}}{the name of the cohort definition
-getId}
+\item{\code{name}}{the name of the cohort definition}
 }
 \if{html}{\out{</div>}}
 }
@@ -41,7 +40,6 @@ getId}
 \if{latex}{\out{\hypertarget{method-CohortInfo-getId}{}}}
 \subsection{Method \code{getId()}}{
 get the cohort id
-getName
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortInfo$getId()}\if{html}{\out{</div>}}
 }
@@ -51,8 +49,7 @@ getName
 \if{html}{\out{<a id="method-CohortInfo-getName"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortInfo-getName}{}}}
 \subsection{Method \code{getName()}}{
-get the cohort Name
-cohortDetails
+get the cohort name
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortInfo$getName()}\if{html}{\out{</div>}}
 }
