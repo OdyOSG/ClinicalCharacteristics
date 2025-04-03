@@ -189,7 +189,7 @@ addDefaultEthnicityLineItems <- function() {
 
   notHispanic <- DemographicConcept$new(
     demoCategory = "Ethnicity",
-    demoLine = "Hispanic",
+    demoLine = "Not Hispanic",
     conceptColumn = "ethnicity_concept_id",
     conceptId = 38003564L
   )
