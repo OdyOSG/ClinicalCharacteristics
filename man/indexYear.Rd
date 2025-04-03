@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{indexYear}
 \alias{indexYear}
-\title{Create an index year char}
+\title{Create an index year characteristic}
 \usage{
 indexYear(breaks = NULL)
 }
@@ -13,5 +13,5 @@ indexYear(breaks = NULL)
 A DemographicIndexYear Statistic class object
 }
 \description{
-Create an index year char
+Create an index year characteristic
 }

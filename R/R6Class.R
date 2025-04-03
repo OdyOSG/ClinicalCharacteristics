@@ -18,15 +18,11 @@ TableShell <- R6::R6Class("TableShell",
       #.setClass(private = private, key = "executionSettings", value = executionSettings, class = "ExecutionSettings")
       .setListofClasses(private = private, key = "lineItems", value = lineItems, classes = c("LineItem"))
     },
-
-    #' getName
     #' @description get the title of the table shell
     getTitle = function() {
       tsName <- private$title
       return(tsName)
     },
-
-    #' getTableShellMeta
     #' @description get the meta information for the table shell build
     getTableShellMeta = function() {
       tsLi <- self$getLineItems()
@@ -35,22 +31,16 @@ TableShell <- R6::R6Class("TableShell",
       )
       return(tsMeta)
     },
-
-    #' getTargetCohorts
     #' @description get the target cohorts from the table shell
     getTargetCohorts = function() {
       tsTargetCohorts <- private$targetCohorts
       return(tsTargetCohorts)
     },
-
-    #' getLineItems
     #' @description get the lineItems from the table shell
     getLineItems = function() {
       tsLineItems <- private$lineItems
       return(tsLineItems)
     },
-
-    #' printJobDetails
     #' @description print the job details of the table shell
     printJobDetails = function() {
 
@@ -81,7 +71,6 @@ TableShell <- R6::R6Class("TableShell",
 
     },
 
-    #' buildTableShellSql
     #' @description function creates the table shell sql needed for the execution
     #' @param executionSettings an executionSettings class obj
     #' @param buildOptions a buildOptions class obj
@@ -174,8 +163,6 @@ TableShell <- R6::R6Class("TableShell",
       return(fullSql)
 
     },
-
-    #' outputResults
     #' @description retrieves results from dbms and formats for review
     #' @param executionSettings an executionSettings class obj
     #' @param buildOptions a buildOptions class obj
@@ -203,7 +190,6 @@ TableShell <- R6::R6Class("TableShell",
       return(res)
     },
 
-    #' dropTempTables
     #' @description drop all temp tables from the tableShell build
     #' @param executionSettings an executionSettings class obj
     #' @param buildOptions a buildOptions class obj
@@ -955,7 +941,7 @@ CohortInfo <- R6::R6Class("CohortInfo",
 #' An R6 class to define a Statistic object
 #'
 #' @description
-#' A Statistic is a type of metric to be used for characterization
+#' A Statistic is a type of metric to be used for characterization.
 #' Specific types of statistics are defined in derived classes
 #'
 #' @export
@@ -971,25 +957,21 @@ Statistic <- R6::R6Class(
       .setString(private = private , key = "aggregationType", value = aggType)
 
     },
-    #' getStatisticType
     #' @description retrieve the statistic type
     getStatisticType = function() {
       statType <- private$statisticType
       return(statType)
     },
-    #' getAggregationType
     #' @description retrieve the aggregation type
     getAggregationType = function() {
       aggType <- private$aggregationType
       return(aggType)
     },
-    #' getPersonLineTransformation
     #' @description retrieve the person line transformation
     getPersonLineTransformation = function() {
       plt <- private$personLineTransformation
       return(plt)
     },
-    #' getBreaksIfAny
     #' @description retrieve the breaks object from the statistic object
     getBreaksIfAny = function() {
       if (self$getStatisticType() == "breaks") {
@@ -999,7 +981,6 @@ Statistic <- R6::R6Class(
       }
       return(br)
     },
-    #' getWeightsIfAny
     #' @description retrieve the weights object from the statistic object
     getWeightsIfAny = function() {
       if (self$getStatisticType() == "scoreTransformation") {
@@ -1321,7 +1302,7 @@ DemographicRace <- R6::R6Class(
 #' Presence Statistic
 #'
 #' @description
-#' A statistic that determines whether at least 1 clinical event was present during the specified time interval. It
+#' A statistic that determines whether at least one clinical event was present during the specified time interval. It
 #' is summarized as a categorical value.
 #'
 #' @export
@@ -1404,7 +1385,7 @@ ContinuousDistribution <- R6::R6Class(
 #'
 #' @description
 #' A statistic that converts a categorical value to a continuous value by modifying the occurrence of
-#' an event by a weight and summing across patients..
+#' an event by a weight and summing across patients.
 #'
 #' @export
 Score <- R6::R6Class(
@@ -1708,7 +1689,6 @@ SourceConceptSetLineItem <- R6::R6Class(
       #.setNumber(private = private, key = "typeConceptIds", value = typeConceptIds, nullable = TRUE)
 
     },
-    #' grabSourceConceptSet
     #' @description retrieve the source concept set
     grabSourceConceptSet = function() {
       scs <- private$sourceConceptSet
@@ -1728,7 +1708,7 @@ SourceConceptSetLineItem <- R6::R6Class(
 
 #' @title DemographicLineItem
 #' @description
-#' An R6 class to handle the ...
+#' An R6 class to handle a Demographic line item
 #'
 #' @export
 DemographicLineItem <- R6::R6Class(

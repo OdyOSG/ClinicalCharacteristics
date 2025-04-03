@@ -293,8 +293,8 @@ anyScore <- function(weight) {
 #'
 #' @description This statistic sums the number of occurrences of an event in a timeInterval and
 #' divides it by the time (modified by  year) to construct a rate per patient. This
-#' can then be summariezed as a continuous variable
-#' @return A stat object f class intervalRate
+#' can then be summarized as a continuous variable
+#' @return A stat object of class intervalRate
 #'
 #' @export
 yearlyRate <- function() {
@@ -309,8 +309,8 @@ yearlyRate <- function() {
 #'
 #' @description This statistic sums the number of occurrences of an event in a timeInterval and
 #' divides it by the time (modified by  month) to construct a rate per patient. This
-#' can then be summariezed as a continuous variable
-#' @return A stat object f class intervalRate
+#' can then be summarized as a continuous variable
+#' @return A stat object of class intervalRate
 #'
 #' @export
 monthlyRate <- function() {
@@ -562,7 +562,7 @@ createDemographicLineItem <- function(statistic) {
 
 
 #' @title
-#' Create an index year char
+#' Create an index year characteristic
 #'
 #' @param breaks a breaksStrategy object dictating how to classify years into categories. By default this will do each year from 2000 to current day.
 #'
@@ -581,7 +581,7 @@ indexYear <- function(breaks = NULL) {
 
 
 #' @title
-#' Create a cohort follow up time char
+#' Create a cohort follow up time characteristic
 #'
 #' @return A DemographicCohortTime Statistic class object
 #'
@@ -594,7 +594,7 @@ cohortFollowupTime <- function() {
 
 
 #' @title
-#' Create a location char
+#' Create a location characteristic
 #'
 #' @param breaks a breaksStrategy object dictating how to classify locations into categories.
 #'
@@ -609,9 +609,9 @@ personLocation <- function(breaks) {
 
 
 #' @title
-#' Create an payer type char
+#' Create a payer type characteristic
 #'
-#' @param breaks a breaksStrategy object dictating how to classify payer types into categories. by default this will use the SOPT vocabulary
+#' @param breaks a breaksStrategy object dictating how to classify payer types into categories. by default this will use the Source of Payment Typology(SOPT) vocabulary
 #'
 #' @return A DemographicPayerType Statistic class object
 #'
@@ -628,7 +628,7 @@ payerType <- function(breaks = NULL) {
 
 
 #' @title
-#' Create a race char
+#' Create a race characteristic
 #'
 #' @param breaks a breaksStrategy object dictating how to classify race into categories. by default this will use custom race categories
 #'

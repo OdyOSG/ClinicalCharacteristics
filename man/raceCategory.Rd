@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{raceCategory}
 \alias{raceCategory}
-\title{Create a race char}
+\title{Create a race characteristic}
 \usage{
 raceCategory(breaks = NULL)
 }
@@ -13,5 +13,5 @@ raceCategory(breaks = NULL)
 A DemographicRace Statistic class object
 }
 \description{
-Create a race char
+Create a race characteristic
 }

@@ -4,7 +4,7 @@
 \alias{DemographicLineItem}
 \title{DemographicLineItem}
 \description{
-An R6 class to handle the ...
+An R6 class to handle a Demographic line item
 }
 \section{Super class}{
 \code{\link[ClinicalCharacteristics:LineItem]{ClinicalCharacteristics::LineItem}} -> \code{DemographicLineItem}
