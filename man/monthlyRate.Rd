@@ -7,10 +7,10 @@
 monthlyRate()
 }
 \value{
-A stat object f class intervalRate
+A stat object of class intervalRate
 }
 \description{
 This statistic sums the number of occurrences of an event in a timeInterval and
 divides it by the time (modified by  month) to construct a rate per patient. This
-can then be summariezed as a continuous variable
+can then be summarized as a continuous variable
 }

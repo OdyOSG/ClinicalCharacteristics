@@ -4,7 +4,7 @@
 \alias{Statistic}
 \title{An R6 class to define a Statistic object}
 \description{
-A Statistic is a type of metric to be used for characterization
+A Statistic is a type of metric to be used for characterization.
 Specific types of statistics are defined in derived classes
 }
 \section{Methods}{
@@ -34,8 +34,7 @@ Specific types of statistics are defined in derived classes
 
 \item{\code{personLine}}{the means of converting occurrences to a single event per patient}
 
-\item{\code{aggType}}{the way the metric is reported either categorical or continuous
-getStatisticType}
+\item{\code{aggType}}{the way the metric is reported either categorical or continuous}
 }
 \if{html}{\out{</div>}}
 }
@@ -45,7 +44,6 @@ getStatisticType}
 \if{latex}{\out{\hypertarget{method-Statistic-getStatisticType}{}}}
 \subsection{Method \code{getStatisticType()}}{
 retrieve the statistic type
-getAggregationType
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$getStatisticType()}\if{html}{\out{</div>}}
 }
@@ -56,7 +54,6 @@ getAggregationType
 \if{latex}{\out{\hypertarget{method-Statistic-getAggregationType}{}}}
 \subsection{Method \code{getAggregationType()}}{
 retrieve the aggregation type
-getPersonLineTransformation
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$getAggregationType()}\if{html}{\out{</div>}}
 }
@@ -67,7 +64,6 @@ getPersonLineTransformation
 \if{latex}{\out{\hypertarget{method-Statistic-getPersonLineTransformation}{}}}
 \subsection{Method \code{getPersonLineTransformation()}}{
 retrieve the person line transformation
-getBreaksIfAny
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$getPersonLineTransformation()}\if{html}{\out{</div>}}
 }
@@ -78,7 +74,6 @@ getBreaksIfAny
 \if{latex}{\out{\hypertarget{method-Statistic-getBreaksIfAny}{}}}
 \subsection{Method \code{getBreaksIfAny()}}{
 retrieve the breaks object from the statistic object
-getWeightsIfAny
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Statistic$getBreaksIfAny()}\if{html}{\out{</div>}}
 }

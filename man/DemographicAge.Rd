@@ -46,8 +46,7 @@ A Demographic Statistic that calculates age from the person table
 
 \item{\code{demoCategory}}{the name of the demographic category}
 
-\item{\code{breaks}}{a breaks strategy object to categorize results
-getDemoLabel}
+\item{\code{breaks}}{a breaks strategy object to categorize results}
 }
 \if{html}{\out{</div>}}
 }
@@ -57,7 +56,6 @@ getDemoLabel}
 \if{latex}{\out{\hypertarget{method-DemographicAge-getDemoLabel}{}}}
 \subsection{Method \code{getDemoLabel()}}{
 retrieve the demographic label
-modifyBreaksLabels
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DemographicAge$getDemoLabel()}\if{html}{\out{</div>}}
 }

@@ -68,7 +68,7 @@ An R6 class to define build options for the tableShell
 \describe{
 \item{\code{codesetTempTable}}{the name of the codeset table used in execution. Defaults as a temp table #codeset}
 
-\item{\code{sourceCodesetTempTable}}{he name of the source codeset table used in execution}
+\item{\code{sourceCodesetTempTable}}{the name of the source codeset table used in execution}
 
 \item{\code{timeWindowTempTable}}{the name of the time Window table used in execution. Defaults as a temp table #time_windows}
 

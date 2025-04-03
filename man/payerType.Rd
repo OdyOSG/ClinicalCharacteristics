@@ -2,16 +2,16 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{payerType}
 \alias{payerType}
-\title{Create an payer type char}
+\title{Create a payer type characteristic}
 \usage{
 payerType(breaks = NULL)
 }
 \arguments{
-\item{breaks}{a breaksStrategy object dictating how to classify payer types into categories. by default this will use the SOPT vocabulary}
+\item{breaks}{a breaksStrategy object dictating how to classify payer types into categories. by default this will use the Source of Payment Typology(SOPT) vocabulary}
 }
 \value{
 A DemographicPayerType Statistic class object
 }
 \description{
-Create an payer type char
+Create a payer type characteristic
 }

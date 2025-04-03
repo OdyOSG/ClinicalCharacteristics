@@ -36,8 +36,7 @@ An R6 class to define a TableShell object
 
 \item{\code{targetCohorts}}{a list of CohortInfo class objects that describe the index cohorts}
 
-\item{\code{lineItems}}{a list of line item class objects
-getName}
+\item{\code{lineItems}}{a list of line item class objects}
 }
 \if{html}{\out{</div>}}
 }
@@ -47,7 +46,6 @@ getName}
 \if{latex}{\out{\hypertarget{method-TableShell-getTitle}{}}}
 \subsection{Method \code{getTitle()}}{
 get the title of the table shell
-getTableShellMeta
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TableShell$getTitle()}\if{html}{\out{</div>}}
 }
@@ -58,7 +56,6 @@ getTableShellMeta
 \if{latex}{\out{\hypertarget{method-TableShell-getTableShellMeta}{}}}
 \subsection{Method \code{getTableShellMeta()}}{
 get the meta information for the table shell build
-getTargetCohorts
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TableShell$getTableShellMeta()}\if{html}{\out{</div>}}
 }
@@ -69,7 +66,6 @@ getTargetCohorts
 \if{latex}{\out{\hypertarget{method-TableShell-getTargetCohorts}{}}}
 \subsection{Method \code{getTargetCohorts()}}{
 get the target cohorts from the table shell
-getLineItems
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TableShell$getTargetCohorts()}\if{html}{\out{</div>}}
 }
@@ -80,7 +76,6 @@ getLineItems
 \if{latex}{\out{\hypertarget{method-TableShell-getLineItems}{}}}
 \subsection{Method \code{getLineItems()}}{
 get the lineItems from the table shell
-printJobDetails
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TableShell$getLineItems()}\if{html}{\out{</div>}}
 }
@@ -91,7 +86,6 @@ printJobDetails
 \if{latex}{\out{\hypertarget{method-TableShell-printJobDetails}{}}}
 \subsection{Method \code{printJobDetails()}}{
 print the job details of the table shell
-buildTableShellSql
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TableShell$printJobDetails()}\if{html}{\out{</div>}}
 }
@@ -111,8 +105,7 @@ function creates the table shell sql needed for the execution
 \describe{
 \item{\code{executionSettings}}{an executionSettings class obj}
 
-\item{\code{buildOptions}}{a buildOptions class obj
-outputResults}
+\item{\code{buildOptions}}{a buildOptions class obj}
 }
 \if{html}{\out{</div>}}
 }
@@ -131,8 +124,7 @@ retrieves results from dbms and formats for review
 \describe{
 \item{\code{executionSettings}}{an executionSettings class obj}
 
-\item{\code{buildOptions}}{a buildOptions class obj
-dropTempTables}
+\item{\code{buildOptions}}{a buildOptions class obj}
 }
 \if{html}{\out{</div>}}
 }

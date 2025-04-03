@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{personLocation}
 \alias{personLocation}
-\title{Create a location char}
+\title{Create a location characteristic}
 \usage{
 personLocation(breaks)
 }
@@ -13,5 +13,5 @@ personLocation(breaks)
 A DemographicLocation Statistic class object
 }
 \description{
-Create a location char
+Create a location characteristic
 }
