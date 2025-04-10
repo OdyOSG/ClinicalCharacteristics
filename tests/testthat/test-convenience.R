@@ -1,5 +1,19 @@
 library(testthat)
 
+test_that("defaultYearGrp returns a BreaksStrategy object",{
+
+  tst <- defaultYearGrp()
+  expect_equal(tst$name,"Default Years (2000-2025)")
+  expect_equal(class(tst)[[1]], "BreaksStrategy")
+  expect_equal(tst$labels[1], "2000")
+})
+
+test_that("defaultYearGrp return correct years if startYear != NULL", {
+  tst <- defaultYearGrp(startYear = 2010)
+  expect_equal(tst$name, "Default Years (2010-2025)")
+  expect_equal(tst$labels[1], "2010")
+})
+
 test_that("age5yrGrp returns a convenient breaks object", {
 
   tst <- age5yrGrp()
