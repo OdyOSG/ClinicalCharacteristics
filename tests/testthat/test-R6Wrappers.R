@@ -13,7 +13,7 @@ test_that("createTableShell returns a TableShell object with the correct name", 
                                  targetCohorts = list(targetCohort),
                                  lineItems = list(lineItem))
   expect_true(inherits(tableShell, "TableShell"))
-  expect_equal(tableShell$getName(), "Table 1")
+  expect_equal(tableShell$getTitle(), "Table 1")
 })
 
 test_that("parseCohortInfoFromDf parses cohort info from a data frame", {
@@ -37,7 +37,7 @@ test_that("createExecutionSettings returns an ExecutionSettings object", {
                                               cdmDatabaseSchema = "cdm_schema",
                                               workDatabaseSchema = "work_schema",
                                               tempEmulationSchema = "fake_temp_emulation_schema",
-                                              targetCohortTable = "fake_target_cohort_table",
+                                              cohortTable = "fake_cohort_table",
                                               cdmSourceName = "fake_cdm_source_name")
   expect_true(inherits(executionSettings, "ExecutionSettings"))
 })
@@ -117,7 +117,7 @@ test_that("createCohorttLineItemBatch creates a list of CohortLineItem objects",
 # Breaks Strategy --------------------
 
 test_that("newBreaks makes a BreaksStrategy Object",{
-  newBreaksStrategy <- newBreaks(name = "test", breaks = c(0,2,4))
+  newBreaksStrategy <- newValueBreaks(name = "test", breaks = c(0,2,4))
   expect_equal(newBreaksStrategy$name, "test")
   expect_equal(class(newBreaksStrategy)[[1]], "BreaksStrategy")
   expect_equal(newBreaksStrategy$labels[1], "[0-2)")
@@ -156,7 +156,7 @@ test_that("ageChar makes a DemographicAge Class", {
   expect_equal(ageChar1$getDemoLabel(), "Age")
   expect_equal(ageChar1$getAggregationType(), "continuous")
 
-  ageChar2 <- ageCharBreaks(
+   ageChar2 <- ageCharBreaks(
     breaks = newBreaks(name = "Child to Adult", breaks = c(0, 18, 65))
   )
 

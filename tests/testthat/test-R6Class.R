@@ -72,10 +72,7 @@ test_that("ConceptSetLineItem object initializes correctly", {
                                        statistic = Statistic$new(statType = "test", personLine = "test", aggType = "test"),
                                        domainTable = "domain",
                                        conceptSet = Capr::cs(1335471, name = "test"),
-                                       timeInterval = TimeInterval$new(0,365)#,
-                                       #sourceConceptSet = Capr::cs(1335471, name = "test_source"),
-                                       #typeConceptIds = c(67890),
-                                       #visitOccurrenceConceptIds = c(12345, 67890)
+                                       timeInterval = TimeInterval$new(0,365)
                                        )
   expect_true(inherits(conceptSet, "ConceptSetLineItem"))
   expect_true(inherits(conceptSet, "LineItem"))
