@@ -32,9 +32,11 @@ test_that("ExecutionSettings object creates", {
                               cdmDatabaseSchema = "fake_cdm_database_schema",
                               workDatabaseSchema = "fake_work_database_schema",
                               tempEmulationSchema = "fake_temp_emulation_schema",
-                              targetCohortTable = "fake_target_cohort_table",
+                              cohortTable = "fake_cohort_table",
                               cdmSourceName = "fake_cdm_source_name")
   expect_true(inherits(es, "ExecutionSettings"), info = "es should be an ExecutionSettings object")
+  expect_equal(es$cdmDatabaseSchema, "fake_cdm_database_schema")
+  expect_equal(es$cohortTable, "fake_cohort_table")
 })
 
 test_that("LineItem class initializes correctly", {
@@ -70,10 +72,8 @@ test_that("ConceptSetLineItem object initializes correctly", {
                                        statistic = Statistic$new(statType = "test", personLine = "test", aggType = "test"),
                                        domainTable = "domain",
                                        conceptSet = Capr::cs(1335471, name = "test"),
-                                       timeInterval = TimeInterval$new(0,365),
-                                       sourceConceptSet = Capr::cs(1335471, name = "test_source"),
-                                       typeConceptIds = c(67890),
-                                       visitOccurrenceConceptIds = c(12345, 67890))
+                                       timeInterval = TimeInterval$new(0,365)
+                                       )
   expect_true(inherits(conceptSet, "ConceptSetLineItem"))
   expect_true(inherits(conceptSet, "LineItem"))
 })

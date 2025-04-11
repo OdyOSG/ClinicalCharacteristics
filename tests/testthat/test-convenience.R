@@ -1,5 +1,19 @@
 library(testthat)
 
+test_that("defaultYearGrp returns a BreaksStrategy object",{
+
+  tst <- defaultYearGrp()
+  expect_equal(tst$name,"Default Years (2000-2025)")
+  expect_equal(class(tst)[[1]], "BreaksStrategy")
+  expect_equal(tst$labels[1], "2000")
+})
+
+test_that("defaultYearGrp return correct years if startYear != NULL", {
+  tst <- defaultYearGrp(startYear = 2010)
+  expect_equal(tst$name, "Default Years (2010-2025)")
+  expect_equal(tst$labels[1], "2010")
+})
+
 test_that("age5yrGrp returns a convenient breaks object", {
 
   tst <- age5yrGrp()
@@ -9,6 +23,16 @@ test_that("age5yrGrp returns a convenient breaks object", {
 
 })
 
+test_that("age 5yrGrp breaks are correctly set", {
+  tst <- age5yrGrp()
+  expected_breaks <- as.list(c(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60,
+                               65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115,
+                               120, 125, 130))
+
+  expect_equal(tst$breaks, expected_breaks)
+})
+
+
 
 test_that("age10yrGrp returns a convenient breaks object", {
 
@@ -17,6 +41,13 @@ test_that("age10yrGrp returns a convenient breaks object", {
   expect_equal(class(tst)[[1]], "BreaksStrategy")
   expect_equal(tst$labels[1], "0-9")
 
+})
+
+
+test_that("age 10yrGrp breaks are correctly set", {
+  tst <- age10yrGrp()
+  expected_breaks <- as.list(c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130))
+  expect_equal(tst$breaks, expected_breaks)
 })
 
 
