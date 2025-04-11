@@ -5,7 +5,7 @@
 \title{Score Statistic}
 \description{
 A statistic that converts a categorical value to a continuous value by modifying the occurrence of
-an event by a weight and summing across patients..
+an event by a weight and summing across patients.
 }
 \section{Super class}{
 \code{\link[ClinicalCharacteristics:Statistic]{ClinicalCharacteristics::Statistic}} -> \code{Score}

@@ -10,7 +10,7 @@ defaultYearGrp(startYear = NULL)
 \item{startYear}{the year to start the year group sequence. By default this is the year 2000}
 }
 \value{
-A BreaksStreategy object with defaults assumptions for 5 year age groups
+A BreaksStrategy object with defaults assumptions for 5 year age groups
 }
 \description{
 Create a breaks Strategy object for year

@@ -33,7 +33,6 @@ A Demographic Statistic that calculates the time (in days) in the target cohort
 \if{latex}{\out{\hypertarget{method-DemographicCohortTime-new}{}}}
 \subsection{Method \code{new()}}{
 initialize cohort time stat
-getDemoLabel
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DemographicCohortTime$new()}\if{html}{\out{</div>}}
 }

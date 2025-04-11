@@ -4,7 +4,7 @@
 \alias{Presence}
 \title{Presence Statistic}
 \description{
-A statistic that determines whether at least 1 clinical event was present during the specified time interval. It
+A statistic that determines whether at least one clinical event was present during the specified time interval. It
 is summarized as a categorical value.
 }
 \section{Super class}{

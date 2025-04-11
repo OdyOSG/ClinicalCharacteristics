@@ -50,8 +50,7 @@ An R6 class to define a SourceConceptSetLineItem
 
 \item{\code{timeInterval}}{a time interval class object to determine the time frame to consider the analytic}
 
-\item{\code{statistic}}{a Statistic Class object used to determine what type of analytic should be done for the line item
-grabSourceConceptSet}
+\item{\code{statistic}}{a Statistic Class object used to determine what type of analytic should be done for the line item}
 }
 \if{html}{\out{</div>}}
 }

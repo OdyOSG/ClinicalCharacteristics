@@ -18,15 +18,11 @@ TableShell <- R6::R6Class("TableShell",
       #.setClass(private = private, key = "executionSettings", value = executionSettings, class = "ExecutionSettings")
       .setListofClasses(private = private, key = "lineItems", value = lineItems, classes = c("LineItem"))
     },
-
-    #' getName
     #' @description get the title of the table shell
     getTitle = function() {
       tsName <- private$title
       return(tsName)
     },
-
-    #' getTableShellMeta
     #' @description get the meta information for the table shell build
     getTableShellMeta = function() {
       tsLi <- self$getLineItems()
@@ -35,22 +31,16 @@ TableShell <- R6::R6Class("TableShell",
       )
       return(tsMeta)
     },
-
-    #' getTargetCohorts
     #' @description get the target cohorts from the table shell
     getTargetCohorts = function() {
       tsTargetCohorts <- private$targetCohorts
       return(tsTargetCohorts)
     },
-
-    #' getLineItems
     #' @description get the lineItems from the table shell
     getLineItems = function() {
       tsLineItems <- private$lineItems
       return(tsLineItems)
     },
-
-    #' printJobDetails
     #' @description print the job details of the table shell
     printJobDetails = function() {
 
@@ -81,7 +71,6 @@ TableShell <- R6::R6Class("TableShell",
 
     },
 
-    #' buildTableShellSql
     #' @description function creates the table shell sql needed for the execution
     #' @param executionSettings an executionSettings class obj
     #' @param buildOptions a buildOptions class obj
@@ -174,8 +163,6 @@ TableShell <- R6::R6Class("TableShell",
       return(fullSql)
 
     },
-
-    #' outputResults
     #' @description retrieves results from dbms and formats for review
     #' @param executionSettings an executionSettings class obj
     #' @param buildOptions a buildOptions class obj
@@ -203,7 +190,6 @@ TableShell <- R6::R6Class("TableShell",
       return(res)
     },
 
-    #' dropTempTables
     #' @description drop all temp tables from the tableShell build
     #' @param executionSettings an executionSettings class obj
     #' @param buildOptions a buildOptions class obj
@@ -607,7 +593,7 @@ BuildOptions <- R6::R6Class(
   classname = "BuildOptions",
   public = list(
     #' @param codesetTempTable the name of the codeset table used in execution. Defaults as a temp table #codeset
-    #' @param sourceCodesetTempTable he name of the source codeset table used in execution
+    #' @param sourceCodesetTempTable the name of the source codeset table used in execution
     #' @param timeWindowTempTable the name of the time Window table used in execution. Defaults as a temp table #time_windows
     #' @param targetCohortTempTable the name of the target cohort table used in execution. Defaults as a temp table #target_cohorts
     #' @param tsMetaTempTable the name of the table shell meta table used in execution. Defaults as a temp table #ts_meta
@@ -758,15 +744,11 @@ ExecutionSettings <- R6::R6Class(
       .setString(private = private, key = ".cohortTable", value = cohortTable)
       .setString(private = private, key = ".cdmSourceName", value = cdmSourceName)
     },
-
-    #' getDbms
     #' @description extract the dbms dialect
     getDbms = function() {
       dbms <- private$connectionDetails$dbms
       return(dbms)
     },
-
-    #' connect
     #' @description connect to dbms
     connect = function() {
 
@@ -783,7 +765,6 @@ ExecutionSettings <- R6::R6Class(
       }
     },
 
-    #' disconnect
     #' @description disconnect from dbms
     disconnect = function() {
 
@@ -805,7 +786,6 @@ ExecutionSettings <- R6::R6Class(
 
     #TODO make this more rigorous
     # add warning if no connection available
-    #' getConnection
     #' @description retrieve the connection object
     getConnection = function() {
       conObj <- private$.connection
@@ -911,7 +891,7 @@ ExecutionSettings <- R6::R6Class(
 
 #' @title CohortInfoe
 #' @description
-#' An R6 class to define a Cohort Info object
+#' An R6 class to define a Cohort Info object.
 #' CohortInfo objects do not maintain any execution settings, just the id and name
 #'
 #' @export
@@ -923,19 +903,16 @@ CohortInfo <- R6::R6Class("CohortInfo",
       .setNumber(private = private, key = "id", value = id)
       .setString(private = private, key = "name", value = name)
     },
-    #' getId
     #' @description get the cohort id
     getId = function() {
       cId <- private$id
       return(cId)
     },
-    #' getName
-    #' @description get the cohort Name
+    #' @description get the cohort name
     getName = function() {
       cName <- private$name
       return(cName)
     },
-    #' cohortDetails
     #' @description print the cohort details
     cohortDetails = function(){
       id <- self$getId()
@@ -964,7 +941,7 @@ CohortInfo <- R6::R6Class("CohortInfo",
 #' An R6 class to define a Statistic object
 #'
 #' @description
-#' A Statistic is a type of metric to be used for characterization
+#' A Statistic is a type of metric to be used for characterization.
 #' Specific types of statistics are defined in derived classes
 #'
 #' @export
@@ -980,25 +957,21 @@ Statistic <- R6::R6Class(
       .setString(private = private , key = "aggregationType", value = aggType)
 
     },
-    #' getStatisticType
     #' @description retrieve the statistic type
     getStatisticType = function() {
       statType <- private$statisticType
       return(statType)
     },
-    #' getAggregationType
     #' @description retrieve the aggregation type
     getAggregationType = function() {
       aggType <- private$aggregationType
       return(aggType)
     },
-    #' getPersonLineTransformation
     #' @description retrieve the person line transformation
     getPersonLineTransformation = function() {
       plt <- private$personLineTransformation
       return(plt)
     },
-    #' getBreaksIfAny
     #' @description retrieve the breaks object from the statistic object
     getBreaksIfAny = function() {
       if (self$getStatisticType() == "breaks") {
@@ -1008,7 +981,6 @@ Statistic <- R6::R6Class(
       }
       return(br)
     },
-    #' getWeightsIfAny
     #' @description retrieve the weights object from the statistic object
     getWeightsIfAny = function() {
       if (self$getStatisticType() == "scoreTransformation") {
@@ -1041,7 +1013,7 @@ DemographicConcept <- R6::R6Class(
   classname = "DemographicConcept",
   inherit = Statistic,
   public = list(
-    #' @param demoCategory the cateogry name of the demographic
+    #' @param demoCategory the category name of the demographic
     #' @param demoLine the line item name of the demographic concept
     #' @param conceptColumn the name of column in the person table to extract demographic concept
     #' @param conceptId the concept to search for in the concept column
@@ -1055,19 +1027,16 @@ DemographicConcept <- R6::R6Class(
       .setString(private = private, key = "conceptColumn", value = conceptColumn)
       .setNumber(private = private, key = "conceptId", value = conceptId)
     },
-    #' getConceptColumn
     #' @description retrieve the concept column
     getConceptColumn = function() {
       rr <- private$conceptColumn
       return(rr)
     },
-    #' getDemoLabel
     #' @description create a label for the demographic concept
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}: {private$demoLine}")
       return(rr)
     },
-    #' getConceptId
     #' @description retrieve the concept id
     getConceptId = function() {
       rr <- private$conceptId
@@ -1107,14 +1076,11 @@ DemographicAge <- R6::R6Class(
       .setClass(private = private, key = "breaks", value = breaks,
                 class = "BreaksStrategy", nullable = TRUE)
     },
-    #' getDemoLabel
     #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
     },
-
-    #' modifyBreaksLabels
     #' @description update the breaks labels within the statistics class
     #' @param newLabels a character string of new labels for the breaks
     modifyBreaksLabels = function(newLabels) {
@@ -1151,14 +1117,11 @@ DemographicIndexYear <- R6::R6Class(
       .setClass(private = private, key = "breaks", value = breaks,
                 class = "BreaksStrategy", nullable = FALSE)
     },
-    #' getDemoLabel
     #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
     },
-
-    #' modifyBreaksLabels
     #' @description update the breaks labels within the statistics class
     #' @param newLabels a character string of new labels for the breaks
     modifyBreaksLabels = function(newLabels) {
@@ -1194,7 +1157,6 @@ DemographicCohortTime <- R6::R6Class(
         aggType = "continuous")
       .setString(private = private, key = "demoCategory", value = "Cohort Follow up")
     },
-    #' getDemoLabel
     #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
@@ -1230,14 +1192,11 @@ DemographicLocation <- R6::R6Class(
       .setClass(private = private, key = "breaks", value = breaks,
                 class = "BreaksStrategy", nullable = FALSE)
     },
-    #' getDemoLabel
     #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
     },
-
-    #' modifyBreaksLabels
     #' @description update the breaks labels within the statistics class
     #' @param newLabels a character string of new labels for the breaks
     modifyBreaksLabels = function(newLabels) {
@@ -1275,14 +1234,11 @@ DemographicPayerType <- R6::R6Class(
       .setClass(private = private, key = "breaks", value = breaks,
                 class = "BreaksStrategy", nullable = FALSE)
     },
-    #' getDemoLabel
     #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
     },
-
-    #' modifyBreaksLabels
     #' @description update the breaks labels within the statistics class
     #' @param newLabels a character string of new labels for the breaks
     modifyBreaksLabels = function(newLabels) {
@@ -1319,14 +1275,11 @@ DemographicRace <- R6::R6Class(
       .setClass(private = private, key = "breaks", value = breaks,
                 class = "BreaksStrategy", nullable = FALSE)
     },
-    #' getDemoLabel
     #' @description retrieve the demographic label
     getDemoLabel = function() {
       rr <- glue::glue("{private$demoCategory}")
       return(rr)
     },
-
-    #' modifyBreaksLabels
     #' @description update the breaks labels within the statistics class
     #' @param newLabels a character string of new labels for the breaks
     modifyBreaksLabels = function(newLabels) {
@@ -1349,7 +1302,7 @@ DemographicRace <- R6::R6Class(
 #' Presence Statistic
 #'
 #' @description
-#' A statistic that determines whether at least 1 clinical event was present during the specified time interval. It
+#' A statistic that determines whether at least one clinical event was present during the specified time interval. It
 #' is summarized as a categorical value.
 #'
 #' @export
@@ -1432,7 +1385,7 @@ ContinuousDistribution <- R6::R6Class(
 #'
 #' @description
 #' A statistic that converts a categorical value to a continuous value by modifying the occurrence of
-#' an event by a weight and summing across patients..
+#' an event by a weight and summing across patients.
 #'
 #' @export
 Score <- R6::R6Class(
@@ -1496,8 +1449,8 @@ IntervalRate <- R6::R6Class(
 
 #' @title LineItem
 #' @description
-#' An R6 class to define a LineItem object
-#' A LineItem is a single, explicitly defined characterization to appear in a Section
+#' An R6 class to define a LineItem object.
+#' A LineItem is a single, explicitly defined characterization to appear in a Section.
 #' Derived classes exist off of LineItems
 #'
 #' @export
@@ -1531,7 +1484,6 @@ LineItem <- R6::R6Class(
       .setClass(private = private, key = "statistic", value = statistic, class = "Statistic")
       .setClass(private = private, key = "timeInterval", value = timeInterval, class = "TimeInterval", nullable = TRUE)
     },
-    #' getLineItemMeta
     #' @description retrieve the line item meta information
     getLineItemMeta = function() {
 
@@ -1558,7 +1510,6 @@ LineItem <- R6::R6Class(
 
       return(tb)
     },
-    #' getStatistic
     #' @description retrieve the statistic class object
     getStatistic = function() {
       st <- private$statistic
@@ -1738,7 +1689,6 @@ SourceConceptSetLineItem <- R6::R6Class(
       #.setNumber(private = private, key = "typeConceptIds", value = typeConceptIds, nullable = TRUE)
 
     },
-    #' grabSourceConceptSet
     #' @description retrieve the source concept set
     grabSourceConceptSet = function() {
       scs <- private$sourceConceptSet
@@ -1758,7 +1708,7 @@ SourceConceptSetLineItem <- R6::R6Class(
 
 #' @title DemographicLineItem
 #' @description
-#' An R6 class to handle the ...
+#' An R6 class to handle a Demographic line item
 #'
 #' @export
 DemographicLineItem <- R6::R6Class(

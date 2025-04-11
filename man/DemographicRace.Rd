@@ -40,8 +40,7 @@ A Demographic Statistic that retrieves and categorizes the patient race from the
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{breaks}}{a breaks strategy object to categorize results
-getDemoLabel}
+\item{\code{breaks}}{a breaks strategy object to categorize results}
 }
 \if{html}{\out{</div>}}
 }
@@ -51,7 +50,6 @@ getDemoLabel}
 \if{latex}{\out{\hypertarget{method-DemographicRace-getDemoLabel}{}}}
 \subsection{Method \code{getDemoLabel()}}{
 retrieve the demographic label
-modifyBreaksLabels
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DemographicRace$getDemoLabel()}\if{html}{\out{</div>}}
 }

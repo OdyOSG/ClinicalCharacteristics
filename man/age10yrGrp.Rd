@@ -7,7 +7,7 @@
 age10yrGrp()
 }
 \value{
-A BreaksStreategy object with defaults assumptions for 10 year age groups
+A BreaksStrategy object with defaults assumptions for 10 year age groups
 }
 \description{
 Create a breaks Strategy object for age into 10 year groups

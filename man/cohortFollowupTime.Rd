@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{cohortFollowupTime}
 \alias{cohortFollowupTime}
-\title{Create a cohort follow up time char}
+\title{Create a cohort follow up time characteristic}
 \usage{
 cohortFollowupTime()
 }
@@ -10,5 +10,5 @@ cohortFollowupTime()
 A DemographicCohortTime Statistic class object
 }
 \description{
-Create a cohort follow up time char
+Create a cohort follow up time characteristic
 }

@@ -41,14 +41,13 @@ A Demographic Statistic that considers concepts in person table
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{demoCategory}}{the cateogry name of the demographic}
+\item{\code{demoCategory}}{the category name of the demographic}
 
 \item{\code{demoLine}}{the line item name of the demographic concept}
 
 \item{\code{conceptColumn}}{the name of column in the person table to extract demographic concept}
 
-\item{\code{conceptId}}{the concept to search for in the concept column
-getConceptColumn}
+\item{\code{conceptId}}{the concept to search for in the concept column}
 }
 \if{html}{\out{</div>}}
 }
@@ -58,7 +57,6 @@ getConceptColumn}
 \if{latex}{\out{\hypertarget{method-DemographicConcept-getConceptColumn}{}}}
 \subsection{Method \code{getConceptColumn()}}{
 retrieve the concept column
-getDemoLabel
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DemographicConcept$getConceptColumn()}\if{html}{\out{</div>}}
 }
@@ -69,7 +67,6 @@ getDemoLabel
 \if{latex}{\out{\hypertarget{method-DemographicConcept-getDemoLabel}{}}}
 \subsection{Method \code{getDemoLabel()}}{
 create a label for the demographic concept
-getConceptId
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DemographicConcept$getDemoLabel()}\if{html}{\out{</div>}}
 }

@@ -2,16 +2,16 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{indexYear}
 \alias{indexYear}
-\title{Create an index year char}
+\title{Create an index year characteristic}
 \usage{
 indexYear(breaks = NULL)
 }
 \arguments{
-\item{breaks}{a breaksStrategy object dictating how to classify years into categories. by default this will do each year from 2000 to current day.}
+\item{breaks}{a breaksStrategy object dictating how to classify years into categories. By default this will do each year from 2000 to current day.}
 }
 \value{
 A DemographicIndexYear Statistic class object
 }
 \description{
-Create an index year char
+Create an index year characteristic
 }
