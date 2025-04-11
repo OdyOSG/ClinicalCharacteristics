@@ -1776,11 +1776,24 @@ CohortLineItem <- R6::R6Class(
   )
 )
 
+
 ## Concept Set Group -----------------
+
+#' @title ConceptSetGroupLineItem
+#' @description
+#' An R6 class to define a ConceptSetGroupLineItem
+#'
+#' @export
 ConceptSetGroupLineItem <- R6::R6Class(
   classname = "ConceptSetGroupLineItem",
   inherit = LineItem,
   public = list(
+    #' @param sectionLabel a label for the table shell section
+    #' @param groupLabel a label for the group
+    #' @param conceptSets a group of concept sets
+    #' @param domainTables the domain tables in the cdm
+    #' @param timeInterval a time interval class object to determine the time frame to consider the analytic
+    #' @param statistic a Statistic Class object used to determine what type of analytic should be done for the line item
     initialize = function(
       sectionLabel,
       groupLabel,
@@ -1818,9 +1831,17 @@ ConceptSetGroupLineItem <- R6::R6Class(
 # Helper Classes -----
 
 ## TimeInterval ------
+
+#' @title TimeInterval
+#' @description
+#' An R6 class to define a TimeInterval
+#'
+#' @export
 TimeInterval <- R6::R6Class(
   "TimeInterval",
   public = list(
+    #' @param lb left bound - the start of the time interval
+    #' @param rb right bound - the end of the time interval
     initialize = function(lb, rb) {
       .setNumber(private = private, key = "lb", value = lb)
       .setNumber(private = private, key = "rb", value = rb)
