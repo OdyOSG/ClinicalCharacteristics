@@ -735,7 +735,8 @@ ExecutionSettings <- R6::R6Class(
                           cohortTable = NULL,
                           cdmSourceName = NULL) {
       stopifnot(is.null(connectionDetails) || is.null(connection))
-      .setClass(private = private, key = "connectionDetails", value = connectionDetails, class = "ConnectionDetails")
+      .setClass(private = private, key = "connectionDetails", value = connectionDetails,
+                class = "ConnectionDetails", nullable = TRUE)
       .setClass(private = private, key = ".connection", value = connection,
                 class = "DatabaseConnectorJdbcConnection", nullable = TRUE)
       .setString(private = private, key = ".cdmDatabaseSchema", value = cdmDatabaseSchema)
@@ -746,7 +747,12 @@ ExecutionSettings <- R6::R6Class(
     },
     #' @description extract the dbms dialect
     getDbms = function() {
-      dbms <- private$connectionDetails$dbms
+      conObj <- private$.connection
+      if (!is.null(conObj)) {
+        dbms <- conObj@dbms
+      } else {
+        dbms <- private$connectionDetails$dbms
+      }
       return(dbms)
     },
     #' @description connect to dbms
