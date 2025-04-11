@@ -116,8 +116,8 @@ test_that("createCohorttLineItemBatch creates a list of CohortLineItem objects",
 
 # Breaks Strategy --------------------
 
-test_that("newBreaks makes a BreaksStrategy Object",{
-  newBreaksStrategy <- newValueBreaks(name = "test", breaks = c(0,2,4))
+test_that("newValueBreaks makes a BreaksStrategy Object",{
+  newBreaksStrategy <- newValueBreaks(name = "test", breaks = list(0,2,4))
   expect_equal(newBreaksStrategy$name, "test")
   expect_equal(class(newBreaksStrategy)[[1]], "BreaksStrategy")
   expect_equal(newBreaksStrategy$labels[1], "[0-2)")
@@ -157,7 +157,7 @@ test_that("ageChar makes a DemographicAge Class", {
   expect_equal(ageChar1$getAggregationType(), "continuous")
 
    ageChar2 <- ageCharBreaks(
-    breaks = newBreaks(name = "Child to Adult", breaks = c(0, 18, 65))
+    breaks = newValueBreaks(name = "Child to Adult", breaks = list(0, 18, 65))
   )
 
   expect_equal(ageChar2$getStatisticType(), "breaks")
@@ -212,7 +212,7 @@ test_that("observedCountCtsStat makes a ContinuousDistribution Class", {
 
 test_that("anyCountBreaksStat with breaks makes a breaks Class", {
 
-  br <- newBreaks(name = "test", breaks = c(1,2,3))
+  br <- newValueBreaks(name = "test", breaks = list(1,2,3))
   tst1 <- anyCountBreaksStat(breaks = br)
   expect_equal(tst1$getStatisticType(), "breaks")
   expect_equal(tst1$getPersonLineTransformation(), "anyCount")
@@ -224,7 +224,7 @@ test_that("anyCountBreaksStat with breaks makes a breaks Class", {
 
 test_that("observedCountBreaksStat with breaks makes a breaks Class", {
 
-  br <- newBreaks(name = "test", breaks = c(1,2,3))
+  br <- newValueBreaks(name = "test", breaks = list(1,2,3))
   tst1 <- observedCountBreaksStat(breaks = br)
   expect_equal(tst1$getStatisticType(), "breaks")
   expect_equal(tst1$getPersonLineTransformation(), "observedCount")
@@ -234,23 +234,11 @@ test_that("observedCountBreaksStat with breaks makes a breaks Class", {
 })
 
 
-test_that("anyTimeToFirstBreaksStat with breaks makes a breaks Class", {
+test_that("timetoFirst makes a ContinuousDistribution Class", {
 
-  br <- newBreaks(name = "test", breaks = c(1,2,3))
-  tst1 <- anyTimeToFirstBreaksStat(breaks = br)
-  expect_equal(tst1$getStatisticType(), "breaks")
-  expect_equal(tst1$getPersonLineTransformation(), "anyTimeToFirst")
-  expect_equal(tst1$getAggregationType(), "categorical")
-  expect_true(inherits(tst1, "Breaks"))
-
-})
-
-
-test_that("anyTimeToFirstCtsStat makes a ContinuousDistribution Class", {
-
-  tst1 <- anyTimeToFirstCtsStat()
+  tst1 <- timeToFirst()
   expect_equal(tst1$getStatisticType(), "continuousDistribution")
-  expect_equal(tst1$getPersonLineTransformation(), "anyTimeToFirst")
+  expect_equal(tst1$getPersonLineTransformation(), "timeToFirst")
   expect_equal(tst1$getAggregationType(), "continuous")
   expect_true(inherits(tst1, "ContinuousDistribution"))
 
