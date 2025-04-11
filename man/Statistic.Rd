@@ -4,14 +4,18 @@
 \alias{Statistic}
 \title{An R6 class to define a Statistic object}
 \description{
-A Statistic is a type of metric to be used for characterization
+A Statistic is a type of metric to be used for characterization.
 Specific types of statistics are defined in derived classes
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Statistic-new}{\code{Statistic$new()}}
-\item \href{#method-Statistic-getStatType}{\code{Statistic$getStatType()}}
+\item \href{#method-Statistic-getStatisticType}{\code{Statistic$getStatisticType()}}
+\item \href{#method-Statistic-getAggregationType}{\code{Statistic$getAggregationType()}}
+\item \href{#method-Statistic-getPersonLineTransformation}{\code{Statistic$getPersonLineTransformation()}}
+\item \href{#method-Statistic-getBreaksIfAny}{\code{Statistic$getBreaksIfAny()}}
+\item \href{#method-Statistic-getWeightsIfAny}{\code{Statistic$getWeightsIfAny()}}
 \item \href{#method-Statistic-clone}{\code{Statistic$clone()}}
 }
 }
@@ -20,16 +24,68 @@ Specific types of statistics are defined in derived classes
 \if{latex}{\out{\hypertarget{method-Statistic-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Statistic$new(type)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$new(statType, personLine, aggType)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{statType}}{the type of statistic}
+
+\item{\code{personLine}}{the means of converting occurrences to a single event per patient}
+
+\item{\code{aggType}}{the way the metric is reported either categorical or continuous}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Statistic-getStatisticType"></a>}}
+\if{latex}{\out{\hypertarget{method-Statistic-getStatisticType}{}}}
+\subsection{Method \code{getStatisticType()}}{
+retrieve the statistic type
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$getStatisticType()}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Statistic-getStatType"></a>}}
-\if{latex}{\out{\hypertarget{method-Statistic-getStatType}{}}}
-\subsection{Method \code{getStatType()}}{
+\if{html}{\out{<a id="method-Statistic-getAggregationType"></a>}}
+\if{latex}{\out{\hypertarget{method-Statistic-getAggregationType}{}}}
+\subsection{Method \code{getAggregationType()}}{
+retrieve the aggregation type
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Statistic$getStatType()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$getAggregationType()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Statistic-getPersonLineTransformation"></a>}}
+\if{latex}{\out{\hypertarget{method-Statistic-getPersonLineTransformation}{}}}
+\subsection{Method \code{getPersonLineTransformation()}}{
+retrieve the person line transformation
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$getPersonLineTransformation()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Statistic-getBreaksIfAny"></a>}}
+\if{latex}{\out{\hypertarget{method-Statistic-getBreaksIfAny}{}}}
+\subsection{Method \code{getBreaksIfAny()}}{
+retrieve the breaks object from the statistic object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$getBreaksIfAny()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-Statistic-getWeightsIfAny"></a>}}
+\if{latex}{\out{\hypertarget{method-Statistic-getWeightsIfAny}{}}}
+\subsection{Method \code{getWeightsIfAny()}}{
+retrieve the weights object from the statistic object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Statistic$getWeightsIfAny()}\if{html}{\out{</div>}}
 }
 
 }

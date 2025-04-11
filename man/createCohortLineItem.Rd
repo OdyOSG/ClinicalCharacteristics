@@ -4,16 +4,22 @@
 \alias{createCohortLineItem}
 \title{Create a cohort line item and set its attributes}
 \usage{
-createCohortLineItem(name = NULL, statistic, cohort, timeInterval)
+createCohortLineItem(
+  sectionLabel = NA_character_,
+  covariateCohort,
+  cohortTable,
+  timeInterval,
+  statistic
+)
 }
 \arguments{
-\item{name}{(OPTIONAL) The name of the line item (if not provided, the name will be set to the cohort name from the CohortInfo object)}
+\item{sectionLabel}{(OPTIONAL) The name of the line item (if not provided, the name will be set to the cohort name from the CohortInfo object)}
+
+\item{timeInterval}{The TimeInterval object used for the line item}
 
 \item{statistic}{The Statistic object to be used to evaluate the line item}
 
 \item{cohort}{A CohortInfo object}
-
-\item{timeInterval}{The TimeInterval object used for the line item}
 }
 \value{
 A CohortLineItem object

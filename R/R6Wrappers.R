@@ -1,4 +1,7 @@
 #' @title
+#' Create Table Shell
+#'
+#' @description
 #' Create an empty TableShell object and set its title
 #'
 #' @param title The title of the TableShell
@@ -11,7 +14,7 @@
 createTableShell <- function(title,
                              targetCohorts,
                              lineItems) {
-    tableShell <- TableShell$new(name = title,
+    tableShell <- TableShell$new(title = title,
                                  targetCohorts = targetCohorts,
                                  lineItems = lineItems)
     return(tableShell)
@@ -26,11 +29,12 @@ createTableShell <- function(title,
 #'
 #' @export
 parseCohortInfoFromDf <- function(df) {
-    cohortInfo <- purrr::pmap(df, function(id, name) {
-        createCohortInfo(id, name)
-    })
-    return(cohortInfo)
+  cohortInfo <- purrr::pmap(df, function(id, name) {
+    createCohortInfo(id, name)
+  })
+  return(cohortInfo)
 }
+
 
 #' @title
 #' Create a CohortInfo object for a cohort and set its attributes
@@ -54,7 +58,7 @@ createCohortInfo <- function(id, name) {
 #' @param cdmDatabaseSchema The schema of the OMOP CDM database
 #' @param workDatabaseSchema The schema to which results will be written
 #' @param tempEmulationSchema Some database platforms like Oracle and Snowflake do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.
-#' @param targetCohortTable The name of the table where the target cohort(s) are stored
+#' @param cohortTable The name of the table where the cohort(s) are stored
 #' @param cdmSourceName A human-readable name for the OMOP CDM source
 #'
 #' @return An ExecutionSettings object
@@ -64,31 +68,62 @@ createExecutionSettings <- function(connectionDetails,
                                     cdmDatabaseSchema,
                                     workDatabaseSchema,
                                     tempEmulationSchema,
-                                    targetCohortTable,
+                                    cohortTable,
                                     cdmSourceName) {
   executionSettings <- ExecutionSettings$new(connectionDetails = connectionDetails,
                                              connection = connection,
                                              cdmDatabaseSchema = cdmDatabaseSchema,
                                              workDatabaseSchema = workDatabaseSchema,
                                              tempEmulationSchema = tempEmulationSchema,
-                                             targetCohortTable = targetCohortTable,
+                                             cohortTable = cohortTable,
                                              cdmSourceName = cdmSourceName)
   return(executionSettings)
 }
 
-
-defaultTableShellBuildOptions <- function(keepResultsTable = FALSE,
-                                          resultsTempTable = "#results_table",
-                                          codesetTempTable = "#codeset",
+#' @title
+#' Default build options to generate table shell
+#'
+#' @param connectionDetails A DatabaseConnector connectionDetails object (optional if connection is specified)
+#' @param codesetTempTable the name of the codeset table used in execution. Defaults as a temp table #codeset
+#' @param timeWindowTempTable the name of the time Window table used in execution. Defaults as a temp table #time_windows
+#' @param targetCohortTempTable the name of the target cohort table used in execution. Defaults as a temp table #target_cohorts
+#' @param tsMetaTempTable the name of the table shell meta table used in execution. Defaults as a temp table #ts_meta
+#' @param conceptSetOccurrenceTempTable the name of the concept set occurrence table used in execution. Defaults as a temp table #concept_set_occ
+#' @param cohortOccurrenceTempTable the name of the cohort occurrence  table used in execution. Defaults as a temp table #cohort_occ
+#' @param patientLevelDataTempTable the name of the patient level data table used in execution. Note this does not contain info of the table shell. Defaults as a temp table #patient_data
+#' @param patientLevelTableShellTempTable the name of the patient level data table with additional meta info used in execution. Defaults as a temp table #pat_ts_tab
+#' @param categoricalSummaryTempTable the name of the categorical summary table used in execution. Defaults as a temp table #categorical_table
+#' @param continuousSummaryTempTable the name of the continuous summary table used in execution. Defaults as a temp table #continuous_table
+#' @param useCohortEra a true false toggle specifying if in a cohort Char whether to use the cohort era (TRUE) or just the start date (FALSE)
+#' @return A BuildOptions object
+#' @export
+defaultTableShellBuildOptions <- function(codesetTempTable = "#codeset",
+                                          sourceCodesetTempTable = "#source_codeset",
                                           timeWindowTempTable = "#time_windows",
-                                          targetCohortTempTable = "#target_cohorts") {
+                                          targetCohortTempTable = "#target_cohorts",
+                                          tsMetaTempTable = "#ts_meta",
+                                          conceptSetOccurrenceTempTable = "#concept_set_occ",
+                                          cohortOccurrenceTempTable = "#cohort_occ",
+                                          patientLevelDataTempTable = "#patient_data",
+                                          patientLevelTableShellTempTable = "#pat_ts_tab",
+                                          categoricalSummaryTempTable = "#categorical_table",
+                                          continuousSummaryTempTable = "#continuous_table",
+                                          useCohortEra = TRUE
+                                          ) {
 
   buildOpts <- BuildOptions$new(
-    keepResultsTable = keepResultsTable,
-    resultsTempTable = resultsTempTable,
     codesetTempTable = codesetTempTable,
+    sourceCodesetTempTable = sourceCodesetTempTable,
     timeWindowTempTable = timeWindowTempTable,
-    targetCohortTempTable = targetCohortTempTable
+    tsMetaTempTable = tsMetaTempTable,
+    targetCohortTempTable = targetCohortTempTable,
+    conceptSetOccurrenceTempTable = conceptSetOccurrenceTempTable,
+    cohortOccurrenceTempTable = cohortOccurrenceTempTable,
+    patientLevelDataTempTable = patientLevelDataTempTable,
+    patientLevelTableShellTempTable = patientLevelTableShellTempTable,
+    categoricalSummaryTempTable = categoricalSummaryTempTable,
+    continuousSummaryTempTable = continuousSummaryTempTable,
+    useCohortEra = useCohortEra
   )
   return(buildOpts)
 
@@ -109,21 +144,187 @@ timeInterval <- function(lb, rb) {
 }
 
 
-createPresence <- function(operator = "at_least", occurrences = 1) {
-  pres <- Presence$new(operator = operator, occurrences = occurrences)
+#' @title
+#' Any Presence Stat
+#'
+#' @description
+#'
+#' Create a presence stat where any occurrence is valid
+#'
+#' @return A presence stat object
+#'
+#' @export
+anyPresenceStat <- function() {
+  pres <- Presence$new(personLine = "anyCount")
   return(pres)
 }
 
-
-createCount <- function(breaks = NULL) {
-  occurrenceCount <- Count$new(breaks = breaks)
-  return(occurrenceCount)
+#' @title
+#' Observed Presence Stat
+#'
+#' @description
+#' Create a presence stat where only occurrence during the observation period are valid
+#'
+#' @return A presence stat object
+#'
+#' @export
+observedPresenceStat <- function() {
+  pres <- Presence$new(personLine = "observedCount")
+  return(pres)
 }
+
+#' @title
+#' Adherent Presence Stat
+#'
+#' @description
+#' Create a presence stat where only occurrence during the observation period are valid and the denominator are those
+#' who only adhere to the observation period
+#'
+#' @return A presence stat object
+#'
+#' @export
+adherentPresenceStat <- function() {
+  pres <- Presence$new(personLine = "adherentCount")
+  return(pres)
+}
+
+#' @title
+#' Any Count Continuous
+#'
+#' @description
+#' Create a count stat where any occurrence is valid.
+#'
+#' @return A stat object continuousDistribution
+#'
+#' @export
+anyCountCtsStat <- function() {
+    stat <- ContinuousDistribution$new(personLine = "anyCount")
+  return(stat)
+}
+
+#' @title
+#' Any Count with Breaks
+#'
+#' @description
+#' Create a count stat with breaks where any occurrence is valid.
+#'
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories.
+#' If null then this defaults to a continuous distribution
+#'
+#' @return A stat object breaks
+#'
+#' @export
+anyCountBreaksStat <- function(breaks) {
+  stat <- Breaks$new(personLine = "anyCount", breaks = breaks)
+  return(stat)
+}
+
+#' @title
+#' Observed Count Continuous
+#'
+#' @description
+#' Create a count stat where only occurrence during the observation period are valid
+#'
+#'
+#' @return A stat object continuousDistribution
+#'
+#' @export
+observedCountCtsStat <- function() {
+  stat <- ContinuousDistribution$new(personLine = "observedCount")
+  return(stat)
+}
+
+#' @title
+#' Observed Count with Breaks
+#'
+#' @description
+#'
+#' Create a count stat with breaks where only occurrence during the observation period are valid
+#'
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories.
+#' If null then this defaults to a continuous distribution
+#'
+#' @return A stat object breaks
+#'
+#' @export
+observedCountBreaksStat <- function(breaks) {
+  stat <- Breaks$new(personLine = "observedCount", breaks = breaks)
+  return(stat)
+}
+
+
+#' @title
+#' Time To First
+#'
+#' @description
+#'
+#' Create a time to stat where any occurrence is valid
+#'
+#' @return A stat object continuousDistribution
+#'
+#' @export
+timeToFirst <- function() {
+  stat <- ContinuousDistribution$new(personLine = "timeToFirst")
+  return(stat)
+}
+
+
+#' @title
+#' Any Score
+#'
+#' @description
+#'
+#' Create score statistic
+#'
+#' @return A stat object for a scoreTransformation
+#'
+#' @export
+anyScore <- function(weight) {
+  stat <- Score$new(
+    personLine = "anyCount",
+    weight = weight
+  )
+  return(stat)
+}
+
+
+#' @title
+#' Create a yearly interval rate statistic
+#'
+#' @description This statistic sums the number of occurrences of an event in a timeInterval and
+#' divides it by the time (modified by  year) to construct a rate per patient. This
+#' can then be summarized as a continuous variable
+#' @return A stat object of class intervalRate
+#'
+#' @export
+yearlyRate <- function() {
+  stat <- IntervalRate$new(
+    interval = "yearly"
+  )
+  return(stat)
+}
+
+#' @title
+#' Create a monthly interval rate statistic
+#'
+#' @description This statistic sums the number of occurrences of an event in a timeInterval and
+#' divides it by the time (modified by  month) to construct a rate per patient. This
+#' can then be summarized as a continuous variable
+#' @return A stat object of class intervalRate
+#'
+#' @export
+monthlyRate <- function() {
+  stat <- IntervalRate$new(
+    interval = "monthly"
+  )
+  return(stat)
+}
+
 
 #' @title
 #' Create a concept set line item and set its attributes
 #'
-#' @param name (OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)
+#' @param sectionLabel (OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)
 #' @param statistic The Statistic object to be used to evaluate the line item
 #' @param domain The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')
 #' @param conceptSet The Capr concept set object
@@ -135,25 +336,21 @@ createCount <- function(breaks = NULL) {
 #' @return A ConceptSetLineItem object
 #'
 #' @export
-createConceptSetLineItem <- function(name = NULL,
-                                     statistic,
+createConceptSetLineItem <- function(sectionLabel = NA_character_,
                                      domain,
                                      conceptSet,
                                      timeInterval,
-                                     sourceConceptSet = NULL,
-                                     typeConceptIds = c(),
-                                     visitOccurrenceConceptIds = c()) {
-  if (is.null(name)) {
-    name = conceptSet@Name
+                                     statistic) {
+
+  if(is.na(sectionLabel)) {
+    sectionLabel <- conceptSet@Name
   }
-  csDefinition <- ConceptSetLineItem$new(name = name,
-                                         statistic = statistic,
-                                         domain = domain,
+
+  csDefinition <- ConceptSetLineItem$new(sectionLabel = sectionLabel,
+                                         domainTable = domain,
                                          conceptSet = conceptSet,
                                          timeInterval = timeInterval,
-                                         sourceConceptSet = sourceConceptSet,
-                                         typeConceptIds = typeConceptIds,
-                                         visitOccurrenceConceptIds = visitOccurrenceConceptIds)
+                                         statistic = statistic)
   return(csDefinition)
 }
 
@@ -164,7 +361,7 @@ createConceptSetLineItem <- function(name = NULL,
 #'
 #' @description
 #' The name of each line item will be set to the name of its Capr concept set. All line items will use the same statistic, domain, type concepts, and visit concepts. It is not possible to specify source concept IDs.
-#' @param name The name of the concept set batch
+#' @param sectionLabel The name of the concept set batch
 #' @param statistic The Statistic object to be used to evaluate the line items
 #' @param domain The domain of the concept sets (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')
 #' @param conceptSets A list of concept set Capr objects
@@ -176,13 +373,11 @@ createConceptSetLineItem <- function(name = NULL,
 #'
 #' @export
 createConceptSetLineItemBatch <- function(
-    name,
-    statistic,
+    sectionLabel,
     domain,
     conceptSets,
     timeIntervals,
-    typeConceptIds = c(),
-    visitOccurrenceConceptIds = c()) {
+    statistic) {
 
   checkmate::assert_list(x = conceptSets, types = c("ConceptSet"), null.ok = FALSE, min.len = 1)
   checkmate::assert_list(x = timeIntervals, types = c("TimeInterval"), null.ok = FALSE, min.len = 1)
@@ -190,19 +385,36 @@ createConceptSetLineItemBatch <- function(
   # build permutations of concepts and timeIntervals
   permDf <- .permuteTi(conceptSets, timeIntervals)
 
+  # deal with different statistic input
+  # typical only add a single statistic class
+  # but if there is a list of statistics for a score handle it
+  if (class(statistic)[[1]] == "list") {
+    if (length(statistic) != length(permDf[[1]])) {
+      stop("If the statistic is a list, it must be the same length as all combinations of conceptSets and timeIntervals")
+    }
+    statPerm <- statistic
+  } else {
+    if (class(statistic)[[2]] == "Statistic") {
+      statPerm <- rep(list(statistic), each = length(permDf[[1]]))
+    } else{
+      stop("statistic slot is not of Statistic Class")
+    }
+  }
+
+
   # create batch of concept set line items
-  csLiBatch <- purrr::map2(
-    permDf$objects,
-    permDf$timeIntervals,
+  csLiBatch <- purrr::pmap(
+    list(
+      permDf$objects,
+      permDf$timeIntervals,
+      statPerm
+    ),
     ~createConceptSetLineItem(
-      name = .x@Name,
-      statistic = statistic,
+      sectionLabel = sectionLabel,
+      statistic = ..3,
       domain = domain,
-      conceptSet = .x,
-      timeInterval = .y,
-      sourceConceptSet = NULL,
-      typeConceptIds = typeConceptIds,
-      visitOccurrenceConceptIds = visitOccurrenceConceptIds
+      conceptSet = ..1,
+      timeInterval = ..2
     )
   ) |>
     unname()
@@ -210,95 +422,371 @@ createConceptSetLineItemBatch <- function(
   return(csLiBatch)
 }
 
+
 #' @title
-#' Create gender demographic line item
+#' Create a source concept set line item and set its attributes
 #'
-#' @return A Demographic line item type class object
+#' @param sectionLabel (OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)
+#' @param statistic The Statistic object to be used to evaluate the line item
+#' @param domain The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')
+#' @param sourceConceptSet A SourceConcept R6 object created using the `sourceConceptSet` function
+#' @param timeInterval The Time Interval object used for the line item
+#' @param typeConceptIds (OPTIONAL) A list of type concept IDs to use to limit the concept set
+#'
+#' @return A SourceConceptSetLineItem object
+#'
 #' @export
-createGenderLineItem <- function() {
+createSourceConceptSetLineItem <- function(sectionLabel = NA_character_,
+                                           domain,
+                                           sourceConceptSet,
+                                           timeInterval,
+                                           statistic,
+                                           typeConceptIds = c()) {
 
-  gender <- DemographicLineItem$new(
-    name = "Gender",
-    statistic = DemographicConcept$new(conceptColumn = "gender_concept_id")
+  if(is.na(sectionLabel)) {
+    sectionLabel <- sourceConceptSet$sourceConceptName
+  }
+
+  scsDefinition <- SourceConceptSetLineItem$new(
+    sectionLabel = sectionLabel,
+    domainTable = domain,
+    sourceConceptSet = sourceConceptSet,
+    timeInterval = timeInterval,
+    statistic = statistic,
+    typeConceptIds = typeConceptIds
   )
-
-  return(gender)
+  return(scsDefinition)
 
 }
 
 
 #' @title
-#' Create race demographic line item
+#' Create a batch of source concept set line items from a list of SourceConceptSet classes.
 #'
-#' @return A Demographic line item type class object
+#' @param sectionLabel (OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)
+#' @param statistic The Statistic object to be used to evaluate the line item
+#' @param domain The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')
+#' @param sourceConceptSet A list of SourceConcept R6 object created using the `sourceConceptSet` function
+#' @param timeIntervals A list of TimeInterval class objects
+#' @param typeConceptIds (OPTIONAL) A list of type concept IDs to use to limit the concept set
+#'
+#' @return A list of SourceConceptSetLineItem objects
+#'
 #' @export
-createRaceLineItem <- function() {
+createSourceConceptSetLineItemBatch <- function(sectionLabel,
+                                           domain,
+                                           sourceConceptSets,
+                                           timeIntervals,
+                                           statistic,
+                                           typeConceptIds = c()) {
 
-  gender <- DemographicLineItem$new(
-    name = "Race",
-    statistic = DemographicConcept$new(conceptColumn = "race_concept_id")
+
+  checkmate::assert_list(x = sourceConceptSets, types = c("SourceConceptSet"), null.ok = FALSE, min.len = 1)
+  checkmate::assert_list(x = timeIntervals, types = c("TimeInterval"), null.ok = FALSE, min.len = 1)
+
+  # build permutations of concepts and timeIntervals
+  permDf <- .permuteTi(sourceConceptSets, timeIntervals)
+
+  # create batch of concept set line items
+  scsLiBatch <- purrr::map2(
+    permDf$objects,
+    permDf$timeIntervals,
+    ~createSourceConceptSetLineItem(
+      sectionLabel = sectionLabel,
+      statistic = statistic,
+      domain = domain,
+      sourceConceptSet = .x,
+      timeInterval = .y,
+      typeConceptIds = typeConceptIds
+    )
+  ) |>
+    unname()
+
+  return(scsLiBatch)
+}
+
+
+
+
+#' @title
+#' Create a demographic line item and set its attributes
+#'
+#' @param statistic The Statistic object to be used to evaluate the line item
+#' @return A DemographicLineItem object
+#'
+#' @export
+createDemographicLineItem <- function(statistic) {
+  dcli <- DemographicLineItem$new(
+    statistic = statistic
   )
+  statLabel <- class(statistic)[[1]]
 
-  return(gender)
+  if (statLabel == "DemographicAge") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "year_of_birth"
+  }
 
+  if (statLabel == "DemographicConcept") {
+    dcli$valueId <- statistic$getConceptId()
+    dcli$valueDescription <- statistic$getConceptColumn()
+  }
+
+  if (statLabel == "DemographicIndexYear") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "cohort_start_date"
+  }
+
+  if (statLabel == "DemographicCohortTime") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "cohort_follow_up"
+  }
+
+  if (statLabel == "DemographicPayerType") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "payer_concept_id"
+  }
+
+  if (statLabel == "DemographicLocation") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "location_id"
+  }
+
+  if (statLabel == "DemographicRace") {
+    dcli$valueId <- -999
+    dcli$valueDescription <- "race_concept_id"
+  }
+
+
+  return(dcli)
+}
+
+
+#' @title
+#' Create an index year characteristic
+#'
+#' @param breaks a breaksStrategy object dictating how to classify years into categories. By default this will do each year from 2000 to current day.
+#'
+#' @return A DemographicIndexYear Statistic class object
+#'
+#' @export
+indexYear <- function(breaks = NULL) {
+
+  if (is.null(breaks)) {
+    breaks <- defaultYearGrp()
+  }
+
+  indexYearChar <- DemographicIndexYear$new(breaks)
+  return(indexYearChar)
+}
+
+
+#' @title
+#' Create a cohort follow up time characteristic
+#'
+#' @return A DemographicCohortTime Statistic class object
+#'
+#' @export
+cohortFollowupTime <- function() {
+
+  cohortFollowupChar <- DemographicCohortTime$new()
+  return(cohortFollowupChar)
+}
+
+
+#' @title
+#' Create a location characteristic
+#'
+#' @param breaks a breaksStrategy object dictating how to classify locations into categories.
+#'
+#' @return A DemographicLocation Statistic class object
+#'
+#' @export
+personLocation <- function(breaks) {
+
+  personLocationChar <- DemographicLocation$new(breaks)
+  return(personLocationChar)
+}
+
+
+#' @title
+#' Create a payer type characteristic
+#'
+#' @param breaks a breaksStrategy object dictating how to classify payer types into categories. by default this will use the Source of Payment Typology(SOPT) vocabulary
+#'
+#' @return A DemographicPayerType Statistic class object
+#'
+#' @export
+payerType <- function(breaks = NULL) {
+
+  if (is.null(breaks)) {
+    breaks <- .soptPayers()
+  }
+
+  payerTypeChar <- DemographicPayerType$new(breaks)
+  return(payerTypeChar)
+}
+
+
+#' @title
+#' Create a race characteristic
+#'
+#' @param breaks a breaksStrategy object dictating how to classify race into categories. by default this will use custom race categories
+#'
+#' @return A DemographicRace Statistic class object
+#'
+#' @export
+raceCategory <- function(breaks = NULL) {
+
+  if (is.null(breaks)) {
+    breaks <- .raceBreaks()
+  }
+
+  raceChar <- DemographicRace$new(breaks)
+  return(raceChar)
+}
+
+
+#' @title
+#' Create a age statistic with breaks
+#'
+#' @param breaks a breaksStrategy object dictating how to classify counts into categories
+#' @return A DemographicAge Statistic class object with breaks
+#'
+#' @export
+ageCharBreaks <- function(breaks) {
+  ageChar <- DemographicAge$new(
+    statType = "breaks",
+    aggType = "categorical",
+    breaks = breaks
+  )
+  return(ageChar)
 }
 
 #' @title
-#' Create ethnicity demographic line item
+#' Create a age statistic as continuous
 #'
-#' @return A Demographic line item type class object
+#' @return A DemographicAge Statistic class object as continuous
+#'
 #' @export
-createEthnicityLineItem <- function() {
-
-  gender <- DemographicLineItem$new(
-    name = "Ethnicity",
-    statistic = DemographicConcept$new(conceptColumn = "ethnicity_concept_id")
+ageCharCts <- function() {
+  ageChar <- DemographicAge$new(
+    statType = "continuousDistribution",
+    aggType = "continuous",
+    breaks = NULL
   )
-
-  return(gender)
-
+  return(ageChar)
 }
 
 #' @title
-#' Create age demographic line item
+#' Create a male concept stat
 #'
-#' @param breaks A breaks object describing how to categorize the continuous value
-#' @return A Demographic line item type class object
+#' @return A DemographicConcept Statistic class object indicating a male concept
+#'
 #' @export
-createAgeLineItem <- function(breaks = NULL) {
+maleGender <- function() {
+  maleConcept <- DemographicConcept$new(
+    demoCategory = "Gender",
+    demoLine = "Male",
+    conceptColumn = "gender_concept_id",
+    conceptId = 8507L
+  )
+  return(maleConcept)
+}
 
-  age <- DemographicLineItem$new(
-    name = "Age",
-    statistic = DemographicAge$new(breaks = breaks)
+#' @title
+#' Create a female concept stat
+#'
+#' @return A DemographicConcept Statistic class object indicating a female concept
+#'
+#' @export
+femaleGender <- function() {
+  femaleConcept <- DemographicConcept$new(
+    demoCategory = "Gender",
+    demoLine = "Female",
+    conceptColumn = "gender_concept_id",
+    conceptId = 8532L
+  )
+  return(femaleConcept)
+}
+
+#' @title
+#' Create a breaks Strategy object for categorizing value
+#'
+#' @param name the name of the breaks
+#' @param breaks a vector with cut points to user
+#' @param labels a character vector indicating how to label the cut-point. Can stay NULL where a default label is given
+#'
+#' @return A BreaksStreategy object of type value
+#'
+#' @export
+newValueBreaks <- function(name, breaks, labels = NULL) {
+  if (is.null(labels)) {
+    a <- dplyr::lead(breaks)
+    lab <- glue::glue("[{breaks}-{a})")[-length(breaks)]
+    labels <- c(lab, paste0(dplyr::last(breaks), "+"))
+  }
+
+  br <- BreaksStrategy$new(
+    name = name,
+    breaks = breaks,
+    labels = labels,
+    type = "value"
   )
 
-  return(age)
-
+  return(br)
 }
+
+#' @title
+#' Create a breaks Strategy object for categorizing concepts
+#'
+#' @param name the name of the breaks
+#' @param breaks a vector with cut points to user
+#' @param labels a character vector indicating how to label the cut-point. Can stay NULL where a default label is given
+#'
+#' @return A BreaksStreategy object of type concept
+#'
+#' @export
+newConceptBreaks <- function(name, breaks, labels) {
+
+  br <- BreaksStrategy$new(
+    name = name,
+    breaks = breaks,
+    labels = labels,
+    type = "concept"
+  )
+
+  return(br)
+}
+
 
 #' @title
 #' Create a cohort line item and set its attributes
 #'
-#' @param name (OPTIONAL) The name of the line item (if not provided, the name will be set to the cohort name from the CohortInfo object)
+#' @param sectionLabel (OPTIONAL) The name of the line item (if not provided, the name will be set to the cohort name from the CohortInfo object)
 #' @param statistic The Statistic object to be used to evaluate the line item
 #' @param cohort A CohortInfo object
 #' @param timeInterval The TimeInterval object used for the line item
-#'
 #' @return A CohortLineItem object
 #'
 #' @export
-createCohortLineItem <- function(name = NULL,
-                                 statistic,
-                                 cohort,
-                                 timeInterval) {
-  if (is.null(name)) {
-    name = cohort$getName()
+createCohortLineItem <- function(sectionLabel = NA_character_,
+                                 covariateCohort,
+                                 cohortTable,
+                                 timeInterval,
+                                 statistic) {
+
+  if(is.na(sectionLabel)) {
+    sectionLabel <- covariateCohort$getName()
   }
-  cohortLineItem <- CohortLineItem$new(name = name,
-                                       statistic = statistic,
-                                       cohort = cohort,
-                                       timeInterval = timeInterval)
-  return(cohortLineItem)
+
+  chDefinition <- CohortLineItem$new(sectionLabel = sectionLabel,
+                                     domainTable = cohortTable,
+                                     covariateCohort = covariateCohort,
+                                     timeInterval = timeInterval,
+                                     statistic = statistic)
+  chDefinition$valueId <- covariateCohort$getId()
+  return(chDefinition)
+
 }
 
 #' @title
@@ -306,7 +794,7 @@ createCohortLineItem <- function(name = NULL,
 #'
 #' @description
 #' The name of each line item will be set to the name of its cohort from the CohortInfo object.
-#' @param name The name of the cohort batch
+#' @param sectionLabel The name of the cohort batch
 #' @param statistic The Statistic object to be used to evaluate the line items
 #' @param cohorts A list of CohortInfo objects
 #' @param timeIntervals A list of TimeInterval class objects
@@ -315,33 +803,72 @@ createCohortLineItem <- function(name = NULL,
 #'
 #' @export
 createCohortLineItemBatch <- function(
-    name,
+    sectionLabel,
+    covariateCohorts,
+    cohortTable,
     statistic,
-    cohorts,
     timeIntervals) {
 
-  checkmate::assert_list(x = cohorts, types = c("CohortInfo"), null.ok = FALSE, min.len = 1)
+  checkmate::assert_list(x = covariateCohorts, types = c("CohortInfo"), null.ok = FALSE, min.len = 1)
   checkmate::assert_list(x = timeIntervals, types = c("TimeInterval"), null.ok = FALSE, min.len = 1)
 
   # build permutations of concepts and timeIntervals
-  permDf <- .permuteTi(cohorts, timeIntervals)
+  permDf <- .permuteTi(covariateCohorts, timeIntervals)
 
   # create batch of concept set line items
-  cLiBatch <- purrr::map2(
+  # create batch of concept set line items
+  chLiBatch <- purrr::map2(
     permDf$objects,
     permDf$timeIntervals,
     ~createCohortLineItem(
-      name = .x$name,
-      statistic = statistic,
-      cohort = .x,
-      timeInterval = .y
+      sectionLabel = sectionLabel,
+      covariateCohort = .x,
+      cohortTable,
+      timeInterval= .y,
+      statistic = statistic
     )
   ) |>
     unname()
 
-  return(cLiBatch)
+
+  return(chLiBatch)
 }
 
+#' @title
+#' Create a concept set group item and set its attributes
+#'
+#' @param sectionLabel (OPTIONAL) The name of the line item (if not provided, the name will be the same as the group label)
+#' @param groupLabel the label of the group
+#' @param conceptSets A list of Capr concept set object
+#' @param domainTables a vector of domains corresponding to the concept set
+#' @param timeInterval The TimeInterval object used for the line item
+#' @param statistic The Statistic object to be used to evaluate the line item
+#'
+#' @return A CohortLineItem object
+#'
+#' @export
+createConceptSetGroupLineItem <- function(sectionLabel = NA_character_,
+                                          groupLabel,
+                                          conceptSets,
+                                          domainTables,
+                                          timeInterval,
+                                          statistic) {
+
+  if(is.na(sectionLabel)) {
+    sectionLabel <- groupLabel
+  }
+
+  csgDefinition <- ConceptSetGroupLineItem$new(
+    sectionLabel = sectionLabel,
+    groupLabel = groupLabel,
+    domainTables = domainTables,
+    conceptSets = conceptSets,
+    timeInterval = timeInterval,
+    statistic = statistic
+  )
+  return(csgDefinition)
+
+}
 
 #' @title
 #' Combine all lineItems to enter into the tableShell slot
@@ -358,7 +885,21 @@ lineItems <- function(...) {
   # add in ordinals
   ii <- seq_along(listOfLineItems)
   for(i in ii) {
-    listOfLineItems[[i]]$ordinal <- ii[i]
+    listOfLineItems[[i]]$ordinalId <- i
   }
+
+  lineItemClassType <- purrr::map_chr(listOfLineItems, ~.x$lineItemClass)
+
+  if (any(lineItemClassType == "ConceptSet")) {
+    # add value ids for the concept sets
+    listOfLineItems <- .setCsValueId(listOfLineItems)
+  }
+
+  if (any(lineItemClassType == "SourceConceptSet")) {
+  # add value ids for the source concept sets
+  listOfLineItems <-  .setSourceValueId(listOfLineItems)
+  }
+
   return(listOfLineItems)
 }
+

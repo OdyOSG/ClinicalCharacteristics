@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Wrappers.R
 \name{createTableShell}
 \alias{createTableShell}
-\title{Create an empty TableShell object and set its title}
+\title{Create Table Shell}
 \usage{
 createTableShell(title, targetCohorts, lineItems)
 }

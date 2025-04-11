@@ -5,25 +5,23 @@
 \title{Create a batch of concept set line items from a list of Capr concept sets.}
 \usage{
 createConceptSetLineItemBatch(
-  name,
-  statistic,
+  sectionLabel,
   domain,
   conceptSets,
   timeIntervals,
-  typeConceptIds = c(),
-  visitOccurrenceConceptIds = c()
+  statistic
 )
 }
 \arguments{
-\item{name}{The name of the concept set batch}
-
-\item{statistic}{The Statistic object to be used to evaluate the line items}
+\item{sectionLabel}{The name of the concept set batch}
 
 \item{domain}{The domain of the concept sets (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')}
 
 \item{conceptSets}{A list of concept set Capr objects}
 
 \item{timeIntervals}{A list of TimeInterval class objects}
+
+\item{statistic}{The Statistic object to be used to evaluate the line items}
 
 \item{typeConceptIds}{(OPTIONAL) A list of type concept IDs to use to limit the concept set}
 

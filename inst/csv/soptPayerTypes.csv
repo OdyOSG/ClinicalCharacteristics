@@ -1,0 +1,163 @@
+conceptId,conceptName,conceptCode,vocabularyId
+280,Medicare,1,SOPT
+281,Medicare Managed Care,11,SOPT
+282,Medicare Health Maintenance Organization (HMO),111,SOPT
+732310,Medicare Chronic Condition Special Needs Plan (C-SNP),1111,SOPT
+732311,Medicare Institutional Special Needs Plan (I-SNP),1112,SOPT
+283,Medicare Preferred Provider Organization (PPO),112,SOPT
+284,Medicare Point of Service (POS),113,SOPT
+362,Medicare Managed Care Other,119,SOPT
+285,Medicare Non-managed Care,12,SOPT
+286,Medicare Fee for Service (FFS),121,SOPT
+308,Medicare Drug Benefit,122,SOPT
+363,Medicare Medical Savings Account (MSA),123,SOPT
+287,Medicare Non-managed Care - Other,129,SOPT
+364,Medicare Hospice,13,SOPT
+288,Dual Eligibility Medicare/Medicaid,14,SOPT
+732312,Dual Eligible Medicare / Medicaid Special Needs Plan (D-SNP),141,SOPT
+732313,Fully Integrated Dual Eligible Medicare / Medicaid Special Needs Plan (FIDE-SNP),142,SOPT
+365,Medicare Other,19,SOPT
+366,Medicare Pharmacy Benefit Manager,191,SOPT
+289,Medicaid,2,SOPT
+290,Medicaid Managed Care,21,SOPT
+291,Medicaid Health Management Organization (HMO),211,SOPT
+292,Medicaid Preferred Provider Organization (PPO),212,SOPT
+367,Medicaid Primary Care Case Management (PCCM),213,SOPT
+368,Medicaid Managed Care - Other,219,SOPT
+293,Medicaid Non-managed Care,22,SOPT
+369,Medicaid/State Childrens Health Insurance Program (SCHIP),23,SOPT
+371,Medicaid Out of State,25,SOPT
+372,Medicaid Long Term Care,26,SOPT
+294,Medicaid - Other,29,SOPT
+373,Medicaid Pharmacy Benefit Manager,291,SOPT
+374,Medicaid Dental,299,SOPT
+295,"Other Government Federal/State/Local, excluding Department of Corrections",3,SOPT
+375,Department of Defense,31,SOPT
+296,"DoD TRICARE, Civilian Health and Medical Program of the Uniformed Services (CHAMPUS)",311,SOPT
+297,DoD TRICARE Prime - Health Management Organization (HMO),3111,SOPT
+298,DoD TRICARE Extra - Preferred Provider Organization (PPO),3112,SOPT
+299,DoD TRICARE Standard - Fee For Service (FFS),3113,SOPT
+376,DoD TRICARE For Life - Medicare Supplement,3114,SOPT
+377,DoD TRICARE Reserve Select,3115,SOPT
+300,DoD Uniformed Services Family Health Plan (USFHP) - Health Management Organization (HMO),3116,SOPT
+301,Department of Defense (DoD) other,3119,SOPT
+378,Military Treatment Facility,312,SOPT
+379,Military Treatment Facility - Enrolled Prime - HMO,3121,SOPT
+380,Military Treatment Facility - Non-enrolled Space Available,3122,SOPT
+381,Military Treatment Facility - TRICARE For Life (TFL),3123,SOPT
+382,DoD Dental - Stand Alone,313,SOPT
+383,Department of Veterans Affairs,32,SOPT
+302,Veteran Care,321,SOPT
+384,VA Direct Care - Care provided in VA facilities,3211,SOPT
+385,VA Indirect Care - Care provided outside VA facilities,3212,SOPT
+303,VA Outside VA facilities - Fee Basis,32121,SOPT
+386,VA Outside VA facilities - Foreign Fee/Foreign Medical Program (FMP),32122,SOPT
+387,VA Outside VA facilities - Contract Nursing Home/Community Nursing Home,32123,SOPT
+388,VA Outside VA facilities - State Veterans Home,32124,SOPT
+389,VA Outside VA facilities - Sharing Agreements,32125,SOPT
+390,VA Outside VA facilities - Other Federal Agency,32126,SOPT
+304,VA Outside VA facilities - Dental,32127,SOPT
+305,VA Outside VA facilities - Vision,32128,SOPT
+391,VA Non-Veteran Care,322,SOPT
+392,VA Civilian Health and Medical Program for the VA (CHAMPVA),3221,SOPT
+393,VA Spina Bifida Health Care Program (SB),3222,SOPT
+394,VA Children of Women Vietnam Veterans (CWVV),3223,SOPT
+395,VA Other Non-Veteran Care,3229,SOPT
+306,Indian Health Service (IHS) Program,33,SOPT
+396,Indian Health Service - Regular,331,SOPT
+397,Indian Health Service - Contract,332,SOPT
+398,Indian Health Service - Managed Care,333,SOPT
+399,Indian Tribe - Sponsored Coverage,334,SOPT
+307,Health Resources and Services Administration (HRSA) Program,34,SOPT
+309,Title V Maternal and Child Health (MSH) Services Block Grant Program,341,SOPT
+346,HRSA Migrant Health Program,342,SOPT
+310,HRSA Ryan White HIV/AIDS Program,343,SOPT
+732314,HRSA Disaster-related (includes Covid-19) program,344,SOPT
+311,HSRA - Other,349,SOPT
+400,Division of Coal Mine Workers Compensation (DCMWC) - Black Lung,35,SOPT
+312,State Government Program,36,SOPT
+313,State Childrens Health Insurance Program (SCHIP) - individual state code,361,SOPT
+401,Specific state program (list/local code),362,SOPT
+314,State program - not otherwise specified (other state),369,SOPT
+315,Local Government Program,37,SOPT
+402,Local Government Managed Care,371,SOPT
+316,Local Government Health Management Organization (HMO),3711,SOPT
+317,Local Government Preferred Provider Organization (PPO),3712,SOPT
+318,Local Government Point of Service (POS),3713,SOPT
+403,Local Government Fee for Service (FFS) Indemnity,372,SOPT
+404,"Local Government FFS/Indemnity not otherwise specified (other local, county)",379,SOPT
+405,"Other Government (Federal, State, Local not specified)",38,SOPT
+406,"Federal, State, Local not specified Managed Care",381,SOPT
+319,"Federal, State, Local not specified - Health Management Organization (HMO)",3811,SOPT
+320,"Federal, State, Local not specified - Preferred Provider Organization (PPO)",3812,SOPT
+321,"Federal, State, Local not specified - Point of Service (POS)",3813,SOPT
+407,"Federal, State, Local not specified - not specified managed care",3819,SOPT
+322,"Federal, State, Local not specified - Fee for Service (FFS)",382,SOPT
+408,"Federal, State, Local not specified - Other",389,SOPT
+323,Other Federal Program,39,SOPT
+324,Federal Employee Health Plan,391,SOPT
+325,Department of Corrections,4,SOPT
+326,Corrections Federal,41,SOPT
+409,Corrections State,42,SOPT
+410,Corrections Local,43,SOPT
+411,Corrections Unknown Level,44,SOPT
+327,Private Health Insurance,5,SOPT
+328,Private Health Insurance - Managed Care,51,SOPT
+329,Commercial Managed Care - Health Management Organization (HMO),511,SOPT
+330,Commercial Managed Care - Preferred Provider Organization (PPO),512,SOPT
+331,Commercial Managed Care - Point of Service (POS),513,SOPT
+412,Exclusive Provider Organization,514,SOPT
+413,Gatekeeper Preferred Provider Organization (GPPO),515,SOPT
+414,Commercial Managed Care - Pharmacy Benefit Manager,516,SOPT
+415,Commercial Managed Care - Dental,517,SOPT
+416,"Managed Care, Other (non HMO)",519,SOPT
+417,Private Health Insurance - Indemnity,52,SOPT
+418,Commercial Indemnity,521,SOPT
+419,Self-insured (ERISA) Administrative Services Only (ASO) plan,522,SOPT
+420,Medicare supplemental policy (as second payer),523,SOPT
+421,Indemnity Insurance - Dental,524,SOPT
+422,Private health insurance - other commercial Indemnity,529,SOPT
+423,"Managed Care (private) or private health insurance (indemnity), not otherwise specified",53,SOPT
+424,Organized Delivery System,54,SOPT
+425,Small Employer Purchasing Group,55,SOPT
+426,Specialized Stand Alone Plan,56,SOPT
+427,Dental Other Private Insurance,561,SOPT
+428,Vision Other Private Insurance,562,SOPT
+332,Blue Cross/Blue Shield,6,SOPT
+429,Blue Cross Managed Care,61,SOPT
+333,Blue Cross Managed Care - Health Management Organization (HMO),611,SOPT
+334,Blue Cross Managed Care - Preferred Provider Organization (PPO),612,SOPT
+335,Blue Cross Managed Care - Point of Service (POS),613,SOPT
+336,Blue Cross Managed Care - Dental,614,SOPT
+430,Blue Cross Managed Care - Other,619,SOPT
+337,Blue Cross Insurance Indemnity,62,SOPT
+338,Blue Cross Indemnity,621,SOPT
+339,Blue Cross Self-insured (ERISA) - Administrative Services Only (ASO),622,SOPT
+431,Blue Cross Medicare Supplemental Plan,623,SOPT
+432,Blue Cross Indemnity - Dental,629,SOPT
+340,"Managed Care, Unspecified",7,SOPT
+341,Managed Care Health Management Organization (HMO),71,SOPT
+342,Managed Care Preferred Provider Organization (PPO),72,SOPT
+433,Managed Care Point of Service (POS),73,SOPT
+434,Other Managed Care,79,SOPT
+435,No Payment from an Organization/Agency/Program/Private Payer Listed,8,SOPT
+436,Self-pay,81,SOPT
+437,No Charge,82,SOPT
+438,Charity,821,SOPT
+439,Professional Courtesy,822,SOPT
+440,Research/Clinical Trial,823,SOPT
+441,Refusal to Pay/Bad Debt,83,SOPT
+343,Hill-Burton Free and Reduced-Cost Health Care,84,SOPT
+442,Research/Donor,85,SOPT
+443,No Payment - Other,89,SOPT
+344,Miscellaneous Program,9,SOPT
+444,Foreign National,91,SOPT
+445,Disability Insurance,93,SOPT
+446,Long-term Care Insurance,94,SOPT
+447,Workers Compensation,95,SOPT
+347,Workers Compensation Health Management Organization (HMO),951,SOPT
+348,Workers Comp Fee-for-Service (FFS),953,SOPT
+448,Workers Comp Other Managed Care,954,SOPT
+449,"Workers Comp, Other unspecified",959,SOPT
+450,Auto Insurance,96,SOPT
+451,Liability Insurance,97,SOPT

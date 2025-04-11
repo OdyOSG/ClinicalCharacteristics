@@ -10,7 +10,7 @@
 
 conceptSetQuerySql <- function(conceptIds) {
   conceptIds <- paste(conceptIds, collapse = ", ")
-  sql <- glue::glue("select concept_id from @vocabularyDatabaseSchema.CONCEPT where concept_id in ({conceptIds})")
+  sql <- glue::glue("select concept_id from @vocabulary_database_schema.CONCEPT where concept_id in ({conceptIds})")
   return(sql)
 }
 
@@ -19,8 +19,8 @@ conceptSetDescendantsSql <- function(conceptIds) {
   conceptIds <- paste(conceptIds, collapse = ", ")
   sql <- glue::glue(
     "select c.concept_id
-  from @vocabularyDatabaseSchema.CONCEPT c
-  join @vocabularyDatabaseSchema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
+  from @vocabulary_database_schema.CONCEPT c
+  join @vocabulary_database_schema.CONCEPT_ANCESTOR ca on c.concept_id = ca.descendant_concept_id
   and ca.ancestor_concept_id in ({conceptIds})
   and c.invalid_reason is null"
   )
@@ -53,7 +53,7 @@ conceptSetMappedSql <- function(conceptSetQuery) {
   (
   {conceptSetQuery}
   ) C
-  join @vocabularyDatabaseSchema.concept_relationship cr
+  join @vocabulary_database_schema.concept_relationship cr
     on C.concept_id = cr.concept_id_2 and cr.relationship_id = 'Maps to' and cr.invalid_reason IS NULL")
   return(sql)
 }
@@ -139,12 +139,32 @@ build_codeset_query <- function(tb, id){
   return(codeset_query)
 }
 
-bind_codeset_queries <- function(conceptSet, codesetTable) {
+.bindCodesetQueries <- function(conceptSet, codesetTable) {
 
-  #make ids for concept sets
-  ids <- seq_along(conceptSet)
-  #turn into list of tables
-  ll <- purrr::map2(conceptSet, ids, ~exp_to_table(.x) |> build_codeset_query(id = .y))
+  # get distinct concept sets from capr
+  distinctConceptSetsMeta <- .caprToMetaTable(conceptSet) |>
+    dplyr::distinct(id, csId, .keep_all = TRUE)
+
+  # get ids to pluck
+  idsToPluck <- distinctConceptSetsMeta |>
+    dplyr::pull(rowId) |>
+    as.integer()
+
+  # csIds to Use
+  csIdsToUse <- distinctConceptSetsMeta |>
+    dplyr::pull(csId) |>
+    as.integer()
+
+  #pluch concept sets to the unique ones
+  distinctConceptSetsToUse <- conceptSet[idsToPluck]
+
+  # turn list of caprs to list of dfs with descendants
+  csTb <- purrr::map(distinctConceptSetsToUse, ~exp_to_table(.x))
+
+  # turn list of dfs into query
+  ll <- purrr::map2(csTb, csIdsToUse, ~build_codeset_query(tb = .x, id = .y))
+
+  # parameterize query
   set <- paste(ll, collapse = "\nUNION ALL\n")
   final_query <- glue::glue(
     "-- Create Codesets

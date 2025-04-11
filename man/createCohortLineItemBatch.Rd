@@ -4,16 +4,22 @@
 \alias{createCohortLineItemBatch}
 \title{Create a batch of cohort line items from a list of CohortInfo objects.}
 \usage{
-createCohortLineItemBatch(name, statistic, cohorts, timeIntervals)
+createCohortLineItemBatch(
+  sectionLabel,
+  covariateCohorts,
+  cohortTable,
+  statistic,
+  timeIntervals
+)
 }
 \arguments{
-\item{name}{The name of the cohort batch}
+\item{sectionLabel}{The name of the cohort batch}
 
 \item{statistic}{The Statistic object to be used to evaluate the line items}
 
-\item{cohorts}{A list of CohortInfo objects}
-
 \item{timeIntervals}{A list of TimeInterval class objects}
+
+\item{cohorts}{A list of CohortInfo objects}
 }
 \value{
 A list of CohortLineItem objects

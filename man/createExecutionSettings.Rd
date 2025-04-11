@@ -10,7 +10,7 @@ createExecutionSettings(
   cdmDatabaseSchema,
   workDatabaseSchema,
   tempEmulationSchema,
-  targetCohortTable,
+  cohortTable,
   cdmSourceName
 )
 }
@@ -25,7 +25,7 @@ createExecutionSettings(
 
 \item{tempEmulationSchema}{Some database platforms like Oracle and Snowflake do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.}
 
-\item{targetCohortTable}{The name of the table where the target cohort(s) are stored}
+\item{cohortTable}{The name of the table where the cohort(s) are stored}
 
 \item{cdmSourceName}{A human-readable name for the OMOP CDM source}
 }

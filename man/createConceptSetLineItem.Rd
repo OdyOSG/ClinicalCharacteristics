@@ -5,26 +5,23 @@
 \title{Create a concept set line item and set its attributes}
 \usage{
 createConceptSetLineItem(
-  name = NULL,
-  statistic,
+  sectionLabel = NA_character_,
   domain,
   conceptSet,
   timeInterval,
-  sourceConceptSet = NULL,
-  typeConceptIds = c(),
-  visitOccurrenceConceptIds = c()
+  statistic
 )
 }
 \arguments{
-\item{name}{(OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)}
-
-\item{statistic}{The Statistic object to be used to evaluate the line item}
+\item{sectionLabel}{(OPTIONAL) The name of the line item (if not provided, the name will be set to the Capr concept set name)}
 
 \item{domain}{The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')}
 
 \item{conceptSet}{The Capr concept set object}
 
 \item{timeInterval}{The Time Interval object used for the line item}
+
+\item{statistic}{The Statistic object to be used to evaluate the line item}
 
 \item{sourceConceptSet}{(OPTIONAL) A Capr concept set of source concept IDs to use to limit the concept set}
 

@@ -2,9 +2,10 @@
 % Please edit documentation in R/R6Class.R
 \name{Presence}
 \alias{Presence}
-\title{An R6 class to define a Presence object}
+\title{Presence Statistic}
 \description{
-Child of Statistic. The Presence statistic is a binary metric the indicates the presence of a variable
+A statistic that determines whether at least one clinical event was present during the specified time interval. It
+is summarized as a categorical value.
 }
 \section{Super class}{
 \code{\link[ClinicalCharacteristics:Statistic]{ClinicalCharacteristics::Statistic}} -> \code{Presence}
@@ -13,14 +14,17 @@ Child of Statistic. The Presence statistic is a binary metric the indicates the 
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-Presence-new}{\code{Presence$new()}}
-\item \href{#method-Presence-getSql}{\code{Presence$getSql()}}
 \item \href{#method-Presence-clone}{\code{Presence$clone()}}
 }
 }
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="ClinicalCharacteristics" data-topic="Statistic" data-id="getStatType"><a href='../../ClinicalCharacteristics/html/Statistic.html#method-Statistic-getStatType'><code>ClinicalCharacteristics::Statistic$getStatType()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ClinicalCharacteristics" data-topic="Statistic" data-id="getAggregationType"><a href='../../ClinicalCharacteristics/html/Statistic.html#method-Statistic-getAggregationType'><code>ClinicalCharacteristics::Statistic$getAggregationType()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ClinicalCharacteristics" data-topic="Statistic" data-id="getBreaksIfAny"><a href='../../ClinicalCharacteristics/html/Statistic.html#method-Statistic-getBreaksIfAny'><code>ClinicalCharacteristics::Statistic$getBreaksIfAny()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ClinicalCharacteristics" data-topic="Statistic" data-id="getPersonLineTransformation"><a href='../../ClinicalCharacteristics/html/Statistic.html#method-Statistic-getPersonLineTransformation'><code>ClinicalCharacteristics::Statistic$getPersonLineTransformation()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ClinicalCharacteristics" data-topic="Statistic" data-id="getStatisticType"><a href='../../ClinicalCharacteristics/html/Statistic.html#method-Statistic-getStatisticType'><code>ClinicalCharacteristics::Statistic$getStatisticType()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="ClinicalCharacteristics" data-topic="Statistic" data-id="getWeightsIfAny"><a href='../../ClinicalCharacteristics/html/Statistic.html#method-Statistic-getWeightsIfAny'><code>ClinicalCharacteristics::Statistic$getWeightsIfAny()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -29,18 +33,17 @@ Child of Statistic. The Presence statistic is a binary metric the indicates the 
 \if{latex}{\out{\hypertarget{method-Presence-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Presence$new(operator, occurrences)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Presence$new(personLine)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{personLine}}{the means of converting occurrences to a single event per patient.
+For presence this could be any, observed or adherent}
 }
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Presence-getSql"></a>}}
-\if{latex}{\out{\hypertarget{method-Presence-getSql}{}}}
-\subsection{Method \code{getSql()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Presence$getSql()}\if{html}{\out{</div>}}
+\if{html}{\out{</div>}}
 }
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Presence-clone"></a>}}
