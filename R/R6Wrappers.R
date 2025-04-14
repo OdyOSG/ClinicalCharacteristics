@@ -743,7 +743,7 @@ newValueBreaks <- function(name, breaks, labels = NULL) {
 #' @param breaks a vector with cut points to user
 #' @param labels a character vector indicating how to label the cut-point. Can stay NULL where a default label is given
 #'
-#' @return A BreaksStreategy object of type concept
+#' @return A BreaksStrategy object of type concept
 #'
 #' @export
 newConceptBreaks <- function(name, breaks, labels) {
