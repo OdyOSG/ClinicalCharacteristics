@@ -1776,11 +1776,24 @@ CohortLineItem <- R6::R6Class(
   )
 )
 
+
 ## Concept Set Group -----------------
+
+#' @title ConceptSetGroupLineItem
+#' @description
+#' An R6 class to define a ConceptSetGroupLineItem
+#'
+#' @export
 ConceptSetGroupLineItem <- R6::R6Class(
   classname = "ConceptSetGroupLineItem",
   inherit = LineItem,
   public = list(
+    #' @param sectionLabel a label for the table shell section
+    #' @param groupLabel a label for the group
+    #' @param conceptSets a group of concept sets
+    #' @param domainTables the domain tables in the cdm
+    #' @param timeInterval a time interval class object to determine the time frame to consider the analytic
+    #' @param statistic a Statistic Class object used to determine what type of analytic should be done for the line item
     initialize = function(
       sectionLabel,
       groupLabel,
@@ -1802,7 +1815,7 @@ ConceptSetGroupLineItem <- R6::R6Class(
       .setListofClasses(private = private, key = "conceptSets", value = conceptSets, classes = csClasses)
 
     },
-
+    #' @description retrieve the concept sets
     grabConceptSet = function() {
       cs <- private$conceptSets
       return(cs)
@@ -1818,26 +1831,38 @@ ConceptSetGroupLineItem <- R6::R6Class(
 # Helper Classes -----
 
 ## TimeInterval ------
+
+#' @title TimeInterval
+#' @description
+#' An R6 class to define a TimeInterval
+#'
+#' @export
 TimeInterval <- R6::R6Class(
   "TimeInterval",
   public = list(
+    #' @param lb left bound - the start of the time interval
+    #' @param rb right bound - the end of the time interval
     initialize = function(lb, rb) {
       .setNumber(private = private, key = "lb", value = lb)
       .setNumber(private = private, key = "rb", value = rb)
       invisible(self)
     },
+    #' @description return the left bound
     getLb = function() {
       lb <- private$lb
       return(lb)
     },
+    #' @description return the right bound
     getRb = function() {
       rb <- private$rb
       return(rb)
     },
+    #' @description create and return time labels for left and right bounds
     getTimeLabel = function() {
       lbl <- glue::glue("{private$lb}d to {private$rb}d")
       return(lbl)
     },
+    #' @description return a tibble with the left and right bounds
     getTimeInterval = function() {
       tb <- tibble::tibble(
         lb = private$lb,
@@ -1853,19 +1878,28 @@ TimeInterval <- R6::R6Class(
 )
 
 ## Breaks Strategy -----------------
+
+#' @title BreaksStrategy
+#' @description
+#' An R6 class to define a BreaksStrategy object
+#'
+#' @export
 BreaksStrategy <- R6::R6Class(
   classname = "BreaksStrategy",
   public = list(
-
+    #' @param name the name of the breaks strategy
+    #' @param labels a character vector indicating how to label each break interval
+    #' @param breaks a vector with cut points
+    #' @param type the type of breaks strategy. Could be 'value' or 'concept'
     initialize = function(name, labels, breaks, type) {
-
       .setString(private = private, key = ".name", value = name)
       .setCharacter(private = private, key = ".labels", value = labels)
       .setListofClasses(private = private, key = ".breaks", classes = character(0), value = breaks)
       .setString(private = private, key = ".type", value =  type)
-
     },
-
+    #' @description
+    #' Generate SQL code for a CASE WHEN statement based on the break strategy
+    #' @param ordinalId the order identifier of the line item in the table shell
     makeCaseWhenSql = function(ordinalId) {
 
       # if the breaks are values do it this way
@@ -1925,15 +1959,19 @@ BreaksStrategy <- R6::R6Class(
   ),
 
   active = list(
+    #' @field name the name of the breaks strategy
     name = function(name) {
       .setActiveString(private = private, key = ".name", value = name)
     },
+    #' @field type the type of breaks strategy. Could be 'value' or 'concept'
     type = function(type) {
       .setActiveString(private = private, key = ".type", value = type)
     },
+    #' @field labels A character vector used to label each break interval
     labels = function(labels) {
       .setActiveCharacter(private = private, key = ".labels", value = labels)
     },
+    #' @field breaks a vector with cut points
     breaks = function(breaks) {
       .setActiveList(private = private, key = ".breaks", value = breaks, classes = character(0))
     }

@@ -20,5 +20,5 @@ a table shell approach where characteristic extraction are limited to what is sp
 
 PDF versions of the documentation are available:
 
-- Vignette: [Demo](https://raw.githubusercontent.com/OHDSI/ClinicalCharacteristics/newV1/extras/pdf_vignette/clinChar_demo.pdf)
-- [Package manual](https://raw.githubusercontent.com/OHDSI/ClinicalCharacteristics/newV1/extras/ClinicalCharacteristics.pdf)
+- Vignette: [Demo](https://raw.githubusercontent.com/OHDSI/ClinicalCharacteristics/main/extras/pdf_vignette/clinChar_demo.pdf)
+- [Package manual](https://raw.githubusercontent.com/OHDSI/ClinicalCharacteristics/main/extras/ClinicalCharacteristics.pdf)

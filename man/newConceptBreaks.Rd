@@ -14,7 +14,7 @@ newConceptBreaks(name, breaks, labels)
 \item{labels}{a character vector indicating how to label the cut-point. Can stay NULL where a default label is given}
 }
 \value{
-A BreaksStreategy object of type concept
+A BreaksStrategy object of type concept
 }
 \description{
 Create a breaks Strategy object for categorizing concepts
