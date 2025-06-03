@@ -716,7 +716,7 @@ femaleGender <- function() {
 #' @param breaks a vector with cut points to user
 #' @param labels a character vector indicating how to label the cut-point. Can stay NULL where a default label is given
 #'
-#' @return A BreaksStreategy object of type value
+#' @return A BreaksStrategy object of type value
 #'
 #' @export
 newValueBreaks <- function(name, breaks, labels = NULL) {

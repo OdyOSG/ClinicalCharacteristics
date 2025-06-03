@@ -22,11 +22,11 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-When conducting real-world evidence (RWE) studies, analysts often need to populate table-shells defined by clinical colleagues. In principle, these table-shells should be simple to generate, as they consist primarily of counts and percentages for categorical variables and summary statistics for continuous variables. Surprisingly, this task proves to be non-trivial when using the available OHDSI tools. The best available tool for characterization is `FeatureExtraction` which is a tool designed to extract as many clinical features as possible to use as covariates for high-dimensional modelling. While helpful for modelling, populating table-shells is awkward because it pulls all concepts from a domain and performs characterization at the individual concept level. One could also use the web application ATLAS to characterize, however, it does not fit programmatic driven pipelines. With some of these gaps in mind, we designed a new OHDSI tool titled `ClinicalCharacteristics` which is a table shell approach to OMOP characterization.
+When conducting real-world evidence (RWE) studies, analysts often need to populate table-shells defined by clinical colleagues. In principle, these table-shells should be simple to generate, as they consist primarily of counts and percentages for categorical variables and summary statistics for continuous variables. Surprisingly, this task proves to be non-trivial when using the available OHDSI tools. The best available tool for characterization is `FeatureExtraction` which is a tool designed to extract as many clinical features as possible to use as covariates for high-dimensional modelling. While helpful for modelling, populating table-shells is awkward because it pulls all concepts from a domain and performs characterization at the individual concept level. One could also use the web application ATLAS to characterize, but it does not fit programmatic driven pipelines. With some of these gaps in mind, we designed a new OHDSI tool titled `ClinicalCharacteristics`, which is a table shell approach to OMOP characterization.
 
 # Features
 
-A characterization requires the identification of a clinical event during a specified window of time relative to the index date of the cohort of interest. For example if we wish to look at baseline characteristics, we anchor our enumeration on the date at which the person enters the cohort and consider a window of time as baseline (say -365 days to -1 days relative to index). There are a few assumptions we need to make from this construction: a) what type of event are we looking for, b) when are we looking, relative to index, and must it be during observed time and c) how do we want to summarize this information.
+A characterization requires the identification of a clinical event during a specified window of time relative to the index date of the cohort of interest. For example, if we wish to look at baseline characteristics, we anchor our enumeration on the date at which the person enters the cohort and consider a window of time as baseline (say -365 days to -1 days relative to index). There are a few assumptions we need to make from this construction: a) what type of event are we looking for, b) when are we looking, relative to index, and must it be during observed time and c) how do we want to summarize this information.
 
 ## Data Types
 
@@ -83,7 +83,7 @@ Something we are introducing within the `ClinicalCharacteristics` package is a c
 -   **cdmDatabaseSchema**: a read only schema where the OMOP CDM is located
 -   **workDatabaseSchema**: a read/write schema where you will conduct work; effectively the location of the cohort table
 -   **tempEmulationSchema**: a read/write schema to store temp tables. Note this is only necessary for dbms' like snowflake and oracle that handle temp tables differently than other dialects
--   **targetCohortTable**: the name of the cohort table where your target cohorts exist
+-   **cohortTable**: the name of the cohort table where your target cohorts exist
 -   **cdmSourceName**: a label for the CDM in use
 
 In `ClinicalCharacteristics` we can set up our execution settings object as follows:
@@ -94,7 +94,7 @@ executionSettings <- createExecutionSettings(
   cdmDatabaseSchema = "omop_schema",
   workDatabaseSchema = "my_schema",
   tempEmulationSchema = "my_schema",
-  targetCohortTable = "my_cohorts",
+  cohortTable = "my_cohorts",
   cdmSourceName = "my_omop"
 )
 ```
@@ -201,7 +201,7 @@ executionSettings <- createExecutionSettings(
   cdmDatabaseSchema = "omop_schema",
   workDatabaseSchema = "my_schema",
   tempEmulationSchema = "my_schema",
-  targetCohortTable = "my_cohorts",
+  cohortTable = "my_cohorts",
   cdmSourceName = "my_omop"
 )
 
@@ -222,7 +222,7 @@ ts <- createTableShell(
   ),
   lineItems = lineItems(
     createDemographicLineItem(maleGender()),
-    createDemographicLineItem(ageChar()),
+    createDemographicLineItem(ageCharCts()),
     createConceptSetLineItem(
       sectionLabel = "CKD: Baseline",
       domain = "condition_occurrence",
@@ -257,7 +257,8 @@ res$continuous
 
 Line items are an important feature of `ClinicalCharacteristics` in order to track the table shell in a consistent matter. However, from a UI perspective this becomes very "typing" intensive. So we have added certain convenience functions to make it easier to design the table shell. Taking the same example from above, what if we added the following to our table shell:
 
--   add female gender
+-   female gender
+-   ethnicity categories
 -   race categories
 -   age in 5-year breaks
 -   sglt2 and glp1 at 0-90 and 0-365 days post index
@@ -271,7 +272,7 @@ executionSettings <- createExecutionSettings(
   cdmDatabaseSchema = "omop_schema",
   workDatabaseSchema = "my_schema",
   tempEmulationSchema = "my_schema",
-  targetCohortTable = "my_cohorts",
+  cohortTable = "my_cohorts",
   cdmSourceName = "my_omop"
 )
 
@@ -282,7 +283,7 @@ condition_cs <- list(
 )
 
 drug_cs <- list(
-  Capr::cs(Capr::descendants(1123627), name = "sglt2")
+  Capr::cs(Capr::descendants(1123627), name = "sglt2"),
   Capr::cs(Capr::descendants(1123618), name = "sglt2")
 )
 
@@ -304,8 +305,9 @@ ts2 <- createTableShell(
   lineItems = lineItems(
     addDefaultGenderLineItems(),
     addDefaultEthnicityLineItems(),
-    createDemographicLineItem(ageChar()),
-    createDemographicLineItem(ageChar(breaks = age5yrGrp())),
+    createDemographicLineItem(raceCategory()),
+    createDemographicLineItem(ageCharCts()),
+    createDemographicLineItem(ageCharBreaks(breaks = age5yrGrp())),
     createConceptSetLineItemBatch(
       sectionLabel = "Baseline Conditions",
       domain = "condition_occurrence",
@@ -329,7 +331,7 @@ res$continuous
 
 ```
 
-In this version of the table shell we have grouped drugs and conditions as a batch to deploy all combinations of the concept set and time interval combinations. As for the demographics we add a convenience function to include all basic gender items (male and female) and race items (white, black, asian and not reported). Finally we apply our first instance of a breaks strategy, turning age into 5 year age groups. A convenience function is used that automatically sets the breaks for the user.
+In this version of the table shell we have grouped drugs and conditions as a batch to deploy all combinations of the concept set and time interval combinations. As for the demographics we add a convenience function to include all basic gender items (male and female), ethnicity categories (Hispanic, not Hispanic, and not reported), and race items (American Indian or Alaska Native", "Asian", "Black or African American", "Native Hawaiian or Other Pacific Islander", "White", and "Unknown or Other"). In addition to the continuous age statistic from the example above, we apply our first instance of a breaks strategy, turning age into 5-year age groups. A convenience function is used that automatically sets the breaks for the user.
 
 Note when a user generates the table shell a log of the shell is printed out for review. Users may also review the table shell meta information to understand the aspects of each line item using the following method of the table shell class which returns a tibble of information.
 
@@ -341,7 +343,7 @@ ts2$getTableShellMeta()
 
 ## Cohorts to Describe
 
-Sometimes we are interested in cohorts as items to characterize in a table shell. For example, say we wanted to describe persons with heart failure who also have ckd (at baseline). This is more easily done as a cohort rather than a concept set beacuse we have to apply logic to the population.
+Sometimes we are interested in cohorts as items to characterize in a table shell. For example, say we wanted to describe persons with heart failure who also have ckd (at baseline). This is more easily done as a cohort rather than a concept set because we have to apply logic to the population.
 
 In order to use cohorts in characterization, users must generate the cohort in a cohort table in their workDatabaseSchema prior to usage. Assuming that is done, adding this feature into the table shell is quite simple.
 
@@ -354,7 +356,7 @@ executionSettings <- createExecutionSettings(
   cdmDatabaseSchema = "omop_schema",
   workDatabaseSchema = "my_schema",
   tempEmulationSchema = "my_schema",
-  targetCohortTable = "my_cohorts",
+  cohortTable = "my_cohorts",
   cdmSourceName = "my_omop"
 )
 
@@ -365,7 +367,7 @@ condition_cs <- list(
 )
 
 drug_cs <- list(
-  Capr::cs(Capr::descendants(1123627), name = "sglt2")
+  Capr::cs(Capr::descendants(1123627), name = "sglt2"),
   Capr::cs(Capr::descendants(1123618), name = "glp1")
 )
 
@@ -391,9 +393,10 @@ ts3 <- createTableShell(
   ),
   lineItems = lineItems(
     addDefaultGenderLineItems(),
-    addDefaultRaceLineItems(),
-    createDemographicLineItem(ageChar()),
-    createDemographicLineItem(ageChar(breaks = age5yrGrp())),
+    addDefaultEthnicityLineItems(),
+    createDemographicLineItem(raceCategory()),
+    createDemographicLineItem(ageCharCts()),
+    createDemographicLineItem(ageCharBreaks(breaks = age5yrGrp())),
     createConceptSetLineItemBatch(
       sectionLabel = "Baseline Conditions",
       domain = "condition_occurrence",
@@ -424,11 +427,11 @@ res$continuous
 
 ```
 
-Notice the UI for adding cohorts into the table shell as line items is the same as the target cohorts. We make CohortInfo class objects as a list. In the lineItem or lineItemBatch calls we must specify into which table these cohorts are instantiated.
+Notice the UI for adding cohorts into the table shell as line items is similar to adding the target cohort(s) into the table shell. We use createCohortInfo() to make CohortInfo class objects, then assign the CohortInfo objects to the variable covCohorts as a list. Then we set the covariateCohorts parameter of createCohortLineItemBatch() equal to our list of CohortInfo objects (covCohorts). In the lineItem or lineItemBatch calls we must specify into which table these cohorts are instantiated.
 
 ## Concept Set Groups
 
-Sometimes clinical events can be described in multiple domains. Smoking for example has concepts in the observation, procedure and condition occurrence tables. Handling multiple domains is easiest done as a group, where we specify each domain to look for our concept set. The code below creates a concept set group line item that can be added to a table shell.
+Sometimes clinical events can be described in multiple domains. Smoking, for example, has concepts in the observation, procedure, and condition occurrence tables. It is easiest to handle multiple domains as a concept set group where we specify each domain in which to look for our concept set. The code below creates a concept set group line item that can be added to a table shell.
 
 ```{r csg, eval=FALSE}
 
@@ -450,12 +453,12 @@ Notice we specify the domain for each element of the concept set list. When enum
 
 ## Breaks
 
-It is very common to want to convert a continuous summary into a categorical summary. Say we want to know how many persons took 1, 2, 3, or 4+ of a medication like sglt2 or glp1s, instead of how many took at least 1 of these drugs at any time. To do this we must make a breaks strategy.
+It is very common to want to convert a continuous summary into a categorical summary. Say we want to know how many persons took 1, 2, 3, or 4+ of a medication like sglt2 or glp1s, instead of how many took at least one of these drugs at any time. To do this we must make a breaks strategy.
 
 ```{r breaksStrategy, eval=FALSE}
 
 drug_cs <- list(
-  Capr::cs(Capr::descendants(1123627), name = "sglt2")
+  Capr::cs(Capr::descendants(1123627), name = "sglt2"),
   Capr::cs(Capr::descendants(1123618), name = "glp1")
 )
 
@@ -464,9 +467,9 @@ tw2 <- list(
   timeInterval(lb = 0, rb = 365)
 )
 
-br <- newBreaks(
+br <- newValueBreaks(
   name = "Medication Groups",
-  breaks = c(1,2,3,4),
+  breaks = list(1,2,3,4),
   labels = c("one", "two", "three", "four or more")
 )
 
@@ -481,12 +484,12 @@ drugBreaks <- createConceptSetLineItemBatch(
 
 ```
 
-Once you have built this line item batch it can be added into the table shell. Instead of providing a continuous summary, these will now be broken into categories as specified in the `newBreaks` function. If we actually wanted the continuous summary the code would look as follows:
+Once you have built this line item batch it can be added into the table shell. Instead of providing a continuous summary, these will now be broken into categories as specified in the `newValueBreaks` function. If we actually wanted the continuous summary the code would look as follows:
 
 ```{r ctsDrugs, eval=FALSE}
 
 drug_cs <- list(
-  Capr::cs(Capr::descendants(1123627), name = "sglt2")
+  Capr::cs(Capr::descendants(1123627), name = "sglt2"),
   Capr::cs(Capr::descendants(1123618), name = "glp1")
 )
 
@@ -495,8 +498,8 @@ tw2 <- list(
   timeInterval(lb = 0, rb = 365)
 )
 
-drugBreaks <- createConceptSetLineItemBatch(
-  sectionLabel = "Drug CountBreaks",
+drugCts <- createConceptSetLineItemBatch(
+  sectionLabel = "Drug Count Continuous",
   domain = "drug_exposure",
   statistic = anyCountCtsStat(),
   conceptSets = drug_cs,
@@ -544,8 +547,8 @@ tssc <- createTableShell(
   lineItems = lineItems(
     addDefaultGenderLineItems(),
     addDefaultRaceLineItems(),
-    createDemographicLineItem(ageChar()),
-    createDemographicLineItem(ageChar(breaks = age5yrGrp())),
+    createDemographicLineItem(ageCharCts()),
+    createDemographicLineItem(ageCharBreaks(breaks = age5yrGrp())),
     createSourceConceptSetLineItem(
       sectionLabel = "Source Concept Conditions Cardiac Arrhythmia",
       domain = "condition_occurrence",
