@@ -83,7 +83,6 @@ createExecutionSettings <- function(connectionDetails,
 #' @title
 #' Default build options to generate table shell
 #'
-#' @param connectionDetails A DatabaseConnector connectionDetails object (optional if connection is specified)
 #' @param codesetTempTable the name of the codeset table used in execution. Defaults as a temp table #codeset
 #' @param timeWindowTempTable the name of the time Window table used in execution. Defaults as a temp table #time_windows
 #' @param targetCohortTempTable the name of the target cohort table used in execution. Defaults as a temp table #target_cohorts
