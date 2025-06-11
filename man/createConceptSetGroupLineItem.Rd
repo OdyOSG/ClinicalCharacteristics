@@ -22,7 +22,7 @@ createConceptSetGroupLineItem(
 
 \item{domainTables}{a vector of domains corresponding to the concept set}
 
-\item{timeInterval}{The TimeInterval object used for the line item}
+\item{timeInterval}{The TimeIntervalClass object used for the line item}
 
 \item{statistic}{The Statistic object to be used to evaluate the line item}
 }
