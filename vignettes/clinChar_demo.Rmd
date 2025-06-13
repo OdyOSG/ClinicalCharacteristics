@@ -334,7 +334,7 @@ res$continuous
 
 ```
 
-In this version of the table shell we have grouped drugs and conditions as a batch to deploy all combinations of the concept set and time interval combinations. As for the demographics we add a convenience function to include all basic gender items (male and female), ethnicity categories (Hispanic, not Hispanic, and not reported), and race items (American Indian or Alaska Native", "Asian", "Black or African American", "Native Hawaiian or Other Pacific Islander", "White", and "Unknown or Other"). In addition to the continuous age statistic from the example above, we apply our first instance of a breaks strategy, turning age into 5-year age groups. A convenience function is used that automatically sets the breaks for the user.
+In this version of the table shell we have grouped drugs and conditions as a batch to deploy all combinations of the concept set and time interval combinations. As for the demographics we add a convenience function to include all basic gender items (male and female), ethnicity categories (Hispanic, not Hispanic, and not reported), and race items ("American Indian or Alaska Native", "Asian", "Black or African American", "Native Hawaiian or Other Pacific Islander", "White", and "Unknown or Other"). In addition to the continuous age statistic from the example above, we apply our first instance of a breaks strategy, turning age into 5-year age groups. A convenience function is used that automatically sets the breaks for the user.
 
 Note: when a user generates the table shell a log of the shell is printed out for review. Users may also review the table shell meta information to understand the aspects of each line item using the following method of the table shell class, which returns a tibble of information.
 
@@ -350,7 +350,7 @@ When using **multiple concepts and/or multiple time intervals** within a line it
 -   `createConceptSetLineItemBatch`
 -   `createSourceConceptSetLineItemBatch`
 
-The batch functions create combinations of each of the concept sets and/or time intervals for the corresponding statistic. For example, the `createConceptSetLineItemBatch` for "Post-Index Drugs" in table shell ts2 above will calculate `anyPresenceStat` measures for every combination of the two drug concept sets in drug_cs, "sglt2" and "glp1", and the two time intervals in tw2. This results in 4 rows of measures in total for "Post-Index Drugs").
+The batch functions create combinations of each of the concept sets and/or time intervals for the corresponding statistic. For example, the `createConceptSetLineItemBatch` for "Post-Index Drugs" in table shell ts2 above will calculate `anyPresenceStat` measures for every combination of the two drug concept sets in drug_cs, "sglt2" and "glp1", and the two time intervals in tw2. This results in 4 rows of measures in total for "Post-Index Drugs".
 
 ## Cohorts to Describe
 
