@@ -37,7 +37,7 @@ A characterization requires the identification of a clinical event during a spec
 -   **Concept Set Groups**: groups of concepts across multiple domains. Sometimes concepts for an occurrence do not occur in one domain (i.e conditions, drugs, procedures) but in multiple. For example, smoking status occurs in observation, procedure, and condition tables. This item unifies them as a single entity.
 -   **Cohorts**: identification of a clinical event across a set of persons over an era of time bracketed by an entry and exit event. Cohorts apply the occurrence of an event accounting for attrition based on inclusion/exclusion criteria.
 -   **Source Codes**: a list of non-standard codes under a single vocabulary to identify events. It is not recommended to use this type of object because it does not leverage the advantages of semantic standardization
--   **Other**: [Future Addition] Sometimes clinically relevant events don't fall into the these categories and require special constructions to query in the CDM. Items such as lab measurements, locations and episodes.
+-   **Other**: [Future Addition] Sometimes clinically relevant events don't fall into the these categories and require special constructions to query in the CDM. Items such as lab measurements, locations, and episodes.
 
 ## Value Types
 
@@ -181,8 +181,7 @@ The statistic determines how to summarize the event; here are examples:
 -   `PresenceStat`: determine who had an occurrence of an event during an interval
 -   `CountCtsStat`: determine the continuous distribution of an event during an interval
 -   `CountBreaksStat`: convert the count to breaks of an event during an interval
--   `TimeToFirstCtsStat`: determine the continuous distribution of the time to the occurrence of the first event
--   `TimeToFirstBreaksStat`: convert the time to the first event into a break of values
+-   `TimeToFirst`: determine the continuous distribution of the time to the occurrence of the first event
 
 To distinguish between **any** and **observed**, add the keyword as a prefix (i.e. `anyPresenceStat()` or `observedPresenceStat()`).
 
@@ -288,7 +287,7 @@ condition_cs <- list(
 
 drug_cs <- list(
   Capr::cs(Capr::descendants(1123627), name = "sglt2"),
-  Capr::cs(Capr::descendants(1123618), name = "sglt2")
+  Capr::cs(Capr::descendants(1123618), name = "glp1")
 )
 
 # make each time window
@@ -339,11 +338,19 @@ In this version of the table shell we have grouped drugs and conditions as a bat
 
 Note: when a user generates the table shell a log of the shell is printed out for review. Users may also review the table shell meta information to understand the aspects of each line item using the following method of the table shell class, which returns a tibble of information.
 
-When using **multiple concepts and/or multiple time windows**, the Batch functions must be used otherwise an error will display.
-
 ```{r tsMeta, eval=FALSE}
 ts2$getTableShellMeta()
 ```
+
+## Batch functions
+
+When using **multiple concepts and/or multiple time intervals** within a line item, we must use one of the Batch functions:
+
+-   `createCohortLineItemBatch`
+-   `createConceptSetLineItemBatch`
+-   `createSourceConceptSetLineItemBatch`
+
+The batch functions create combinations of each of the concept sets and/or time intervals for the corresponding statistic. For example, the `createConceptSetLineItemBatch` for "Post-Index Drugs" in table shell ts2 above will calculate `anyPresenceStat` measures for every combination of the two drug concept sets in drug_cs, "sglt2" and "glp1", and the two time intervals in tw2. This results in 4 rows of measures in total for "Post-Index Drugs").
 
 ## Cohorts to Describe
 
@@ -431,7 +438,7 @@ res$continuous
 
 ```
 
-We use createCohortInfo() to make CohortInfo class objects, then assign the CohortInfo objects to the variable covCohorts as a list. Then we set the covariateCohorts parameter of createCohortLineItemBatch() equal to our list of CohortInfo objects (covCohorts). In the createCohortlineItem() or CreateCohortLineItemBatch() calls we must specify into which table these cohorts are instantiated.
+We use `createCohortInfo` to make CohortInfo class objects, then assign the CohortInfo objects to the variable covCohorts as a list. Then we set the covariateCohorts parameter of `createCohortLineItemBatch` equal to our list of CohortInfo objects (called covCohorts in the above example). In the `createCohortlineItem` or `CreateCohortLineItemBatch` calls we must specify into which table these cohorts are instantiated.
 
 ## Concept Set Groups
 
@@ -515,7 +522,7 @@ drugCts <- createConceptSetLineItemBatch(
 
 ## Review the Sql
 
-The way `ClinicalCharacteristics` works is it serializes the input of the TableShell object into a sql script that is run against the database connection. Sometimes users may want to review the sql to either check its quality or modify it slightly. We provide a function to save the script designed by the program as a `.sql` that can be opened in any code or text editor.
+`ClinicalCharacteristics` works by serializing the input of the TableShell object into a sql script that is run against the database connection. Sometimes users may want to review the sql to either check its quality or modify it slightly. We provide a function to save the script designed by the program as a `.sql` that can be opened in any code or text editor.
 
 ```{r reviewSql, eval=FALSE}
 reviewTableShellSql(ts, executionSettings, saveName = "my_ts", savePath = here::here("output"))
