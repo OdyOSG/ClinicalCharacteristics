@@ -139,7 +139,7 @@ defaultTableShellBuildOptions <- function(codesetTempTable = "#codeset",
 #'
 #' @export
 timeInterval <- function(lb, rb) {
-  ti <- TimeInterval$new(lb = lb, rb = rb)
+  ti <- TimeIntervalClass$new(lb = lb, rb = rb)
   return(ti)
 }
 
@@ -365,7 +365,7 @@ createConceptSetLineItem <- function(sectionLabel = NA_character_,
 #' @param statistic The Statistic object to be used to evaluate the line items
 #' @param domain The domain of the concept sets (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')
 #' @param conceptSets A list of concept set Capr objects
-#' @param timeIntervals A list of TimeInterval class objects
+#' @param timeIntervals A list of TimeIntervalClass objects
 #' @param typeConceptIds (OPTIONAL) A list of type concept IDs to use to limit the concept set
 #' @param visitOccurrenceConceptIds (OPTIONAL) A list of visit occurrence concept IDs to use to limit the concept set
 #'
@@ -380,7 +380,7 @@ createConceptSetLineItemBatch <- function(
     statistic) {
 
   checkmate::assert_list(x = conceptSets, types = c("ConceptSet"), null.ok = FALSE, min.len = 1)
-  checkmate::assert_list(x = timeIntervals, types = c("TimeInterval"), null.ok = FALSE, min.len = 1)
+  checkmate::assert_list(x = timeIntervals, types = c("TimeIntervalClass"), null.ok = FALSE, min.len = 1)
 
   # build permutations of concepts and timeIntervals
   permDf <- .permuteTi(conceptSets, timeIntervals)
@@ -467,7 +467,7 @@ createSourceConceptSetLineItem <- function(sectionLabel = NA_character_,
 #' @param statistic The Statistic object to be used to evaluate the line item
 #' @param domain The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')
 #' @param sourceConceptSet A list of SourceConcept R6 object created using the `sourceConceptSet` function
-#' @param timeIntervals A list of TimeInterval class objects
+#' @param timeIntervals A list of TimeIntervalClass objects
 #' @param typeConceptIds (OPTIONAL) A list of type concept IDs to use to limit the concept set
 #'
 #' @return A list of SourceConceptSetLineItem objects
@@ -482,7 +482,7 @@ createSourceConceptSetLineItemBatch <- function(sectionLabel,
 
 
   checkmate::assert_list(x = sourceConceptSets, types = c("SourceConceptSet"), null.ok = FALSE, min.len = 1)
-  checkmate::assert_list(x = timeIntervals, types = c("TimeInterval"), null.ok = FALSE, min.len = 1)
+  checkmate::assert_list(x = timeIntervals, types = c("TimeIntervalClass"), null.ok = FALSE, min.len = 1)
 
   # build permutations of concepts and timeIntervals
   permDf <- .permuteTi(sourceConceptSets, timeIntervals)
@@ -765,7 +765,7 @@ newConceptBreaks <- function(name, breaks, labels) {
 #' @param sectionLabel (OPTIONAL) The name of the line item (if not provided, the name will be set to the cohort name from the CohortInfo object)
 #' @param statistic The Statistic object to be used to evaluate the line item
 #' @param cohort A CohortInfo object
-#' @param timeInterval The TimeInterval object used for the line item
+#' @param timeInterval The TimeIntervalClass object used for the line item
 #' @return A CohortLineItem object
 #'
 #' @export
@@ -797,7 +797,7 @@ createCohortLineItem <- function(sectionLabel = NA_character_,
 #' @param sectionLabel The name of the cohort batch
 #' @param statistic The Statistic object to be used to evaluate the line items
 #' @param cohorts A list of CohortInfo objects
-#' @param timeIntervals A list of TimeInterval class objects
+#' @param timeIntervals A list of TimeIntervalClass objects
 #'
 #' @return A list of CohortLineItem objects
 #'
@@ -810,7 +810,7 @@ createCohortLineItemBatch <- function(
     timeIntervals) {
 
   checkmate::assert_list(x = covariateCohorts, types = c("CohortInfo"), null.ok = FALSE, min.len = 1)
-  checkmate::assert_list(x = timeIntervals, types = c("TimeInterval"), null.ok = FALSE, min.len = 1)
+  checkmate::assert_list(x = timeIntervals, types = c("TimeIntervalClass"), null.ok = FALSE, min.len = 1)
 
   # build permutations of concepts and timeIntervals
   permDf <- .permuteTi(covariateCohorts, timeIntervals)
@@ -841,7 +841,7 @@ createCohortLineItemBatch <- function(
 #' @param groupLabel the label of the group
 #' @param conceptSets A list of Capr concept set object
 #' @param domainTables a vector of domains corresponding to the concept set
-#' @param timeInterval The TimeInterval object used for the line item
+#' @param timeInterval The TimeIntervalClass object used for the line item
 #' @param statistic The Statistic object to be used to evaluate the line item
 #'
 #' @return A CohortLineItem object

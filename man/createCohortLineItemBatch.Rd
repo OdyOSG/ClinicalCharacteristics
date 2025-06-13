@@ -17,7 +17,7 @@ createCohortLineItemBatch(
 
 \item{statistic}{The Statistic object to be used to evaluate the line items}
 
-\item{timeIntervals}{A list of TimeInterval class objects}
+\item{timeIntervals}{A list of TimeIntervalClass objects}
 
 \item{cohorts}{A list of CohortInfo objects}
 }

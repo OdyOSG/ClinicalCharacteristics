@@ -47,7 +47,7 @@ test_that("createConceptSetLineItem creates a ConceptSetLineItem object", {
                                    statistic = Presence$new(personLine = "anyCount"),
                                    domain = "drug_exposure",
                                    conceptSet = Capr::cs(1335471, name = "test"),
-                                   timeInterval = TimeInterval$new(0,365))
+                                   timeInterval = TimeIntervalClass$new(0,365))
   expect_true(inherits(csLi, "ConceptSetLineItem"))
   expect_true(inherits(csLi, "LineItem"))
   expect_equal(csLi$lineItemClass, "ConceptSet")
@@ -57,7 +57,7 @@ test_that("createConceptSetLineItem creates a ConceptSetLineItem object - no nam
   csLi <- createConceptSetLineItem(statistic = Presence$new(personLine = "anyCount"),
                                    domain = "Drug",
                                    conceptSet = Capr::cs(1335471, name = "test"),
-                                   timeInterval = TimeInterval$new(0,365))
+                                   timeInterval = TimeIntervalClass$new(0,365))
   expect_true(inherits(csLi, "ConceptSetLineItem"))
   expect_true(inherits(csLi, "LineItem"))
   expect_equal(csLi$lineItemClass, "ConceptSet")
@@ -70,7 +70,7 @@ test_that("createCohortLineItem creates a CohortLineItem object", {
                               statistic = Presence$new(personLine = "anyCount"),
                               covariateCohort = cohortInfo,
                               cohortTable = "test_cohort_table",
-                              timeInterval = TimeInterval$new(0,365))
+                              timeInterval = TimeIntervalClass$new(0,365))
   expect_true(inherits(cLi, "CohortLineItem"))
   expect_true(inherits(cLi, "LineItem"))
   expect_equal(cLi$lineItemClass, "Cohort")
@@ -81,7 +81,7 @@ test_that("createCohortLineItem creates a CohortLineItem object - no name specif
   cLi <- createCohortLineItem(statistic = Presence$new(personLine = "anyCount"),
                               covariateCohort = cohortInfo,
                               cohortTable = "test_cohort_table",
-                              timeInterval = TimeInterval$new(0,365))
+                              timeInterval = TimeIntervalClass$new(0,365))
   expect_true(inherits(cLi, "CohortLineItem"))
   expect_true(inherits(cLi, "LineItem"))
   expect_equal(cLi$lineItemClass, "Cohort")
@@ -94,7 +94,7 @@ test_that("createConceptSetLineItemBatch creates a list of ConceptSetLineItem ob
                                           statistic = Presence$new(personLine = "anyCount"),
                                           domain = "drug_exposure",
                                           conceptSets = conceptSets,
-                                          timeIntervals = list(TimeInterval$new(0,365)))
+                                          timeIntervals = list(TimeIntervalClass$new(0,365)))
   expect_equal(length(csList), 3)
   expect_true(inherits(csList[[1]], "ConceptSetLineItem"))
   expect_true(inherits(csList[[1]], "LineItem"))
@@ -107,7 +107,7 @@ test_that("createCohorttLineItemBatch creates a list of CohortLineItem objects",
                                           statistic = Presence$new(personLine = "anyCount"),
                                           covariateCohorts = cohorts,
                                           cohortTable = "test_cohort_table",
-                                          timeIntervals = list(TimeInterval$new(0,365)))
+                                          timeIntervals = list(TimeIntervalClass$new(0,365)))
   expect_equal(length(cohortList), 2)
   expect_true(inherits(cohortList[[1]], "CohortLineItem"))
   expect_true(inherits(cohortList[[1]], "LineItem"))

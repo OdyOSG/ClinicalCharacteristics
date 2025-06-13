@@ -18,7 +18,7 @@ createSourceConceptSetLineItemBatch(
 
 \item{domain}{The domain of the concept set (must be one of 'Condition', 'Drug', 'Procedure', 'Observation', 'Measurement', 'Device')}
 
-\item{timeIntervals}{A list of TimeInterval class objects}
+\item{timeIntervals}{A list of TimeIntervalClass objects}
 
 \item{statistic}{The Statistic object to be used to evaluate the line item}
 
