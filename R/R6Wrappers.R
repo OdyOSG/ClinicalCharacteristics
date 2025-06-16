@@ -108,8 +108,11 @@ defaultTableShellBuildOptions <- function(codesetTempTable = "#codeset",
                                           patientLevelTableShellTempTable = "#pat_ts_tab",
                                           categoricalSummaryTempTable = "#categorical_table",
                                           continuousSummaryTempTable = "#continuous_table",
-                                          useCohortEra = TRUE
+                                          cohortAnalysisType = c("era", "startDate")
                                           ) {
+
+
+  cohortAnalysisType <- match.arg(cohortAnalysisType)
 
   buildOpts <- BuildOptions$new(
     codesetTempTable = codesetTempTable,
@@ -123,7 +126,7 @@ defaultTableShellBuildOptions <- function(codesetTempTable = "#codeset",
     patientLevelTableShellTempTable = patientLevelTableShellTempTable,
     categoricalSummaryTempTable = categoricalSummaryTempTable,
     continuousSummaryTempTable = continuousSummaryTempTable,
-    useCohortEra = useCohortEra
+    cohortAnalysisType = cohortAnalysisType
   )
   return(buildOpts)
 
