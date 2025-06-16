@@ -19,7 +19,7 @@ createConceptSetLineItemBatch(
 
 \item{conceptSets}{A list of concept set Capr objects}
 
-\item{timeIntervals}{A list of TimeInterval class objects}
+\item{timeIntervals}{A list of TimeIntervalClass objects}
 
 \item{statistic}{The Statistic object to be used to evaluate the line items}
 
