@@ -16,7 +16,7 @@ defaultTableShellBuildOptions(
   patientLevelTableShellTempTable = "#pat_ts_tab",
   categoricalSummaryTempTable = "#categorical_table",
   continuousSummaryTempTable = "#continuous_table",
-  useCohortEra = TRUE
+  cohortAnalysisType = c("era", "startDate")
 )
 }
 \arguments{
@@ -40,9 +40,9 @@ defaultTableShellBuildOptions(
 
 \item{continuousSummaryTempTable}{the name of the continuous summary table used in execution. Defaults as a temp table #continuous_table}
 
-\item{useCohortEra}{a true false toggle specifying if in a cohort Char whether to use the cohort era (TRUE) or just the start date (FALSE)}
-
 \item{connectionDetails}{A DatabaseConnector connectionDetails object (optional if connection is specified)}
+
+\item{useCohortEra}{a true false toggle specifying if in a cohort Char whether to use the cohort era (TRUE) or just the start date (FALSE)}
 }
 \value{
 A BuildOptions object
