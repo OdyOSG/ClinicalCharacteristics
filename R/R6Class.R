@@ -1488,7 +1488,7 @@ LineItem <- R6::R6Class(
       .setNumber(private = private, key = ".valueId", value = valueId)
       .setString(private = private, key = ".valueDescription", value = valueDescription, naOk = TRUE)
       .setClass(private = private, key = "statistic", value = statistic, class = "Statistic")
-      .setClass(private = private, key = "timeInterval", value = timeInterval, class = "TimeInterval", nullable = TRUE)
+      .setClass(private = private, key = "timeInterval", value = timeInterval, class = "TimeIntervalClass", nullable = TRUE)
     },
     #' @description retrieve the line item meta information
     getLineItemMeta = function() {
@@ -1601,7 +1601,7 @@ ConceptSetLineItem <- R6::R6Class(
       )
 
       .setClass(private = private, key = "conceptSet", value = conceptSet, class = "ConceptSet")
-      #.setClass(private = private, key = "timeInterval", value = timeInterval, class = "TimeInterval", nullable = TRUE)
+      #.setClass(private = private, key = "timeInterval", value = timeInterval, class = "TimeIntervalClass", nullable = TRUE)
       # TODO change this to enforce domain from choice list
       # .setClass(private = private, key = "sourceConceptSet", value = sourceConceptSet, class = "ConceptSet", nullable = TRUE)
       # .setNumber(private = private, key = "typeConceptIds", value = typeConceptIds, nullable = TRUE)
@@ -1830,15 +1830,15 @@ ConceptSetGroupLineItem <- R6::R6Class(
 
 # Helper Classes -----
 
-## TimeInterval ------
+## TimeIntervalClass ------
 
-#' @title TimeInterval
+#' @title TimeIntervalClass
 #' @description
-#' An R6 class to define a TimeInterval
+#' An R6 class to define a TimeIntervalClass
 #'
 #' @export
-TimeInterval <- R6::R6Class(
-  "TimeInterval",
+TimeIntervalClass <- R6::R6Class(
+  "TimeIntervalClass",
   public = list(
     #' @param lb left bound - the start of the time interval
     #' @param rb right bound - the end of the time interval

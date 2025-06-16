@@ -47,7 +47,7 @@ test_that("LineItem class initializes correctly", {
   valueId <- 1
   valueDescription <- "Description 1"
   statistic <- Statistic$new(statType = "test", personLine = "test", aggType = "test")
-  timeInterval <- TimeInterval$new(0,365)
+  timeInterval <- TimeIntervalClass$new(0,365)
 
   lineItem <- LineItem$new(
     sectionLabel = sectionLabel,
@@ -72,7 +72,7 @@ test_that("ConceptSetLineItem object initializes correctly", {
                                        statistic = Statistic$new(statType = "test", personLine = "test", aggType = "test"),
                                        domainTable = "domain",
                                        conceptSet = Capr::cs(1335471, name = "test"),
-                                       timeInterval = TimeInterval$new(0,365)
+                                       timeInterval = TimeIntervalClass$new(0,365)
                                        )
   expect_true(inherits(conceptSet, "ConceptSetLineItem"))
   expect_true(inherits(conceptSet, "LineItem"))
@@ -80,7 +80,7 @@ test_that("ConceptSetLineItem object initializes correctly", {
 
 test_that("CohortLineItem initializes correctly", {
   cohortInfo <- CohortInfo$new(id = 1, name = "Test Cohort")
-  timeInterval <- TimeInterval$new(0, 365)
+  timeInterval <- TimeIntervalClass$new(0, 365)
   statistic <- Statistic$new(statType = "test", personLine = "test", aggType = "test")
   cohortLi <- CohortLineItem$new(sectionLabel = "C",
                                  statistic = statistic,
