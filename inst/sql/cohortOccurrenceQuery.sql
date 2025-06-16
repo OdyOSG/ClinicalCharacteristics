@@ -23,11 +23,14 @@ INNER JOIN (
   FROM @time_window_table tt
   WHERE time_label IN ('{time_labels}')
 ) tw
-{{@use_era}} ?
+{{@cohort_analysis_type == "era"}} ?
 {{
+/* era cohort strategy */
 ON DATEADD(day, tw.time_a, t.cohort_start_date) <= ch.cohort_end_date
   AND DATEADD(day, tw.time_b, t.cohort_start_date) >= ch.cohort_start_date
-}} : {{
+}}
+{{@cohort_analysis_type == "startDate"}} ? {{
+/*cohort start date strategy */
 ON ch.cohort_start_date >= DATEADD(day, tw.time_a, t.cohort_start_date)
   AND ch.cohort_start_date <= DATEADD(day, tw.time_b, t.cohort_start_date)
   AND ch.cohort_start_date <= t.cohort_end_date
