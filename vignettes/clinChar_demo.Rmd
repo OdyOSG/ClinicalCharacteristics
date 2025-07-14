@@ -60,7 +60,7 @@ As do all OHDSI tools we need to setup the database credentials of the dbms host
 
 ```{r connectionDetails, eval=FALSE}
 # set a environment variable defining the jar folder path
-Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = "c:/temp/jdbcDrivers")
+#Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = "c:/temp/jdbcDrivers")
 
 # download the jdbc driver
 DatabaseConnector::downloadJdbcDrivers("postgresql")
