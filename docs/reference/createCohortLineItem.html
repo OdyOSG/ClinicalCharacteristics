@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ClinicalCharacteristics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/clinCharV1Demo.html">Clinical Characteristics V1 demo</a>
+      <a href="../articles/clinChar_demo.html">How to use ClinicalCharacteristics</a>
     </li>
   </ul></li>
 <li>
@@ -57,13 +57,23 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">createCohortLineItem</span><span class="op">(</span>name <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">statistic</span>, <span class="va">cohort</span>, <span class="va">timeInterval</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">createCohortLineItem</span><span class="op">(</span></span>
+<span>  sectionLabel <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  <span class="va">covariateCohort</span>,</span>
+<span>  <span class="va">cohortTable</span>,</span>
+<span>  <span class="va">timeInterval</span>,</span>
+<span>  <span class="va">statistic</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>name</dt>
+    <dl><dt>sectionLabel</dt>
 <dd><p>(OPTIONAL) The name of the line item (if not provided, the name will be set to the cohort name from the CohortInfo object)</p></dd>
+
+
+<dt>timeInterval</dt>
+<dd><p>The TimeIntervalClass object used for the line item</p></dd>
 
 
 <dt>statistic</dt>
@@ -72,10 +82,6 @@
 
 <dt>cohort</dt>
 <dd><p>A CohortInfo object</p></dd>
-
-
-<dt>timeInterval</dt>
-<dd><p>The TimeInterval object used for the line item</p></dd>
 
 </dl></div>
     <div id="value">

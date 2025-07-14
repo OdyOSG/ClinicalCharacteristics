@@ -12,7 +12,7 @@ a table shell approach where characteristic extraction are limited to what is sp
 
 ```r
   install.packages("remotes")
-  remotes::install_github("ohdsi/ClinicalCharacteristics", ref = "newV1")
+  remotes::install_github("ohdsi/ClinicalCharacteristics")
 ```
 
 

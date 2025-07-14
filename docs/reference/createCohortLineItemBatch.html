@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ClinicalCharacteristics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/clinCharV1Demo.html">Clinical Characteristics V1 demo</a>
+      <a href="../articles/clinChar_demo.html">How to use ClinicalCharacteristics</a>
     </li>
   </ul></li>
 <li>
@@ -57,12 +57,18 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">createCohortLineItemBatch</span><span class="op">(</span><span class="va">name</span>, <span class="va">statistic</span>, <span class="va">cohorts</span>, <span class="va">timeIntervals</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">createCohortLineItemBatch</span><span class="op">(</span></span>
+<span>  <span class="va">sectionLabel</span>,</span>
+<span>  <span class="va">covariateCohorts</span>,</span>
+<span>  <span class="va">cohortTable</span>,</span>
+<span>  <span class="va">statistic</span>,</span>
+<span>  <span class="va">timeIntervals</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>name</dt>
+    <dl><dt>sectionLabel</dt>
 <dd><p>The name of the cohort batch</p></dd>
 
 
@@ -70,12 +76,12 @@
 <dd><p>The Statistic object to be used to evaluate the line items</p></dd>
 
 
+<dt>timeIntervals</dt>
+<dd><p>A list of TimeIntervalClass objects</p></dd>
+
+
 <dt>cohorts</dt>
 <dd><p>A list of CohortInfo objects</p></dd>
-
-
-<dt>timeIntervals</dt>
-<dd><p>A list of TimeInterval class objects</p></dd>
 
 </dl></div>
     <div id="value">

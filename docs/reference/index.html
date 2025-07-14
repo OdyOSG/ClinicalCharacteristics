@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ClinicalCharacteristics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/clinCharV1Demo.html">Clinical Characteristics V1 demo</a>
+      <a href="../articles/clinChar_demo.html">How to use ClinicalCharacteristics</a>
     </li>
   </ul></li>
 <li>
@@ -55,13 +55,85 @@
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="Count.html">Count</a></code> </p>
+          <p><code><a href="addDefaultEthnicityLineItems.html">addDefaultEthnicityLineItems()</a></code> </p>
         </td>
-        <td><p>An R6 class to define a Count object</p></td>
+        <td><p>Convenience function to add default ethnicity line items</p></td>
       </tr><tr><td>
-          <p><code><a href="createAgeLineItem.html">createAgeLineItem()</a></code> </p>
+          <p><code><a href="addDefaultGenderLineItems.html">addDefaultGenderLineItems()</a></code> </p>
         </td>
-        <td><p>Create age demographic line item</p></td>
+        <td><p>Convenience function to add male and female line items for demographic characterization</p></td>
+      </tr><tr><td>
+          <p><code><a href="adherentPresenceStat.html">adherentPresenceStat()</a></code> </p>
+        </td>
+        <td><p>Adherent Presence Stat</p></td>
+      </tr><tr><td>
+          <p><code><a href="age10yrGrp.html">age10yrGrp()</a></code> </p>
+        </td>
+        <td><p>Create a breaks Strategy object for age into 10 year groups</p></td>
+      </tr><tr><td>
+          <p><code><a href="age5yrGrp.html">age5yrGrp()</a></code> </p>
+        </td>
+        <td><p>Create a breaks Strategy object for age into 5 year groups</p></td>
+      </tr><tr><td>
+          <p><code><a href="ageCharBreaks.html">ageCharBreaks()</a></code> </p>
+        </td>
+        <td><p>Create a age statistic with breaks</p></td>
+      </tr><tr><td>
+          <p><code><a href="ageCharCts.html">ageCharCts()</a></code> </p>
+        </td>
+        <td><p>Create a age statistic as continuous</p></td>
+      </tr><tr><td>
+          <p><code><a href="anyCountBreaksStat.html">anyCountBreaksStat()</a></code> </p>
+        </td>
+        <td><p>Any Count with Breaks</p></td>
+      </tr><tr><td>
+          <p><code><a href="anyCountCtsStat.html">anyCountCtsStat()</a></code> </p>
+        </td>
+        <td><p>Any Count Continuous</p></td>
+      </tr><tr><td>
+          <p><code><a href="anyPresenceStat.html">anyPresenceStat()</a></code> </p>
+        </td>
+        <td><p>Any Presence Stat</p></td>
+      </tr><tr><td>
+          <p><code><a href="anyScore.html">anyScore()</a></code> </p>
+        </td>
+        <td><p>Any Score</p></td>
+      </tr><tr><td>
+          <p><code><a href="Breaks.html">Breaks</a></code> </p>
+        </td>
+        <td><p>Breaks Statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="BreaksStrategy.html">BreaksStrategy</a></code> </p>
+        </td>
+        <td><p>BreaksStrategy</p></td>
+      </tr><tr><td>
+          <p><code><a href="BuildOptions.html">BuildOptions</a></code> </p>
+        </td>
+        <td><p>BuildOptions</p></td>
+      </tr><tr><td>
+          <p><code><a href="cohortFollowupTime.html">cohortFollowupTime()</a></code> </p>
+        </td>
+        <td><p>Create a cohort follow up time characteristic</p></td>
+      </tr><tr><td>
+          <p><code><a href="CohortInfo.html">CohortInfo</a></code> </p>
+        </td>
+        <td><p>CohortInfoe</p></td>
+      </tr><tr><td>
+          <p><code><a href="CohortLineItem.html">CohortLineItem</a></code> </p>
+        </td>
+        <td><p>CohortLineItem</p></td>
+      </tr><tr><td>
+          <p><code><a href="ConceptSetGroupLineItem.html">ConceptSetGroupLineItem</a></code> </p>
+        </td>
+        <td><p>ConceptSetGroupLineItem</p></td>
+      </tr><tr><td>
+          <p><code><a href="ConceptSetLineItem.html">ConceptSetLineItem</a></code> </p>
+        </td>
+        <td><p>ConceptSetLineItem</p></td>
+      </tr><tr><td>
+          <p><code><a href="ContinuousDistribution.html">ContinuousDistribution</a></code> </p>
+        </td>
+        <td><p>Continuous Distribution Statistic</p></td>
       </tr><tr><td>
           <p><code><a href="createCohortInfo.html">createCohortInfo()</a></code> </p>
         </td>
@@ -75,6 +147,10 @@
         </td>
         <td><p>Create a batch of cohort line items from a list of CohortInfo objects.</p></td>
       </tr><tr><td>
+          <p><code><a href="createConceptSetGroupLineItem.html">createConceptSetGroupLineItem()</a></code> </p>
+        </td>
+        <td><p>Create a concept set group item and set its attributes</p></td>
+      </tr><tr><td>
           <p><code><a href="createConceptSetLineItem.html">createConceptSetLineItem()</a></code> </p>
         </td>
         <td><p>Create a concept set line item and set its attributes</p></td>
@@ -83,45 +159,193 @@
         </td>
         <td><p>Create a batch of concept set line items from a list of Capr concept sets.</p></td>
       </tr><tr><td>
-          <p><code><a href="createEthnicityLineItem.html">createEthnicityLineItem()</a></code> </p>
+          <p><code><a href="createDemographicLineItem.html">createDemographicLineItem()</a></code> </p>
         </td>
-        <td><p>Create ethnicity demographic line item</p></td>
+        <td><p>Create a demographic line item and set its attributes</p></td>
       </tr><tr><td>
           <p><code><a href="createExecutionSettings.html">createExecutionSettings()</a></code> </p>
         </td>
         <td><p>Create an ExecutionSettings object and set its attributes</p></td>
       </tr><tr><td>
-          <p><code><a href="createGenderLineItem.html">createGenderLineItem()</a></code> </p>
+          <p><code><a href="createSourceConceptSetLineItem.html">createSourceConceptSetLineItem()</a></code> </p>
         </td>
-        <td><p>Create gender demographic line item</p></td>
+        <td><p>Create a source concept set line item and set its attributes</p></td>
       </tr><tr><td>
-          <p><code><a href="createRaceLineItem.html">createRaceLineItem()</a></code> </p>
+          <p><code><a href="createSourceConceptSetLineItemBatch.html">createSourceConceptSetLineItemBatch()</a></code> </p>
         </td>
-        <td><p>Create race demographic line item</p></td>
+        <td><p>Create a batch of source concept set line items from a list of SourceConceptSet classes.</p></td>
       </tr><tr><td>
           <p><code><a href="createTableShell.html">createTableShell()</a></code> </p>
         </td>
-        <td><p>Create an empty TableShell object and set its title</p></td>
+        <td><p>Create Table Shell</p></td>
+      </tr><tr><td>
+          <p><code><a href="defaultTableShellBuildOptions.html">defaultTableShellBuildOptions()</a></code> </p>
+        </td>
+        <td><p>Default build options to generate table shell</p></td>
+      </tr><tr><td>
+          <p><code><a href="defaultYearGrp.html">defaultYearGrp()</a></code> </p>
+        </td>
+        <td><p>Create a breaks Strategy object for year</p></td>
+      </tr><tr><td>
+          <p><code><a href="DemographicAge.html">DemographicAge</a></code> </p>
+        </td>
+        <td><p>Demographic Age Statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="DemographicCohortTime.html">DemographicCohortTime</a></code> </p>
+        </td>
+        <td><p>Demographic Cohort Time Statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="DemographicConcept.html">DemographicConcept</a></code> </p>
+        </td>
+        <td><p>Demographic Concept Statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="DemographicIndexYear.html">DemographicIndexYear</a></code> </p>
+        </td>
+        <td><p>Demographic Index Year Statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="DemographicLineItem.html">DemographicLineItem</a></code> </p>
+        </td>
+        <td><p>DemographicLineItem</p></td>
+      </tr><tr><td>
+          <p><code><a href="DemographicLocation.html">DemographicLocation</a></code> </p>
+        </td>
+        <td><p>Demographic Location Statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="DemographicPayerType.html">DemographicPayerType</a></code> </p>
+        </td>
+        <td><p>Demographic Payer Statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="DemographicRace.html">DemographicRace</a></code> </p>
+        </td>
+        <td><p>Demographic Race Statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="ExecutionSettings.html">ExecutionSettings</a></code> </p>
+        </td>
+        <td><p>ExecutionSettings</p></td>
+      </tr><tr><td>
+          <p><code><a href="femaleGender.html">femaleGender()</a></code> </p>
+        </td>
+        <td><p>Create a female concept stat</p></td>
+      </tr><tr><td>
+          <p><code><a href="generateTableShell.html">generateTableShell()</a></code> </p>
+        </td>
+        <td><p>Function to generate results for the table shell object</p></td>
+      </tr><tr><td>
+          <p><code><a href="indexYear.html">indexYear()</a></code> </p>
+        </td>
+        <td><p>Create an index year characteristic</p></td>
+      </tr><tr><td>
+          <p><code><a href="IntervalRate.html">IntervalRate</a></code> </p>
+        </td>
+        <td><p>Interval Rate Statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="LineItem.html">LineItem</a></code> </p>
+        </td>
+        <td><p>LineItem</p></td>
       </tr><tr><td>
           <p><code><a href="lineItems.html">lineItems()</a></code> </p>
         </td>
         <td><p>Combine all lineItems to enter into the tableShell slot</p></td>
       </tr><tr><td>
+          <p><code><a href="lookupSourceConcepts.html">lookupSourceConcepts()</a></code> </p>
+        </td>
+        <td><p>Function to look up source concepts in the OMOP Vocabulary</p></td>
+      </tr><tr><td>
+          <p><code><a href="maleGender.html">maleGender()</a></code> </p>
+        </td>
+        <td><p>Create a male concept stat</p></td>
+      </tr><tr><td>
+          <p><code><a href="monthlyRate.html">monthlyRate()</a></code> </p>
+        </td>
+        <td><p>Create a monthly interval rate statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="newConceptBreaks.html">newConceptBreaks()</a></code> </p>
+        </td>
+        <td><p>Create a breaks Strategy object for categorizing concepts</p></td>
+      </tr><tr><td>
+          <p><code><a href="newValueBreaks.html">newValueBreaks()</a></code> </p>
+        </td>
+        <td><p>Create a breaks Strategy object for categorizing value</p></td>
+      </tr><tr><td>
+          <p><code><a href="observedCountBreaksStat.html">observedCountBreaksStat()</a></code> </p>
+        </td>
+        <td><p>Observed Count with Breaks</p></td>
+      </tr><tr><td>
+          <p><code><a href="observedCountCtsStat.html">observedCountCtsStat()</a></code> </p>
+        </td>
+        <td><p>Observed Count Continuous</p></td>
+      </tr><tr><td>
+          <p><code><a href="observedPresenceStat.html">observedPresenceStat()</a></code> </p>
+        </td>
+        <td><p>Observed Presence Stat</p></td>
+      </tr><tr><td>
           <p><code><a href="parseCohortInfoFromDf.html">parseCohortInfoFromDf()</a></code> </p>
         </td>
         <td><p>Parse cohort info from a data frame</p></td>
       </tr><tr><td>
+          <p><code><a href="payerType.html">payerType()</a></code> </p>
+        </td>
+        <td><p>Create a payer type characteristic</p></td>
+      </tr><tr><td>
+          <p><code><a href="personLocation.html">personLocation()</a></code> </p>
+        </td>
+        <td><p>Create a location characteristic</p></td>
+      </tr><tr><td>
           <p><code><a href="Presence.html">Presence</a></code> </p>
         </td>
-        <td><p>An R6 class to define a Presence object</p></td>
+        <td><p>Presence Statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="quanCharlsonComorbidityScore.html">quanCharlsonComorbidityScore()</a></code> </p>
+        </td>
+        <td><p>Convenience function to add quan charlson comorbidity score</p></td>
+      </tr><tr><td>
+          <p><code><a href="raceCategory.html">raceCategory()</a></code> </p>
+        </td>
+        <td><p>Create a race characteristic</p></td>
+      </tr><tr><td>
+          <p><code><a href="reviewTableShellSql.html">reviewTableShellSql()</a></code> </p>
+        </td>
+        <td><p>Function that previews sql script used to generate results for table shell</p></td>
+      </tr><tr><td>
+          <p><code><a href="saveTableShellResults.html">saveTableShellResults()</a></code> </p>
+        </td>
+        <td><p>Function that previews sql script used to generate results for table shell</p></td>
+      </tr><tr><td>
+          <p><code><a href="Score.html">Score</a></code> </p>
+        </td>
+        <td><p>Score Statistic</p></td>
+      </tr><tr><td>
+          <p><code><a href="sourceConceptSet.html">sourceConceptSet()</a></code> </p>
+        </td>
+        <td><p>Function to create a source concept set</p></td>
+      </tr><tr><td>
+          <p><code><a href="SourceConceptSetLineItem.html">SourceConceptSetLineItem</a></code> </p>
+        </td>
+        <td><p>SourceConceptSetLineItem</p></td>
       </tr><tr><td>
           <p><code><a href="Statistic.html">Statistic</a></code> </p>
         </td>
         <td><p>An R6 class to define a Statistic object</p></td>
       </tr><tr><td>
+          <p><code><a href="TableShell.html">TableShell</a></code> </p>
+        </td>
+        <td><p>Table Shell</p></td>
+      </tr><tr><td>
           <p><code><a href="timeInterval.html">timeInterval()</a></code> </p>
         </td>
         <td><p>Create a single time interval</p></td>
+      </tr><tr><td>
+          <p><code><a href="TimeIntervalClass.html">TimeIntervalClass</a></code> </p>
+        </td>
+        <td><p>TimeIntervalClass</p></td>
+      </tr><tr><td>
+          <p><code><a href="timeToFirst.html">timeToFirst()</a></code> </p>
+        </td>
+        <td><p>Time To First</p></td>
+      </tr><tr><td>
+          <p><code><a href="yearlyRate.html">yearlyRate()</a></code> </p>
+        </td>
+        <td><p>Create a yearly interval rate statistic</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

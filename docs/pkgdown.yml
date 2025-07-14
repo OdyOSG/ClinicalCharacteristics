@@ -2,6 +2,6 @@ pandoc: '3.2'
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  clinCharV1Demo: clinCharV1Demo.html
-last_built: 2024-10-23T12:18Z
+  clinChar_demo: clinChar_demo.html
+last_built: 2025-07-14T17:01Z
 

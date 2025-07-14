@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ClinicalCharacteristics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/clinCharV1Demo.html">Clinical Characteristics V1 demo</a>
+      <a href="../articles/clinChar_demo.html">How to use ClinicalCharacteristics</a>
     </li>
   </ul></li>
 <li>
@@ -58,24 +58,18 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">createConceptSetLineItemBatch</span><span class="op">(</span></span>
-<span>  <span class="va">name</span>,</span>
-<span>  <span class="va">statistic</span>,</span>
+<span>  <span class="va">sectionLabel</span>,</span>
 <span>  <span class="va">domain</span>,</span>
 <span>  <span class="va">conceptSets</span>,</span>
 <span>  <span class="va">timeIntervals</span>,</span>
-<span>  typeConceptIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  visitOccurrenceConceptIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">statistic</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>name</dt>
+    <dl><dt>sectionLabel</dt>
 <dd><p>The name of the concept set batch</p></dd>
-
-
-<dt>statistic</dt>
-<dd><p>The Statistic object to be used to evaluate the line items</p></dd>
 
 
 <dt>domain</dt>
@@ -87,7 +81,11 @@
 
 
 <dt>timeIntervals</dt>
-<dd><p>A list of TimeInterval class objects</p></dd>
+<dd><p>A list of TimeIntervalClass objects</p></dd>
+
+
+<dt>statistic</dt>
+<dd><p>The Statistic object to be used to evaluate the line items</p></dd>
 
 
 <dt>typeConceptIds</dt>

@@ -43,6 +43,6 @@ unlink("extras/pdf_vignette/clinChar_demo.tex")
 
 
 # 4) build site ------------------------
-# pkgdown::build_site()
+pkgdown::build_site()
 # OhdsiRTools::fixHadesLogo()
 

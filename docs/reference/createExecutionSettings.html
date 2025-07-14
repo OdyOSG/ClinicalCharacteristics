@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ClinicalCharacteristics</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/clinCharV1Demo.html">Clinical Characteristics V1 demo</a>
+      <a href="../articles/clinChar_demo.html">How to use ClinicalCharacteristics</a>
     </li>
   </ul></li>
 <li>
@@ -63,7 +63,7 @@
 <span>  <span class="va">cdmDatabaseSchema</span>,</span>
 <span>  <span class="va">workDatabaseSchema</span>,</span>
 <span>  <span class="va">tempEmulationSchema</span>,</span>
-<span>  <span class="va">targetCohortTable</span>,</span>
+<span>  <span class="va">cohortTable</span>,</span>
 <span>  <span class="va">cdmSourceName</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -90,8 +90,8 @@
 <dd><p>Some database platforms like Oracle and Snowflake do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.</p></dd>
 
 
-<dt>targetCohortTable</dt>
-<dd><p>The name of the table where the target cohort(s) are stored</p></dd>
+<dt>cohortTable</dt>
+<dd><p>The name of the table where the cohort(s) are stored</p></dd>
 
 
 <dt>cdmSourceName</dt>
