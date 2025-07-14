@@ -1,6 +1,11 @@
 # ClinicalCharacteristics 1.0.0
 
 * Re-structure ClinChar using R6 classes
+* New UI for ClinChar
+
+# ClinicalCharacteristics 0.3.5
+
+* Change datTable to temp
 
 # ClinicalCharacteristics 0.3.4
 

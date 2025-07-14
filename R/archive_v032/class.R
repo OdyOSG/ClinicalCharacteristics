@@ -74,7 +74,7 @@ setClass("executionSettings",
            cohortTable = NA_character_,
            timeWindowTable = "#tw",
            codesetTable = "#Codesets",
-           dataTable = "#dat"
+           dataTable = "#datTable"
          )
 )
 

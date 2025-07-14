@@ -41,7 +41,7 @@ makeClinChar <- function(targetCohortIds,
                          workDatabaseSchema,
                          tempEmulationSchema = workDatabaseSchema,
                          cohortTable,
-                         datTableName = "dat") {
+                         datTableName = "datTable") {
   # make new clin char object
   clinChar <- new("ClinChar")
   # add target ids
@@ -56,7 +56,7 @@ makeClinChar <- function(targetCohortIds,
 
   if (dbms == "snowflake") {
     clinChar@executionSettings@tempEmulationSchema <- tempEmulationSchema
-    clinChar@executionSettings@dataTable <- glue::glue("{workDatabaseSchema}.{datTableName}_tmp")
+    clinChar@executionSettings@dataTable <- glue::glue("#{datTableName}")
     # clinChar@targetCohort@tempTable <- glue::glue("{workDatabaseSchema}.target_tmp")
     # clinChar@executionSettings@timeWindowTable <- glue::glue("{workDatabaseSchema}.tw_tmp")
     # clinChar@executionSettings@codesetTable <- glue::glue("{workDatabaseSchema}.codeset_tmp")
@@ -249,7 +249,7 @@ get_cat_ids <- function(clinChar) {
 
 # Summarize ----------------
 
-summarize_continuous <- function(connection, dataTable, cts_ids) {
+summarize_continuous <- function(connection, tempEmulationSchema, dataTable, cts_ids) {
 
   cts_ids <- cts_ids |>
     paste(collapse = ", ")
@@ -271,7 +271,9 @@ summarize_continuous <- function(connection, dataTable, cts_ids) {
   FROM T1
   GROUP BY cohort_id, category_id, time_id, value_id
   ;") |>
-    SqlRender::translate(targetDialect = connection@dbms)
+    SqlRender::translate(
+      targetDialect = connection@dbms,
+                         tempEmulationSchema = tempEmulationSchema)
 
   cts_sum <- DatabaseConnector::querySql(connection, sql = sql) |>
     tibble::as_tibble() |>
@@ -282,14 +284,14 @@ summarize_continuous <- function(connection, dataTable, cts_ids) {
 
 }
 
-summarize_categorical<- function(connection, dataTable, workDatabaseSchema, cohortTable, cat_ids) {
+summarize_categorical<- function(connection, dataTable, tempEmulationSchema, workDatabaseSchema, cohortTable, cat_ids) {
 
   cat_ids <- cat_ids |>
     paste(collapse = ", ")
 
   sql <- glue::glue(
     "WITH T1 AS (
-    SELECT * FROM {dataTable} WHERE category_id IN ({cat_ids})
+    SELECT DISTINCT * FROM {dataTable} WHERE category_id IN ({cat_ids})
   ),
   T2 AS (
     SELECT cohort_definition_id AS cohort_id, COUNT(DISTINCT subject_id) AS tot
@@ -314,7 +316,8 @@ summarize_categorical<- function(connection, dataTable, workDatabaseSchema, coho
   cohort_id, category_id, time_id, value_id, n, pct
   FROM T4
   ;") |>
-    SqlRender::translate(targetDialect = connection@dbms)
+    SqlRender::translate(targetDialect = connection@dbms,
+                         tempEmulationSchema = tempEmulationSchema)
 
   cat_sum <- DatabaseConnector::querySql(connection, sql = sql) |>
     tibble::as_tibble() |>
@@ -378,7 +381,11 @@ set_labels <- function(clinChar) {
 check_and_drop_dat <- function(connection, clinChar) {
 
   datTable <- clinChar@executionSettings@dataTable
-  sql <- glue::glue("DROP TABLE IF EXISTS {datTable}")
+  sql <- glue::glue("DROP TABLE IF EXISTS {datTable};") |>
+    SqlRender::translate(
+      targetDialect = clinChar@executionSettings@dbms,
+      tempEmulationSchema = clinChar@executionSettings@tempEmulationSchema
+    )
 
   cli::cat_bullet(
     glue::glue("Drop {crayon::green(datTable)} from db if it already exists"),
@@ -509,6 +516,7 @@ summarize_them_cts <- function(clinChar, connection) {
     # summarize continuous covars
     cts_sum <- summarize_continuous(
       connection = connection,
+      tempEmulationSchema = clinChar@executionSettings@tempEmulationSchema,
       dataTable = clinChar@executionSettings@dataTable,
       cts_ids = cts_ids
     ) |>
@@ -556,6 +564,7 @@ summarize_them_cat <- function(clinChar, connection) {
     cat_sum <- summarize_categorical(
       connection = connection,
       dataTable = clinChar@executionSettings@dataTable,
+      tempEmulationSchema = clinChar@executionSettings@tempEmulationSchema,
       workDatabaseSchema = clinChar@executionSettings@workDatabaseSchema,
       cohortTable = clinChar@executionSettings@cohortTable,
       cat_ids = cat_ids
@@ -672,9 +681,17 @@ runClinicalCharacteristics <- function(connection,
       bullet = "pointer",
       bullet_col = "yellow"
     )
+
+    drpSql <- trunc_drop(clinChar@executionSettings@dataTable) |>
+      SqlRender::translate(
+        targetDialect = clinChar@executionSettings@dbms,
+        tempEmulationSchema = clinChar@executionSettings@tempEmulationSchema
+      )
+
+
     DatabaseConnector::executeSql(
       connection = connection,
-      trunc_drop(clinChar@executionSettings@dataTable),
+      drpSql,
       progressBar = FALSE,
       reportOverallTime = FALSE
     )
