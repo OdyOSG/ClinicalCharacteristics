@@ -83,7 +83,6 @@ createExecutionSettings <- function(connectionDetails,
 #' @title
 #' Default build options to generate table shell
 #'
-#' @param connectionDetails A DatabaseConnector connectionDetails object (optional if connection is specified)
 #' @param codesetTempTable the name of the codeset table used in execution. Defaults as a temp table #codeset
 #' @param timeWindowTempTable the name of the time Window table used in execution. Defaults as a temp table #time_windows
 #' @param targetCohortTempTable the name of the target cohort table used in execution. Defaults as a temp table #target_cohorts
@@ -719,7 +718,7 @@ femaleGender <- function() {
 #' @param breaks a vector with cut points to user
 #' @param labels a character vector indicating how to label the cut-point. Can stay NULL where a default label is given
 #'
-#' @return A BreaksStreategy object of type value
+#' @return A BreaksStrategy object of type value
 #'
 #' @export
 newValueBreaks <- function(name, breaks, labels = NULL) {

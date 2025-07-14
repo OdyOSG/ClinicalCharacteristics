@@ -14,7 +14,7 @@ newValueBreaks(name, breaks, labels = NULL)
 \item{labels}{a character vector indicating how to label the cut-point. Can stay NULL where a default label is given}
 }
 \value{
-A BreaksStreategy object of type value
+A BreaksStrategy object of type value
 }
 \description{
 Create a breaks Strategy object for categorizing value

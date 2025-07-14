@@ -22,31 +22,31 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-When conducting real-world evidence (RWE) studies, analysts often need to populate table-shells defined by clinical colleagues. In principle, these table-shells should be simple to generate, as they consist primarily of counts and percentages for categorical variables and summary statistics for continuous variables. Surprisingly, this task proves to be non-trivial when using the available OHDSI tools. The best available tool for characterization is `FeatureExtraction` which is a tool designed to extract as many clinical features as possible to use as covariates for high-dimensional modelling. While helpful for modelling, populating table-shells is awkward because it pulls all concepts from a domain and performs characterization at the individual concept level. One could also use the web application ATLAS to characterize, however, it does not fit programmatic driven pipelines. With some of these gaps in mind, we designed a new OHDSI tool titled `ClinicalCharacteristics` which is a table shell approach to OMOP characterization.
+When conducting real-world evidence (RWE) studies, analysts often need to populate table-shells defined by clinical colleagues. In principle, these table-shells should be simple to generate, as they consist primarily of counts and percentages for categorical variables and summary statistics for continuous variables. Surprisingly, this task proves to be non-trivial when using the available OHDSI tools. The best available tool for characterization is `FeatureExtraction` which is a tool designed to extract as many clinical features as possible to use as covariates for high-dimensional modelling. While helpful for modelling, populating table-shells is awkward because it pulls all concepts from a domain and performs characterization at the individual concept level. One could also use the web application ATLAS to characterize, but it does not fit programmatic driven pipelines. With some of these gaps in mind, we designed a new OHDSI tool titled `ClinicalCharacteristics`, which is a table shell approach to OMOP characterization.
 
 # Features
 
-A characterization requires the identification of a clinical event during a specified window of time relative to the index date of the cohort of interest. For example if we wish to look at baseline characteristics, we anchor our enumeration on the date at which the person enters the cohort and consider a window of time as baseline (say -365 days to -1 days relative to index). There are a few assumptions we need to make from this construction: a) what type of event are we looking for, b) when are we looking, relative to index, and must it be during observed time and c) how do we want to summarize this information.
+A characterization requires the identification of a clinical event during a specified window of time relative to the index date of the cohort of interest. For example, if we wish to look at baseline characteristics, we anchor our enumeration on the date at which the person enters the cohort and consider a window of time as baseline (say -365 days to -1 days relative to index). There are a few assumptions we need to make from this construction: a) what type of event are we looking for, b) when are we looking, relative to index, and must it be during observed time and c) how do we want to summarize this information.
 
 ## Data Types
 
 `ClinicalCharacteristics` can summarize the following types of OHDSI objects:
 
 -   **Demographics**: information rooted in the person table such as age, gender, race, and ethnicity.
--   **Concept Sets**: groupings of concepts in a single domain, applying hierarchical logic to identify large lists of clinical concepts. For example a Type 2 Diabetes concept set would include the high-level concept and its descendants.
+-   **Concept Sets**: groupings of concepts in a single domain, applying hierarchical logic to identify large lists of clinical concepts. For example, a Type 2 Diabetes concept set would include the high-level concept and its descendants.
 -   **Concept Set Groups**: groups of concepts across multiple domains. Sometimes concepts for an occurrence do not occur in one domain (i.e conditions, drugs, procedures) but in multiple. For example, smoking status occurs in observation, procedure, and condition tables. This item unifies them as a single entity.
--   **Cohorts**: identification of clinical event across a set of persons over an era of time bracketed by an entry and exit event. Cohorts apply the occurrence of an event accounting for attrition based on inclusion/exclusion criteria.
--   **Source Codes**: [Future Addition] a list of non-standard codes under a single vocabulary to identify events. It is not recommended to use this type of object because it does not leverage the advantages of semantic standardization
--   **Other**: [Future Addition] Sometimes clinically relevant events don't fall into the these categories and require special constructions to query in the CDM. Items such as lab measurements, locations and episodes.
+-   **Cohorts**: identification of a clinical event across a set of persons over an era of time bracketed by an entry and exit event. Cohorts apply the occurrence of an event accounting for attrition based on inclusion/exclusion criteria.
+-   **Source Codes**: a list of non-standard codes under a single vocabulary to identify events. It is not recommended to use this type of object because it does not leverage the advantages of semantic standardization
+-   **Other**: [Future Addition] Sometimes clinically relevant events don't fall into the these categories and require special constructions to query in the CDM. Items such as lab measurements, locations, and episodes.
 
 ## Value Types
 
 Beyond types of domains to summarize, there are different ways of performing an aggregation of information. `ClinicalCharacteristics` can create tables based on these value types:
 
 -   **Presence**: an event is either observed or not observed for a patient given a time window. With this statistic type we report a categorical value as n and percent.
--   **Continuous Distribution**: how many times is an event or measured value observed during a period of time. With this statistic type we report as a continuous value using mean, standard deviation and default order statistics
--   **Breaks**: sometimes we want to convert a continuous value into a categorical grouping. For example persons taking 1, 2, 3, or 4+ medications during a period of time. We apply breaks to categorize counts and report as a categorical value with n and percent
--   **Score**: [Future Addition] the inverse of breaks, we may want to turn a categorical grouping into a continuous value. For example we wish to apply a weight to the presence of an event and the summarize a collection of scores per patient.
+-   **Continuous Distribution**: how many times is an event or measured value observed during a period of time. With this statistic type we report as a continuous value using mean, standard deviation and default order statistics.
+-   **Breaks**: sometimes we want to convert a continuous value into a categorical grouping. For example, persons taking 1, 2, 3, or 4+ medications during a period of time. We apply breaks to categorize counts and report as a categorical value with n and percent.
+-   **Score**: the inverse of breaks, we may want to turn a categorical grouping into a continuous value. For example we wish to apply a weight to the presence of an event and the summarize a collection of scores per patient.
 
 ## Observed Time
 
@@ -83,23 +83,25 @@ Something we are introducing within the `ClinicalCharacteristics` package is a c
 -   **cdmDatabaseSchema**: a read only schema where the OMOP CDM is located
 -   **workDatabaseSchema**: a read/write schema where you will conduct work; effectively the location of the cohort table
 -   **tempEmulationSchema**: a read/write schema to store temp tables. Note this is only necessary for dbms' like snowflake and oracle that handle temp tables differently than other dialects
--   **targetCohortTable**: the name of the cohort table where your target cohorts exist
+-   **cohortTable**: the name of the cohort table where your target cohorts exist
 -   **cdmSourceName**: a label for the CDM in use
 
 In `ClinicalCharacteristics` we can set up our execution settings object as follows:
 
 ```{r es, eval=FALSE}
+library(ClinicalCharacteristics)
+
 executionSettings <- createExecutionSettings(
   connectionDetails = connectionDetails,
   cdmDatabaseSchema = "omop_schema",
   workDatabaseSchema = "my_schema",
   tempEmulationSchema = "my_schema",
-  targetCohortTable = "my_cohorts",
+  cohortTable = "my_cohorts",
   cdmSourceName = "my_omop"
 )
 ```
 
-The convenience of this object is that it serves as a container to pass parameters to steps that execute the sql. Note users also do not need to worry about opening and closing connections when using these tools.
+The convenience of this object is that it serves as a container to pass parameters to steps that execute the sql. Note that users also do not need to worry about opening and closing connections when using these tools.
 
 Replacing parameters in the executionSettings object is done through simple assignment:
 
@@ -114,7 +116,7 @@ executionSettings$workDatabaseSchema <- "my_other_schema"
 
 ## Concept Sets
 
-Our key distinguishing feature to the `FeatureExtraction` package is the ability to characterize using Concept Sets as opposed to individual concept ids. There are two ways to import concept sets into the `ClinicalCharacteristics` work flow: a) import from json or b) create on the fly. Both methods apply the R package [`Capr`](https://github.com/OHDSI/Capr).
+Our key distinguishing feature to the `FeatureExtraction` package is the ability to characterize using concept sets as opposed to individual concept ids. There are two ways to import concept sets into the `ClinicalCharacteristics` work flow: a) import from json or b) create on the fly. Both methods apply the R package [`Capr`](https://github.com/OHDSI/Capr).
 
 ### Import from Json
 
@@ -132,7 +134,7 @@ We recommend using this method if you have complex concept sets.
 
 ### Create on the Fly
 
-Also using `Capr` one can create a simple concept set using the standard concept id of interest.
+Users can also use `Capr` to create a simple concept set using the standard concept id of interest.
 
 ```{r fly, eval=FALSE}
 cs2 <- Capr::cs(Capr::descendants(201826), name = "t2d")
@@ -142,7 +144,7 @@ This function creates a concept set class in Capr. We take the standard concept 
 
 # Using ClinicalCharacteristics
 
-Now that we have setup the requirements for `ClinicalCharacteristics` we can begin to use the program to develop table shells. The goal is to populate a `TableShell` class object with the details of how you want to populate your table. The key elements of the table shell are: the title, the target cohorts to use and the table line items.
+Now that we have setup the requirements for `ClinicalCharacteristics`, we can begin to use the program to develop table shells. The goal is to populate a `TableShell` class object with the details of how you want to populate your table. The key elements of the table shell are: the title, the target cohorts to use and the table line items.
 
 ## Target Cohorts
 
@@ -172,15 +174,16 @@ createConceptSetLineItem(
 )
 ```
 
-The section label specifies how we want to identify the line item within the table as a section. The domain must specify which domain table in the CDM we should check for events. Because CKD is a condition, we want to check the *condition_occurrence* table. If we were characterizing drugs we would check the *drug_exposure* table. Review the [OMOP CDM](https://ohdsi.github.io/CommonDataModel/cdm54.html#Current_Support_for_CDM_v54) to become familiar with the different types of domains. The statistic determines how to summarize the event; here are examples:
+The section label specifies how we want to identify the line item within the table as a section. The domain must specify which domain table in the CDM we should check for events. Because CKD is a condition, we want to check the *condition_occurrence* table. If we were characterizing drugs we would check the *drug_exposure* table. Review the [OMOP CDM](https://ohdsi.github.io/CommonDataModel/cdm54.html#Current_Support_for_CDM_v54) to become familiar with the different types of domains.
+
+The statistic determines how to summarize the event; here are examples:
 
 -   `PresenceStat`: determine who had an occurrence of an event during an interval
 -   `CountCtsStat`: determine the continuous distribution of an event during an interval
 -   `CountBreaksStat`: convert the count to breaks of an event during an interval
--   `TimeToFirstCtsStat`: determine the continuous distribution of the time to the occurrence of the first event
--   `TimeToFirstBreaksStat`: convert the time to the first event into a break of values
+-   `TimeToFirst`: determine the continuous distribution of the time to the occurrence of the first event
 
-To distinguish between **any** and **observed** add the keyword as a prefix (i.e. `anyPresenceStat()` or `observedPresenceStat()`).
+To distinguish between **any** and **observed**, add the keyword as a prefix (i.e. `anyPresenceStat()` or `observedPresenceStat()`).
 
 ## Basic Example
 
@@ -201,7 +204,7 @@ executionSettings <- createExecutionSettings(
   cdmDatabaseSchema = "omop_schema",
   workDatabaseSchema = "my_schema",
   tempEmulationSchema = "my_schema",
-  targetCohortTable = "my_cohorts",
+  cohortTable = "my_cohorts",
   cdmSourceName = "my_omop"
 )
 
@@ -222,7 +225,7 @@ ts <- createTableShell(
   ),
   lineItems = lineItems(
     createDemographicLineItem(maleGender()),
-    createDemographicLineItem(ageChar()),
+    createDemographicLineItem(ageCharCts()),
     createConceptSetLineItem(
       sectionLabel = "CKD: Baseline",
       domain = "condition_occurrence",
@@ -257,7 +260,8 @@ res$continuous
 
 Line items are an important feature of `ClinicalCharacteristics` in order to track the table shell in a consistent matter. However, from a UI perspective this becomes very "typing" intensive. So we have added certain convenience functions to make it easier to design the table shell. Taking the same example from above, what if we added the following to our table shell:
 
--   add female gender
+-   female gender
+-   ethnicity categories
 -   race categories
 -   age in 5-year breaks
 -   sglt2 and glp1 at 0-90 and 0-365 days post index
@@ -271,7 +275,7 @@ executionSettings <- createExecutionSettings(
   cdmDatabaseSchema = "omop_schema",
   workDatabaseSchema = "my_schema",
   tempEmulationSchema = "my_schema",
-  targetCohortTable = "my_cohorts",
+  cohortTable = "my_cohorts",
   cdmSourceName = "my_omop"
 )
 
@@ -282,8 +286,8 @@ condition_cs <- list(
 )
 
 drug_cs <- list(
-  Capr::cs(Capr::descendants(1123627), name = "sglt2")
-  Capr::cs(Capr::descendants(1123618), name = "sglt2")
+  Capr::cs(Capr::descendants(1123627), name = "sglt2"),
+  Capr::cs(Capr::descendants(1123618), name = "glp1")
 )
 
 # make each time window
@@ -304,8 +308,9 @@ ts2 <- createTableShell(
   lineItems = lineItems(
     addDefaultGenderLineItems(),
     addDefaultEthnicityLineItems(),
-    createDemographicLineItem(ageChar()),
-    createDemographicLineItem(ageChar(breaks = age5yrGrp())),
+    createDemographicLineItem(raceCategory()),
+    createDemographicLineItem(ageCharCts()),
+    createDemographicLineItem(ageCharBreaks(breaks = age5yrGrp())),
     createConceptSetLineItemBatch(
       sectionLabel = "Baseline Conditions",
       domain = "condition_occurrence",
@@ -329,21 +334,29 @@ res$continuous
 
 ```
 
-In this version of the table shell we have grouped drugs and conditions as a batch to deploy all combinations of the concept set and time interval combinations. As for the demographics we add a convenience function to include all basic gender items (male and female) and race items (white, black, asian and not reported). Finally we apply our first instance of a breaks strategy, turning age into 5 year age groups. A convenience function is used that automatically sets the breaks for the user.
+In this version of the table shell we have grouped drugs and conditions as a batch to deploy all combinations of the concept set and time interval combinations. As for the demographics we add a convenience function to include all basic gender items (male and female), ethnicity categories (Hispanic, not Hispanic, and not reported), and race items ("American Indian or Alaska Native", "Asian", "Black or African American", "Native Hawaiian or Other Pacific Islander", "White", and "Unknown or Other"). In addition to the continuous age statistic from the example above, we apply our first instance of a breaks strategy, turning age into 5-year age groups. A convenience function is used that automatically sets the breaks for the user.
 
-Note when a user generates the table shell a log of the shell is printed out for review. Users may also review the table shell meta information to understand the aspects of each line item using the following method of the table shell class which returns a tibble of information.
-
-When using **multiple concepts and/or multiple time windows**, the Batch functions must be used otherwise an error will display.
+Note: when a user generates the table shell a log of the shell is printed out for review. Users may also review the table shell meta information to understand the aspects of each line item using the following method of the table shell class, which returns a tibble of information.
 
 ```{r tsMeta, eval=FALSE}
 ts2$getTableShellMeta()
 ```
 
+## Batch functions
+
+When using **multiple concepts and/or multiple time intervals** within a line item, we must use one of the Batch functions:
+
+-   `createCohortLineItemBatch`
+-   `createConceptSetLineItemBatch`
+-   `createSourceConceptSetLineItemBatch`
+
+The batch functions create combinations of each of the concept sets and/or time intervals for the corresponding statistic. For example, the `createConceptSetLineItemBatch` for "Post-Index Drugs" in table shell ts2 above will calculate `anyPresenceStat` measures for every combination of the two drug concept sets in drug_cs, "sglt2" and "glp1", and the two time intervals in tw2. This results in 4 rows of measures in total for "Post-Index Drugs".
+
 ## Cohorts to Describe
 
-Sometimes we are interested in cohorts as items to characterize in a table shell. For example, say we wanted to describe persons with heart failure who also have ckd (at baseline). This is more easily done as a cohort rather than a concept set beacuse we have to apply logic to the population.
+Sometimes we are interested in cohorts as items to characterize in a table shell. For example, say we wanted to describe persons with heart failure who also have ckd (at baseline). This is more easily done as a cohort rather than a concept set because we have to apply logic to the population.
 
-In order to use cohorts in characterization, users must generate the cohort in a cohort table in their workDatabaseSchema prior to usage. Assuming that is done, adding this feature into the table shell is quite simple.
+In order to use cohorts in characterization, users must [generate the cohort](https://ohdsi.github.io/CohortGenerator/articles/GeneratingCohorts.html) in a cohort table in their workDatabaseSchema prior to usage. Assuming that is done, adding this feature into the table shell is quite simple.
 
 ```{r demo3, eval=FALSE}
 library(ClinicalCharacteristics)
@@ -354,7 +367,7 @@ executionSettings <- createExecutionSettings(
   cdmDatabaseSchema = "omop_schema",
   workDatabaseSchema = "my_schema",
   tempEmulationSchema = "my_schema",
-  targetCohortTable = "my_cohorts",
+  cohortTable = "my_cohorts",
   cdmSourceName = "my_omop"
 )
 
@@ -365,7 +378,7 @@ condition_cs <- list(
 )
 
 drug_cs <- list(
-  Capr::cs(Capr::descendants(1123627), name = "sglt2")
+  Capr::cs(Capr::descendants(1123627), name = "sglt2"),
   Capr::cs(Capr::descendants(1123618), name = "glp1")
 )
 
@@ -391,9 +404,10 @@ ts3 <- createTableShell(
   ),
   lineItems = lineItems(
     addDefaultGenderLineItems(),
-    addDefaultRaceLineItems(),
-    createDemographicLineItem(ageChar()),
-    createDemographicLineItem(ageChar(breaks = age5yrGrp())),
+    addDefaultEthnicityLineItems(),
+    createDemographicLineItem(raceCategory()),
+    createDemographicLineItem(ageCharCts()),
+    createDemographicLineItem(ageCharBreaks(breaks = age5yrGrp())),
     createConceptSetLineItemBatch(
       sectionLabel = "Baseline Conditions",
       domain = "condition_occurrence",
@@ -424,17 +438,17 @@ res$continuous
 
 ```
 
-Notice the UI for adding cohorts into the table shell as line items is the same as the target cohorts. We make CohortInfo class objects as a list. In the lineItem or lineItemBatch calls we must specify into which table these cohorts are instantiated.
+We use `createCohortInfo` to make CohortInfo class objects, then assign the CohortInfo objects to the variable covCohorts as a list. Then we set the covariateCohorts parameter of `createCohortLineItemBatch` equal to our list of CohortInfo objects (called covCohorts in the above example). In the `createCohortlineItem` or `CreateCohortLineItemBatch` calls we must specify into which table these cohorts are instantiated.
 
 ## Concept Set Groups
 
-Sometimes clinical events can be described in multiple domains. Smoking for example has concepts in the observation, procedure and condition occurrence tables. Handling multiple domains is easiest done as a group, where we specify each domain to look for our concept set. The code below creates a concept set group line item that can be added to a table shell.
+Sometimes clinical events can be described in multiple domains. Smoking, for example, has concepts in the observation and procedure occurrence tables. It is easiest to handle multiple domains as a concept set group where we specify each domain in which to look for our concept set. The code below creates a concept set group line item that can be added to a table shell.
 
 ```{r csg, eval=FALSE}
 
 smoking_cs <- list(
   Capr::cs(Capr::descendants(761009), name = "Smoking Assessment"),
-  Capr::cs(Capr::descendants(44804450), name = "Smoking Cessation")
+  Capr::cs(Capr::descendants(44804450), name = "Smoking Cessation"),
 )
 
 csg <- createConceptSetGroupLineItem(
@@ -450,12 +464,12 @@ Notice we specify the domain for each element of the concept set list. When enum
 
 ## Breaks
 
-It is very common to want to convert a continuous summary into a categorical summary. Say we want to know how many persons took 1, 2, 3, or 4+ of a medication like sglt2 or glp1s, instead of how many took at least 1 of these drugs at any time. To do this we must make a breaks strategy.
+It is very common to want to convert a continuous summary into a categorical summary. Say we want to know how many persons took 1, 2, 3, or 4+ of a medication like sglt2 or glp1s, instead of how many took at least one of these drugs at any time. To do this we must make a breaks strategy.
 
 ```{r breaksStrategy, eval=FALSE}
 
 drug_cs <- list(
-  Capr::cs(Capr::descendants(1123627), name = "sglt2")
+  Capr::cs(Capr::descendants(1123627), name = "sglt2"),
   Capr::cs(Capr::descendants(1123618), name = "glp1")
 )
 
@@ -464,9 +478,9 @@ tw2 <- list(
   timeInterval(lb = 0, rb = 365)
 )
 
-br <- newBreaks(
+br <- newValueBreaks(
   name = "Medication Groups",
-  breaks = c(1,2,3,4),
+  breaks = list(1,2,3,4),
   labels = c("one", "two", "three", "four or more")
 )
 
@@ -481,12 +495,12 @@ drugBreaks <- createConceptSetLineItemBatch(
 
 ```
 
-Once you have built this line item batch it can be added into the table shell. Instead of providing a continuous summary, these will now be broken into categories as specified in the `newBreaks` function. If we actually wanted the continuous summary the code would look as follows:
+Once you have built this line item batch it can be added into the table shell. Instead of providing a continuous summary, these will now be broken into categories as specified in the `newValueBreaks` function. If we actually wanted the continuous summary the code would look as follows:
 
 ```{r ctsDrugs, eval=FALSE}
 
 drug_cs <- list(
-  Capr::cs(Capr::descendants(1123627), name = "sglt2")
+  Capr::cs(Capr::descendants(1123627), name = "sglt2"),
   Capr::cs(Capr::descendants(1123618), name = "glp1")
 )
 
@@ -495,8 +509,8 @@ tw2 <- list(
   timeInterval(lb = 0, rb = 365)
 )
 
-drugBreaks <- createConceptSetLineItemBatch(
-  sectionLabel = "Drug CountBreaks",
+drugCts <- createConceptSetLineItemBatch(
+  sectionLabel = "Drug Count Continuous",
   domain = "drug_exposure",
   statistic = anyCountCtsStat(),
   conceptSets = drug_cs,
@@ -508,7 +522,7 @@ drugBreaks <- createConceptSetLineItemBatch(
 
 ## Review the Sql
 
-The way `ClinicalCharacteristics` works is it serializes the input of the TableShell object into a Sql script that is run against the database connection. Sometimes users may want to review the sql to either check its quality or modify it slightly. We provide a function to save the script designed by the program as a `.sql` that can be opened in any code or text editor.
+`ClinicalCharacteristics` works by serializing the input of the TableShell object into a sql script that is run against the database connection. Sometimes users may want to review the sql to either check its quality or modify it slightly. We provide a function to save the script designed by the program as a `.sql` that can be opened in any code or text editor.
 
 ```{r reviewSql, eval=FALSE}
 reviewTableShellSql(ts, executionSettings, saveName = "my_ts", savePath = here::here("output"))
@@ -516,7 +530,7 @@ reviewTableShellSql(ts, executionSettings, saveName = "my_ts", savePath = here::
 
 ## Using source concepts
 
-In certain circumstances, researchers might need to use source concepts instead of standardized codes, however, the recommendation is always to use standardized codes.
+In certain circumstances, researchers might need to use source concepts instead of standardized codes. However, the recommendation is always to use standardized codes.
 
 ## Searching the codes
 
@@ -531,7 +545,7 @@ ca_source <- lookupSourceConcepts(
   sourceConceptSet(name = "Cardiac Arrhythmia")
 ```
 
-Then the table shell will look like
+Then the table shell will look like the following:
 
 ```{r demosc, eval=FALSE}
 tw1 <- timeInterval(lb = -365, rb = -1)
@@ -543,9 +557,9 @@ tssc <- createTableShell(
   ),
   lineItems = lineItems(
     addDefaultGenderLineItems(),
-    addDefaultRaceLineItems(),
-    createDemographicLineItem(ageChar()),
-    createDemographicLineItem(ageChar(breaks = age5yrGrp())),
+    addDefaultEthnicityLineItems(),
+    createDemographicLineItem(ageCharCts()),
+    createDemographicLineItem(ageCharBreaks(breaks = age5yrGrp())),
     createSourceConceptSetLineItem(
       sectionLabel = "Source Concept Conditions Cardiac Arrhythmia",
       domain = "condition_occurrence",
