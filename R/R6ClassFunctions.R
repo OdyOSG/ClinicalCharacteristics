@@ -1,0 +1,114 @@
+
+.getAssertChoices <- function(category) {
+  readr::read_csv(file = system.file(package = pkgload::pkg_name(), "csv", "assertChoices.csv"), show_col_types = FALSE) |>
+    dplyr::filter(category == !!category) |>
+    dplyr::pull(choice)
+}
+
+.getCaseSql <- function(covariateValues,
+                        then) {
+
+  sql <- glue::glue("when covariate_value >= {thresholdMin} and covariate_value <= {thresholdMax} then {covariateId}")
+  caseSql <- glue::glue("case {sql} end as covariate_id", sql = paste(caseSql, collapse = "\n"))
+}
+
+.setString <- function(private, key, value, naOk = FALSE) {
+  checkmate::assert_string(x = value, na.ok = naOk, min.chars = 1, null.ok = FALSE)
+  private[[key]] <- value
+  invisible(private)
+}
+
+.setCharacter <- function(private, key, value, nullOk = FALSE) {
+  checkmate::assert_character(x = value, min.chars = 1, null.ok = nullOk)
+  private[[key]] <- value
+  invisible(private)
+}
+
+.setNumber <- function(private, key, value, nullable = FALSE) {
+  checkmate::assert_numeric(x = value, null.ok = nullable)
+  private[[key]] <- value
+  invisible(private)
+}
+
+.setLogical <- function(private, key, value) {
+  checkmate::assert_logical(x = value, null.ok = FALSE)
+  private[[key]] <- value
+  invisible(private)
+}
+
+.setClass <- function(private, key, value, class, nullable = FALSE) {
+  checkmate::assert_class(x = value, classes = class, null.ok = nullable)
+  private[[key]] <- value
+  invisible(private)
+}
+
+.setDataFrame <- function(private, key, value, colN, nullable = FALSE) {
+  checkmate::assert_data_frame(x = value, ncols = colN, null.ok = nullable)
+  private[[key]] <- value
+  invisible(private)
+}
+
+.setListofClasses <- function(private, key, value, classes) {
+  checkmate::assert_list(x = value, types = classes, null.ok = FALSE, min.len = 1)
+  private[[key]] <- value
+  invisible(private)
+}
+
+.setChoice <- function(private, key, value, choices) {
+  checkmate::assert_choice(x = value, choices = choices, null.ok = FALSE)
+  private[[key]] <- value
+  invisible(private)
+}
+
+.setChoiceList <- function(private, key, value, choices) {
+  checkmate::assert_subset(x = value, choices = choices, empty.ok = FALSE)
+  private[[key]] <- value
+  invisible(private)
+}
+
+
+.setActiveLogical <- function(private, key, value) {
+  # return the value if nothing added
+  if(missing(value)) {
+    vv <- private[[key]]
+    return(vv)
+  }
+  .setLogical(private = private, key = key, value = value)
+}
+
+.setActiveString <- function(private, key, value) {
+  # return the value if nothing added
+  if(missing(value)) {
+    vv <- private[[key]]
+    return(vv)
+  }
+  .setString(private = private, key = key, value = value)
+}
+
+.setActiveCharacter <- function(private, key, value) {
+  # return the value if nothing added
+  if(missing(value)) {
+    vv <- private[[key]]
+    return(vv)
+  }
+  .setCharacter(private = private, key = key, value = value)
+}
+
+.setActiveNumber <- function(private, key, value) {
+  # return the value if nothing added
+  if(missing(value)) {
+    vv <- private[[key]]
+    return(vv)
+  }
+  .setNumber(private = private, key = key, value = value)
+}
+
+
+.setActiveList <- function(private, key, classes, value) {
+  # return the value if nothing added
+  if(missing(value)) {
+    vv <- private[[key]]
+    return(vv)
+  }
+  .setListofClasses(private = private, key = key, value = value, classes = classes)
+}

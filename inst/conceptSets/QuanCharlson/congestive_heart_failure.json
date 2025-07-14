@@ -1,0 +1,840 @@
+{
+ "items": [
+ {
+ "concept": {
+ "CONCEPT_ID": 44782718,
+"CONCEPT_NAME": "Acute combined systolic and diastolic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "153931000119109",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1391126400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 40481042,
+"CONCEPT_NAME": "Acute diastolic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "443343001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1264896000000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 44782733,
+"CONCEPT_NAME": "Acute on chronic combined systolic and diastolic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "153951000119103",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1391126400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 40481043,
+"CONCEPT_NAME": "Acute on chronic diastolic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "443344007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1264896000000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37309625,
+"CONCEPT_NAME": "Acute on chronic right-sided congestive heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "16838951000119100",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1580428800000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 40480602,
+"CONCEPT_NAME": "Acute on chronic systolic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "443253003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1264896000000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4233424,
+"CONCEPT_NAME": "Acute right-sided heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "359617009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 40480603,
+"CONCEPT_NAME": "Acute systolic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "443254009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1264896000000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 439698,
+"CONCEPT_NAME": "Benign hypertensive heart disease with congestive cardiac failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "194767001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4242669,
+"CONCEPT_NAME": "Biventricular congestive heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "92506005",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4215802,
+"CONCEPT_NAME": "Cardiac asthma",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "71892000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 321319,
+"CONCEPT_NAME": "Cardiomyopathy",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "85898001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 320746,
+"CONCEPT_NAME": "Cardiomyopathy associated with another disorder",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "195029002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 44782719,
+"CONCEPT_NAME": "Chronic combined systolic and diastolic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "153941000119100",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1391126400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4229440,
+"CONCEPT_NAME": "Chronic congestive heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "88805009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 40479576,
+"CONCEPT_NAME": "Chronic diastolic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "441530006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1248998400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 444031,
+"CONCEPT_NAME": "Chronic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "48447003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4014159,
+"CONCEPT_NAME": "Chronic right-sided heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "10335000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 40479192,
+"CONCEPT_NAME": "Chronic systolic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "441481004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1248998400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 40482727,
+"CONCEPT_NAME": "Combined systolic and diastolic dysfunction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "442304009",
+"DOMAIN_ID": "Observation",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Clinical Finding",
+"VALID_START_DATE":            1248998400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 319835,
+"CONCEPT_NAME": "Congestive heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "42343007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 315295,
+"CONCEPT_NAME": "Congestive rheumatic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "82523003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 443587,
+"CONCEPT_NAME": "Diastolic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "418304008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1138665600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4163710,
+"CONCEPT_NAME": "Dilated cardiomyopathy",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "399020009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1059609600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 318773,
+"CONCEPT_NAME": "Dilated cardiomyopathy secondary to alcohol",
+"STANDARD_CONCEPT": "N",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard",
+"INVALID_REASON": "D",
+"INVALID_REASON_CAPTION": "Invalid",
+"CONCEPT_CODE": "83521008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            1659225600000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4110961,
+"CONCEPT_NAME": "Generalized ischemic myocardial dysfunction",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "194849004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 316139,
+"CONCEPT_NAME": "Heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "84114007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4004279,
+"CONCEPT_NAME": "High output heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "10091002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 44782728,
+"CONCEPT_NAME": "Hypertensive heart AND chronic kidney disease with congestive heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "15781000119107",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1391126400000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 439696,
+"CONCEPT_NAME": "Hypertensive heart and renal disease with (congestive) heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "194779001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 439694,
+"CONCEPT_NAME": "Hypertensive heart and renal disease with both (congestive) heart failure and renal failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "194781004",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 314378,
+"CONCEPT_NAME": "Hypertensive heart disease with congestive heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "5148006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 444101,
+"CONCEPT_NAME": "Hypertensive heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "46113002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 439846,
+"CONCEPT_NAME": "Left heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "85232009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 316994,
+"CONCEPT_NAME": "Malignant hypertensive heart disease with congestive heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "83105008",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4172864,
+"CONCEPT_NAME": "Neonatal cardiac failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "276514007",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 320122,
+"CONCEPT_NAME": "Nutritional and metabolic cardiomyopathies",
+"STANDARD_CONCEPT": "N",
+"STANDARD_CONCEPT_CAPTION": "Non-Standard",
+"INVALID_REASON": "D",
+"INVALID_REASON_CAPTION": "Invalid",
+"CONCEPT_CODE": "195023001",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            1627689600000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4190773,
+"CONCEPT_NAME": "Restrictive cardiomyopathy",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "415295002",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1107129600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4195785,
+"CONCEPT_NAME": "Right heart failure secondary to left heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "44313006",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4273632,
+"CONCEPT_NAME": "Right ventricular failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "367363000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 443580,
+"CONCEPT_NAME": "Systolic heart failure",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "417996009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1138665600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4224935,
+"CONCEPT_NAME": "Dilated cardiomyopathy due to nutritional deficiency",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "84733009",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 4006292,
+"CONCEPT_NAME": "Dilated cardiomyopathy due to metabolic disorder",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "111285003",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1012435200000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+},
+{
+ "concept": {
+ "CONCEPT_ID": 37164777,
+"CONCEPT_NAME": "Alcoholic cardiomyopathy",
+"STANDARD_CONCEPT": "S",
+"STANDARD_CONCEPT_CAPTION": "Standard",
+"INVALID_REASON": "V",
+"INVALID_REASON_CAPTION": "Valid",
+"CONCEPT_CODE": "1234750000",
+"DOMAIN_ID": "Condition",
+"VOCABULARY_ID": "SNOMED",
+"CONCEPT_CLASS_ID": "Disorder",
+"VALID_START_DATE":            1659225600000,
+"VALID_END_DATE":            4102358400000 
+},
+"isExcluded": false,
+"includeDescendants": false,
+"includeMapped": false 
+} 
+] 
+}

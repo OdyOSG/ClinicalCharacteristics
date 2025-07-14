@@ -1,7 +1,10 @@
 .Rproj.user
-extras/
 errorReportSql.txt
 R/archive/
 clinCharQuery.sql
 .Rhistory
 hidden/
+.vscode/
+test_table_shell.sql
+inst/doc
+.RData
