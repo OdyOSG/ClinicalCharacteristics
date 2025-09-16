@@ -168,6 +168,7 @@ build_codeset_query <- function(tb, id){
   set <- paste(ll, collapse = "\nUNION ALL\n")
   final_query <- glue::glue(
     "-- Create Codesets
+    DROP TABLE IF EXISTS {codesetTable};
     CREATE TABLE {codesetTable} (
         codeset_id int NOT NULL,
         concept_id bigint NOT NULL

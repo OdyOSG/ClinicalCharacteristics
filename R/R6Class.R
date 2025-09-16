@@ -115,7 +115,7 @@ TableShell <- R6::R6Class("TableShell",
           buildOptions = buildOptions
         ),
 
-        # step 5: create targe cohort table
+        # step 5: create target cohort table
         private$.buildCodesetQueries(
           executionSettings = executionSettings,
           buildOptions = buildOptions
@@ -158,7 +158,6 @@ TableShell <- R6::R6Class("TableShell",
         )
       ) |>
         glue::glue_collapse(sep = "\n")
-
 
       return(fullSql)
 
@@ -291,7 +290,6 @@ TableShell <- R6::R6Class("TableShell",
         tableName = buildOptions$timeWindowTempTable,
         data = time_tbl
       )
-
       return(time_sql)
     },
 
@@ -320,7 +318,6 @@ TableShell <- R6::R6Class("TableShell",
           targetDialect = executionSettings$getDbms(),
           tempEmulationSchema = executionSettings$tempEmulationSchema
         )
-
       return(renderedSql)
     },
 
@@ -328,7 +325,6 @@ TableShell <- R6::R6Class("TableShell",
 
     # function to create sql for codset query
     .buildCodesetQueries = function(executionSettings, buildOptions) {
-
       #temporary change with class
       codesetTable <-  buildOptions$codesetTempTable
 
@@ -517,7 +513,6 @@ TableShell <- R6::R6Class("TableShell",
     },
 
     .transformToPatientLineData = function(executionSettings, buildOptions) {
-
       # Step 1: make patient level data table
       ptDatTbSql <- fs::path_package(
         "ClinicalCharacteristics",
@@ -530,8 +525,8 @@ TableShell <- R6::R6Class("TableShell",
 
       # Step 2: run patient level queries
       tsm <- self$getTableShellMeta()
-      # step 2a demographics
 
+      # step 2a demographics
       demoPatientLevelSql <- .buildDemoPatientLevelSql(tsm, executionSettings, buildOptions)
 
       # step 2b concept set pat level
@@ -540,8 +535,11 @@ TableShell <- R6::R6Class("TableShell",
       # step 2c cohort pat level
       chPatientLevelSql <- .buildCohortPatientLevelSql(tsm, executionSettings, buildOptions)
 
+      # step 2d cost
+      cstPatientLevelSql <- .buildCostPatientLevelSql(tsm, executionSettings, buildOptions)
+
       # full sql for sql
-      ptFullSql <- c(ptDatTbSql, demoPatientLevelSql, csPatientLevelSql, chPatientLevelSql) |>
+      ptFullSql <- c(ptDatTbSql, demoPatientLevelSql, csPatientLevelSql, chPatientLevelSql, cstPatientLevelSql) |>
         glue::glue_collapse(sep = "\n\n") |>
         SqlRender::translate(
           targetDialect = executionSettings$getDbms(),
@@ -552,7 +550,7 @@ TableShell <- R6::R6Class("TableShell",
     },
 
     .prepDenominator = function(executionSettings, buildOptions){
-      # Create temp table joining patient date with ts meta
+      # Create temp table joining patient data with ts meta
       patTsSql <- .tempPsDatTable(executionSettings, buildOptions) |>
         glue::glue_collapse(sep = "\n\n") |>
         SqlRender::translate(
@@ -895,7 +893,7 @@ ExecutionSettings <- R6::R6Class(
 
 # Cohort Info -----
 
-#' @title CohortInfoe
+#' @title CohortInfo
 #' @description
 #' An R6 class to define a Cohort Info object.
 #' CohortInfo objects do not maintain any execution settings, just the id and name
@@ -1299,6 +1297,47 @@ DemographicRace <- R6::R6Class(
     breaks = NULL
   )
 )
+
+
+## Cost Stats----------------------
+
+
+### Total Cost -----------------
+#' @title
+#' Total Cost Statistic
+#'
+#' @description
+#' A Cost Statistic that calculates total cost per patient
+#'
+#' @export
+CostTotalClass <- R6::R6Class(
+  classname = "CostTotalClass",
+  inherit = Statistic,
+  public = list(
+    #' @param costCategory the category name of the demographic
+    #' @param costLine the line item name of the demographic concept
+    #' @param conceptColumn the name of column in the person table to extract demographic concept
+    #' @param conceptId the concept to search for in the concept column
+    initialize = function(costCategory, costLine, conceptColumn, conceptId) {
+      super$initialize(
+        personLine = "cost",
+        statType = "continuousDistribution",
+        aggType = "continuous")
+        .setString(private = private, key = "costCategory", value = costCategory)
+        .setString(private = private, key = "costLine", value = costLine)
+    },
+    #' @description create a label for the demographic concept
+    getCostLabel = function() {
+      rr <- glue::glue("{private$costCategory}: {private$costLine}")
+      return(rr)
+    }
+  ),
+  private = list(
+    costCategory = NA_character_,
+    costLine = NA_character_
+  )
+)
+
 
 
 ## CS, CSG, Cohort Stats -----------------------------
@@ -1734,6 +1773,33 @@ DemographicLineItem <- R6::R6Class(
     }),
   private = list()
 )
+
+
+# CostLineItem -----
+
+#' @title CostLineItem
+#' @description
+#' An R6 class to handle a Cost line item
+#'
+#' @export
+CostLineItem <- R6::R6Class(
+  classname = "CostLineItem",
+  inherit = LineItem,
+  public = list(
+    #' @param statistic a Statistic Class object used to determine what type of analytic should be done for the line item
+    initialize = function(statistic = statistic) {
+      super$initialize(
+        sectionLabel = "Cost",
+        domainTable = "cost",
+        lineItemLabel = statistic$getCostLabel(),
+        lineItemClass = "Cost",
+        statistic = statistic,
+        timeInterval = NULL
+      )
+    }),
+  private = list()
+)
+
 
 ## CohortLineItem ----
 

@@ -563,6 +563,31 @@ createDemographicLineItem <- function(statistic) {
 }
 
 
+
+#' @title
+#' Create a cost line item and set its attributes
+#'
+#' @param statistic The Statistic object to be used to evaluate the line item
+#' @return A CostLineItem object
+#'
+#' @export
+createCostLineItem <- function(statistic) {
+  cli <- CostLineItem$new(
+    statistic = statistic
+  )
+  statLabel <- class(statistic)[[1]]
+
+  if (statLabel == "CostTotalClass") {
+    cli$valueId <- -999
+    cli$valueDescription <- "totalCost"
+  }
+
+  return(cli)
+}
+
+
+
+
 #' @title
 #' Create an index year characteristic
 #'
@@ -711,6 +736,22 @@ femaleGender <- function() {
   return(femaleConcept)
 }
 
+
+#' @title
+#' Create a TotalCost stat
+#'
+#' @return A TotalCost Statistic class object
+#'
+#' @export
+costTotal <- function() {
+  totalCost <- CostTotalClass$new(
+    costCategory = "Cost",
+    costLine = "Total"
+  )
+  return(totalCost)
+}
+
+
 #' @title
 #' Create a breaks Strategy object for categorizing value
 #'
@@ -817,7 +858,6 @@ createCohortLineItemBatch <- function(
   # build permutations of concepts and timeIntervals
   permDf <- .permuteTi(covariateCohorts, timeIntervals)
 
-  # create batch of concept set line items
   # create batch of concept set line items
   chLiBatch <- purrr::map2(
     permDf$objects,

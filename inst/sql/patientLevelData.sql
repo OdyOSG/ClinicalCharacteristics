@@ -1,4 +1,5 @@
 /* Create Patient Level data Table */
+DROP TABLE IF EXISTS @patient_level_data;
 CREATE TABLE @patient_level_data (
 	target_cohort_id BIGINT NOT NULL,
 	subject_id BIGINT NOT NULL,

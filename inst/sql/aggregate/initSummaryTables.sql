@@ -19,7 +19,7 @@ CREATE TABLE @continuous_table (
 	maximum_value FLOAT NOT NULL
 );
 
-DROP TABLE IF EXISTS @categorical_table_table;
+DROP TABLE IF EXISTS @categorical_table;
 /* Initialize Categorical Table*/
 CREATE TABLE @categorical_table (
 	target_cohort_id BIGINT NOT NULL,

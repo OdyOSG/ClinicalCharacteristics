@@ -8,7 +8,6 @@
 
 
 .insertTableSql <- function(executionSettings, tableName, data) {
-
   #prep data for insert
   data <- data |>
     dplyr::rename_with(snakecase::to_snake_case) |>
@@ -367,6 +366,36 @@
   return(sourceConceptSqlFinal)
 
 }
+
+
+## Cost level Sql
+.buildCostPatientLevelSql <- function(tsm, executionSettings, buildOptions){
+  costLines <- tsm |>
+    dplyr::filter(
+      grepl("Cost", lineItemClass)
+    )
+
+  sqlCostPath <- fs::path_package(
+    package = "ClinicalCharacteristics",
+    fs::path("sql", "cost")
+  )
+  if (nrow(costLines) > 0) {
+    costSql <- readr::read_file(file = fs::path(sqlCostPath, "costTotal.sql")) |>
+      glue::glue() |>
+      glue::glue_collapse("\n\n")|>
+      SqlRender::render(
+        patient_level_data = buildOptions$patientLevelDataTempTable,
+        cdm_database_schema = executionSettings$cdmDatabaseSchema,
+        target_cohort_table = buildOptions$targetCohortTempTable
+      )
+  } else {
+    costSql <- ""
+  }
+
+  return(costSql)
+
+}
+
 
 ## Patient level Sql ---------------------
 

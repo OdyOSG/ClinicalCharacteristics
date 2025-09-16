@@ -2,7 +2,7 @@
 % Please edit documentation in R/R6Class.R
 \name{CohortInfo}
 \alias{CohortInfo}
-\title{CohortInfoe}
+\title{CohortInfo}
 \description{
 An R6 class to define a Cohort Info object.
 CohortInfo objects do not maintain any execution settings, just the id and name
